@@ -27,14 +27,14 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory); //idem
 void getMostRecent(Network* net);
 void getMostRecent(Network* net,char lettre_testee);
-void write_compte_rendu(Network* net, bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee, char* nom_fichier);
-void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs);
-void recupere_apprend();
-Network** apprend_nouveau();
-void apprend_tous(Network** tablo_net);
-Network** createurs_reseaux();
-void destructeur_reseaux(Network** tablo_net);
-char tester(Network** tablo_net, double input[]);
+void writeReport(Network* net, bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee, char* nom_fichier);
+void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs);
+void getAndLearn();
+Network** createNewAndLearn();
+void learnAllNetworks(Network** tablo_net);
+Network** createNetworks();
+void destroyNetworks(Network** tablo_net);
+char testNetworks(Network** tablo_net, double input[]);
 //char teste_Pierrot(char* nom_fichier, const char* directory);
 //char* recupere_teste();
 //char* recupere_teste(const char* directory);

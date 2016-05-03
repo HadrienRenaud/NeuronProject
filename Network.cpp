@@ -69,7 +69,10 @@ void Network::recuperateur(string nom_fichier){
         file >> lengthLayer; // on lit la longueur de la prochaine couche
     }
 }
-
+char* Network::save(char lettre_testee){
+    char* nom_fichier[MAX_LENGTH_NAME_FILE];
+    return save(lettre_testee,nom_fichier);
+}
 char* Network::save(char* char_nom_fichier){return save('_',char_nom_fichier);}
 char* Network::save(char lettre_testee,char* char_nom_fichier){
     // On trouve le nom du fichier

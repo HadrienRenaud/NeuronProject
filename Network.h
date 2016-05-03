@@ -36,6 +36,7 @@ public :
     bool launchGradient();//lancer la rétropropagation du gradient
     bool learn();//;)
     char* save(char* char_nom_fichier);
+    char* save(char lettre_testee);
     char* save(char lettre_testee,char* char_nom_fichier); //sauver l'etat du réseau
     void recup(string nom_fichier);// récupérer le réseau depuis le fichier
     //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet

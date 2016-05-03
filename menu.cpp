@@ -79,7 +79,7 @@ void menu(SDL_Renderer *ren)
     SDL_RenderPresent(ren);
 
     cout << "Recuperation des reseaux ... " << flush;
-    Network** tablo_net(createurs_reseaux());
+    Network** tablo_net(createNetworks());
 
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
         getMostRecent(tablo_net[i],g_alphabet[i]);
@@ -198,7 +198,7 @@ void menu(SDL_Renderer *ren)
 
                     cout << "testedImageName : " << testedImageName << endl;
                     if(readExemple(testedImageText,input,FIRST_LAYER_SIZE,DOSSIERTESTTEXT))
-                        testResult[strlen(testResult) - 1] = tester(tablo_net,input);
+                        testResult[strlen(testResult) - 1] = testNetworks(tablo_net,input);
                     else
                         testResult[strlen(testResult) - 1] = '_';
                     cout << "testResult : " << testResult << endl;
@@ -258,10 +258,10 @@ void menu(SDL_Renderer *ren)
             SDL_RenderPresent(ren);
 
             if (!caseLearn.hasBeenPressed()){
-                tablo_net = apprend_nouveau();
+                tablo_net = createNewAndLearn();
             }
             else
-                apprend_tous(tablo_net);
+                learnAllNetworks(tablo_net);
         }
 
         else if (testButton.hasBeenPressed())
@@ -286,5 +286,5 @@ void menu(SDL_Renderer *ren)
         else
             SDL_RenderPresent(ren);
     }
-    destructeur_reseaux(tablo_net);
+    destroyNetworks(tablo_net);
 }
