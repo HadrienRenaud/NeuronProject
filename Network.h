@@ -12,6 +12,7 @@ using namespace std;
 #define FIRST_LAYER_SIZE 400//nombre de neurones de la première couche
 #define LAST_LAYER_SIZE 1//nombe de neurones de la dernière couche
 #define ALPHA 0.05 //momentum, quantité d'inertie
+#define MAX_LENGTH_NAME_FILE 100
 
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network{

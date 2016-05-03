@@ -187,7 +187,7 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
 
         //Résultat attendu
         if(tabloFichiers[exemple][0]==lettre_testee)
-            att_output[0]=1
+            att_output[0]=1;
         else
             att_output[0] =0;
 

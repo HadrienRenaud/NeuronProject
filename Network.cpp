@@ -70,7 +70,7 @@ void Network::recuperateur(string nom_fichier){
     }
 }
 char* Network::save(char lettre_testee){
-    char* nom_fichier[MAX_LENGTH_NAME_FILE];
+    char* nom_fichier;
     return save(lettre_testee,nom_fichier);
 }
 char* Network::save(char* char_nom_fichier){return save('_',char_nom_fichier);}

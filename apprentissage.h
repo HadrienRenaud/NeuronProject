@@ -3,7 +3,6 @@
 
 #include "Network.h"
 
-#define MAX_LENGTH_NAME_FILE 100
 #define NB_APPRENTISSAGE 10
 #define DISTANCE_MAXIMALE 0.1
 #define MAX_LIMIT_LOOP 20
