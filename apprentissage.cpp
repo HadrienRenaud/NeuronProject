@@ -100,8 +100,8 @@ void getArrayOfFileNames(char** tabloFichiers,const char* directory){
     }
 }
 
-void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples){
-    getArrayOfExemples(tabloFichiers, tabloExemple, nb_exemples , g_dir_exemples);
+void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples){ //Surcharge
+    getArrayOfExemples(tabloFichiers, tabloExemple, nb_exemples , g_dir_exemples); // Par défaut, directory = g_dir_exemples
 }
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory){
     cout << " Lecture des exemples ... " << flush;
@@ -114,9 +114,11 @@ void getMostRecent(Network* net){ //surcharge
     getMostRecent(net, '_'); //default
 }
 void getMostRecent(Network* net , char lettre_testee){
-    //on reconstitue le nom du fichier :
+    //initialisations
     string nom_fichier;
     string nom_db;
+
+    //on reconstitue le nom du fichier :
     nom_db= string(g_dir_svg) + g_nom_svg+lettre_testee;
     nom_db=nom_db+".txt";
 
@@ -127,19 +129,23 @@ void getMostRecent(Network* net , char lettre_testee){
 }
 
 void write_compte_rendu(Network* net, bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee,char* nom_fichier){
+    //initialisations
     ofstream base_donnes;
-    base_donnes.open("../Compte_rendu_test_toutes.csv",ios::out|ios::app);
     time_t rawtime;
     struct tm * timeinfo;
     char buffer [80];
     time (&rawtime);
+    Layer* temp ;
+
+    //Inscription des premières données
+    base_donnes.open("../Compte_rendu_test_toutes.csv",ios::out|ios::app);
     timeinfo = localtime (&rawtime);
     strftime(buffer,80,"%d/%m/%y",timeinfo);
     base_donnes << buffer << ',';
     strftime(buffer,80,"%H:%M:%S",timeinfo);
     base_donnes << buffer << ","<< lettre_testee << "," << net->getTotalLayerNumber()+1 << ',';
 
-    Layer* temp ;
+    //inscription des couches
     temp = net->getFirstLayer();
     do
     {
@@ -148,7 +154,10 @@ void write_compte_rendu(Network* net, bool resultat, int count, double distance_
     } while (temp!=0);
     for (int i(0);i<(4-(net->getTotalLayerNumber()));i++)
         base_donnes << ',';
-    base_donnes << count << ',' << distance_moyenne << ',' << DISTANCE_MAXIMALE << ',' << resultat << ',' << temps_mis <<','<< commentaires << ',' << nom_fichier << endl;
+
+    //fin de l'inscription des données
+    base_donnes << count << ',' << distance_moyenne << ',' << DISTANCE_MAXIMALE  << ',';
+    cout << resultat << ',' << temps_mis <<','<< commentaires << ',' << nom_fichier << endl;
 }
 
 void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs){
@@ -156,96 +165,92 @@ void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabl
 
     cout << "Apprentissage de la lettre " << lettre_testee << " ..." << endl;
 
+    // Initialisations
     int exemple=0;//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
     int successes = 0;//le réseau doit enchainer nb_exemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
     int count = 0;//nombre de passage dans la boucle
     double dist = 0;//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
     double att_output[LAST_LAYER_SIZE];//valeur attendue en sortie du réseau
     double exp_output[LAST_LAYER_SIZE];//valeur prototypale en sortie du réseau
+    char nom_fichier[MAX_LENGTH_NAME_FILE];
+    double distance_totale(0);
+
 
     clock_t t1(clock());
 
+    //APPRENTISSAGE
     while((successes<nb_exemples) && (count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)){//tant qu'on a pas enchaîner nb_exemples succès
-    	//if(successes!=0)//si l'on a réussi l'exemple précédent on passe au suivant
+        //incrémentation
     	exemple ++;
     	exemple%=nb_exemples;//On ne dépasse pas nb_exemples
-    	//cout << "ok0" <<endl;
+        count++;
 
-        if(tabloFichiers[exemple][0]==lettre_testee){ att_output[0]=1; }
-        else{ att_output[0] =0; }
+        //Résultat attendu
+        if(tabloFichiers[exemple][0]==lettre_testee)
+            att_output[0]=1
+        else
+            att_output[0] =0;
+
+        //Calcul de la réponse du réseau
         net->initNetwork(inputs[exemple]); //on initialise avec les valeurs inputs
-    	//cout << "ok1" <<endl;
-        net->launch(exp_output);//on lance et on récupère les outputs
-        //cout << exp_output << " : " << &exp_output <<endl << att_output << " : " << &att_output<< endl ;
+    	net->launch(exp_output);//on lance et on récupère les outputs
+
+        //Calcul de l'écart
         if (count < nb_exemples * NB_APPRENTISSAGE * BORNE_MAX_CASSE && false)
             dist = distance(exp_output, att_output , LAST_LAYER_SIZE );//on calcule l'écart
         else
             dist = distanceMod(exp_output, att_output , LAST_LAYER_SIZE );//on calcule l'écart
-    	//cout << "ok2" <<endl;
+
+        //On apprend, ou pas en fonction du résultat
         if(dist<DISTANCE_MAXIMALE){//si c'est assez petit, c'est un succès
             successes++;
         }else{//sinon c'est un echec et le réseau recalcule les poids des liaisons
-            //cout << "ok3" << endl;
             net->initNetworkGradient(att_output);
             net->learn();
             successes = 0;//on réinitialise aussi les nombre de succès enchaînés
         }
 
-        count++;
+        // Affichages de temps en temps ...
         if(count%(NB_APPRENTISSAGE*nb_exemples)==0)//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
         {
             cout << "count = " << count << " soit " << count / nb_exemples << " boucles d'apprentissage";
             cout << " ( " << NB_APPRENTISSAGE << " boucles  en : " << ((float)(clock()-t1)/CLOCKS_PER_SEC) << " s. ) ." << endl;
             t1 = clock();
-            //cout << "dist :  "   << dist << endl;
-            //cout << "Weight : " << net-> getLastLayer()->getNeuron(0)->getBinding(0)->getWeight() << endl;
-            //cout << "Weight1 : " << net-> getLastLayer()->getNeuron(0)->getBinding(1)->getWeight() << endl;
         }
     }
-    char nom_fichier[MAX_LENGTH_NAME_FILE];
+
+    //On sauvegarde le réseau
     net->save(lettre_testee,nom_fichier);
 
-    cout << "apprentissage ok : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
+    //Affichages ...
+    if (count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
+        cout << "apprentissage INFRUCTUEUX sur count = " << count ;
+    else
+        cout << "apprentissage productif : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
+
     cout << " avec " << successes << "succes, effectué en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
-    //quelques infos
-    cout << "dist :  "   << dist << endl;
-    cout << "count : " << count << endl;
 
-    double distance_totale(0);
-
-    //un fois que le réseau répond correctement à toutes les entrées, on affiche les sortie réelles
+    //Calcul de la distance moyenne
     for(exemple = 0; exemple<nb_exemples; exemple++){
+        //Réponse attendue
+        if(tabloFichiers[exemple][0]==lettre_testee)
+            att_output[0]=1;
+        else
+            att_output[0] =0;
+        //Réponse du réseau
         net->initNetwork(inputs[exemple]);
         net->launch(exp_output);
-        if(tabloFichiers[exemple][0]==lettre_testee){ att_output[0]=1; }
-        else{ att_output[0] =0; }
+
+        //Calcul de la distance
         distance_totale+=distance(exp_output, att_output , LAST_LAYER_SIZE );
     }
-
     cout << "distance moyenne sur les exemples : " << distance_totale / nb_exemples << endl ;
 
-    /*TODO : vérification
-    //et on test avec une input proche de {0,1} pour voir ce que ça donne, c'est la validation
-    cout << "valid : \n";
-    double valid[2] = {0.1,0.9};
-    net->initNetwork(valid);
-    exp_output = net->launch(length);
-    displayArray(valid, FIRST_LAYER_SIZE);
-    cout << "\t=>\t";
-    displayArray(exp_output, *length);
-    cout << endl;
-    */
-
-    //on affihe le nombre de liaisons total dans les réseau
-    //cout << "net bindings : "<< net->getTotalBindingsNumber() << endl;
-
-    // On enregistre l'état du réseau
-    net-> save(lettre_testee,nom_fichier);
-
+    //Calcul du temps mis
     double temps_mis(((float)(clock()-t0)/CLOCKS_PER_SEC));
     cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
 
-    // On met à jour la data base
+    // On met à jour les données
     write_compte_rendu(net,(count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
 
 }
