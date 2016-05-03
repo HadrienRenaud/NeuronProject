@@ -45,7 +45,7 @@ void database(bool sauvegarde, bool filtre)
                 cout << ep->d_name << " : traitement ... ";
                 filterPngs(ep->d_name,sauvegarde, filtre, pixelsR, pixelsG, pixelsB);
                 compteurPolices++;
-                cout << endl << "Traitee." << endl << endl;
+                cout << "Traitee." << endl;
             }
         }
         (void) closedir (dp);

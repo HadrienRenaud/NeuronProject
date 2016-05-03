@@ -21,12 +21,12 @@ bool readExemple(char* nom_fichier,double entrees[],int taille_entree);
 bool readExemple(char* nom_fichier,double entrees[],int taille_entree,const char* directory);//idem
 int countExemples();
 int countExemples(const char* directory);//compte les exemples dans directory
-void getTabloFichier(char** tabloFichier); // lit le tableau correspondant à une image
-void getTabloFichier(char** tabloFichier, const char* directory); // idem
-void getTabloExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples); // récupère tous les tablos d'exemples
-void getTabloExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory); //idem
-void plus_recent(Network* net);
-void plus_recent(Network* net,char lettre_testee);
+void getArrayOfFileNames(char** tabloFichier); // lit le tableau correspondant à une image
+void getArrayOfFileNames(char** tabloFichier, const char* directory); // idem
+void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples); // récupère tous les tablos d'exemples
+void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory); //idem
+void getMostRecent(Network* net);
+void getMostRecent(Network* net,char lettre_testee);
 void write_compte_rendu(Network* net, bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee, char* nom_fichier);
 void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs);
 void recupere_apprend();

@@ -103,13 +103,13 @@ char* Network::save(char lettre_testee,char* char_nom_fichier){
         }
     }
     //cout << "réseau enregistre dans le fichier : " << nom_fichier << endl;
-    // on sauvegarde le dernier fichier enregistré dans plus_recent.txt :
-    string plus_recent;
-    plus_recent = g_dir_svg + string(g_nom_svg) + lettre_testee;
-    plus_recent = plus_recent + ".txt";
-    ofstream fichier_recent(plus_recent.c_str());
+    // on sauvegarde le dernier fichier enregistré dans getMostRecent.txt :
+    string getMostRecent;
+    getMostRecent = g_dir_svg + string(g_nom_svg) + lettre_testee;
+    getMostRecent = getMostRecent + ".txt";
+    ofstream fichier_recent(getMostRecent.c_str());
     fichier_recent << nom_fichier.c_str();
-    //cout << "fichier " << plus_recent << " mis à jour." <<endl;
+    //cout << "fichier " << getMostRecent << " mis à jour." <<endl;
     strcpy(char_nom_fichier, nom_fichier.c_str());
     return char_nom_fichier;
 }
