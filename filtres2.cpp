@@ -9,7 +9,8 @@ Voir la description dans filtres2.h
 void filtres(){
     filtres(DOSSIERIMAGES);
 }
-void filtres(const char* repertory_dep){
+void filtres(const char* repertory_dep)
+{
     filtres(repertory_dep,DOSSIERTEXTES);
 }
 void filtres(const char* repertory_dep, const char* repertory_arr){
@@ -62,7 +63,6 @@ void filtres(const char* repertory_dep, const char* repertory_arr){
             cout << "Chargement : " << 100*compteurimages/nombreimages << "% - ";
             cout << ep->d_name << " : traitement ... ";
             lettre = NULL;
-            cout << ep->d_name << " : traitement ... " << flush;
             filtres_indiv(ep->d_name, pixelsR, pixelsG, pixelsB, lettre, repertory_dep, repertory_arr);
             compteurimages++;
             cout << " Traitee." << endl;
@@ -126,6 +126,7 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
     nomFichierTxt[strlen(nomFichierPng)-4]='\0';    //Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
     strcat(nomFichierTxt,".txt");   //Puis on lui ajoute ".txt"
 
+
     strcat(dossierPng,nomFichierPng);   //On obtient le chemin relatif menant à l'image en concaténant "images/" et le nom de l'image
     strcat(dossierTxt,nomFichierTxt);   //Idem pour le dossier "textes/" et le fichier ".txt"
 
@@ -134,9 +135,9 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
 
     if (lettre == NULL) //Si il y a eu un souci d'ouverture de l'image, on écrit une erreur dans erreur.txt
     {
-        ofstream file("erreur.txt",ofstream::ate);
-        file << "Filtres2 - Bug 1 : L'image " << dossierPng << " n'a pas pu être ouverte." << endl;
-	    //cout << "Filtres2 - Bug 1 : L'image " << dossierPng << " n'a pas pu être ouverte." << endl;
+        ofstream file("erreur.txt");
+        file << "Filtres2 - Bug 1 : L'image " << dossierPng << " n'a pas pu etre ouverte." << endl;
+        cout << "Filtres2 - Bug 1 : L'image " << dossierPng << " n'a pas pu etre ouverte." << endl;
     }
     else
     {
@@ -144,11 +145,12 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
     fichier = fopen(dossierTxt,"w+");   //On ouvre (ou on créé) un fichier txt
 
     if (fichier == NULL){    //Si l'ouverture du fichier texte a échoué, on inscrit une erreur dans erreur.txt
-        ofstream file("erreur.txt",ofstream::ate);
-    	file << "Filtres2 - Bug 2 : Le fichier " << dossierTxt << " n'a pas pu être ouvert" <<endl;
-    	cout << "Filtres2 - Bug 2 : Le fichier " << dossierTxt << " n'a pas pu être ouvert" <<endl;
+        ofstream file("erreur.txt");
+        file << "Filtres2 - Bug 2 : Le fichier " << dossierTxt << " n'a pas pu etre ouvert." <<endl;
+        cout << "Filtres2 - Bug 2 : Le fichier " << dossierTxt << " n'a pas pu etre ouvert." <<endl;
     }
-	else{    //Si l'ouverture a réussi
+	else //Si l'ouverture a réussi
+	{
     //La couleur du pixel de référence
     infopixel = getPixel(lettre, 0,0);
     SDL_GetRGB(infopixel, lettre->format, &red, &green, &blue);

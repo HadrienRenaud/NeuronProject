@@ -82,7 +82,7 @@ void menu(SDL_Renderer *ren)
     Network** tablo_net(createurs_reseaux());
 
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
-        getMostRecent(tablo_net[i],g_alphabet[i]);
+        plus_recent(tablo_net[i],g_alphabet[i]);
 
     cout << "Reseaux recuperes." << endl;
 

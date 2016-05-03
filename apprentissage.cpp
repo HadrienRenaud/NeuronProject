@@ -11,78 +11,79 @@ using namespace std;
 
 const char* g_dir_exemples("texts/"  ); //dossier ou sont contenus tous les fichiers d'exemples
 const char* g_dir_test("test/");
-const char g_alphabet[LENGTH_ALPHABET] {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+const char g_alphabet[LENGTH_ALPHABET] {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
 template <class T>
 void displayArray(T* data, int length){//afficher un tableau de valeur
-    cout << "["; //début de l'affichage
-    for(int i = 0; i<length-1; i++) // pour chaque valeur du tableau,
-        cout << (data[i]>=0 ? "+" : "") << data[i] << "," ; // on l'affiche avec son signe
-    cout << (data[length-1]>=0 ? "+" : "") << data[length-1] << "]"; //fin de l'affichage
+    cout << "[";
+    for(int i = 0; i<length-1; i++)
+        cout << (data[i]>=0 ? "+" : "") << data[i] << "," ;
+    cout << (data[length-1]>=0 ? "+" : "") << data[length-1] << "]";
 }
 
 double distance(double* data1, double* data2, int length){//on fait la moyenne des carrés de chaque écart entre data1 et data2
-    double res = 0; //initialisation
-    for(int i = 0; i<length; i++) //on parcourt la liste
-        res+=((data1[i]-data2[i])*(data1[i]-data2[i])); //On augmente la moyenne du carré de la distance entre data1 et data2 ~ Variance
-    res/=length; // On moyenne
+    double res = 0;
+    for(int i = 0; i<length; i++)
+        res+=((data1[i]-data2[i])*(data1[i]-data2[i]));
+    res/=length;
     return res;
 }
 
 double distanceMod(double* data1, double* data2, int length){
-    double res=0; //initialisation
-    int j=-1; //initialisation
+    double res=0;
+    int j;
     for (int i=0; i<length; i++){
-        res += ((data1[i]-data2[i])*(data1[i]-data2[i])); //carré de la distance
-        j = (i+26)%length; //position de la majuscule
-        res += ((data1[i]-data2[j])*(data1[i]-data2[j])); //carré de la distance à la majuscule
+        res += ((data1[i]-data2[i])*(data1[i]-data2[i]));
+        j = (i+26)%length;
+        res += ((data1[i]-data2[j])*(data1[i]-data2[j]));
     }
-    res/=length*2; // on moyenne
+    res/=length*2;
     return res;
 }
 
-bool readExemple(char* nom_fichier, double entrees[], int taille_entree){ //surcharge, appelle readExemple
-    return readExemple(nom_fichier,entrees,taille_entree,g_dir_exemples); //par défaut on lit les exemples dans g_dir_exemples
+bool lecture_example(char* nom_fichier, double entrees[], int taille_entree){ //surcharge, appelle lecture_example
+    return lecture_example(nom_fichier,entrees,taille_entree,g_dir_exemples); //par défaut on lit les exemples dans g_dir_exemples
 }
-bool readExemple(char* nom_fichier,double entrees[], int taille_entree,const char* directory){
+bool lecture_example(char* nom_fichier,double entrees[], int taille_entree,const char* directory){
     ifstream file((string(directory)+string(nom_fichier)).c_str()); //ouverture du fichier
     if (!file){
-        //ERREUR -> message dans erreur.txt, affiché dans la console
         ofstream file("erreur.txt");
         file << "Apprentissage - Bug 1 : Exemple " << directory << nom_fichier << " non lu." << endl;
         cout << "Apprentissage - Bug 1 : Exemple " << directory << nom_fichier << " non lu." << endl;
         return false;
     }
     else{
-        // On lit le fichier
+        //cout << "lecture de " << nom_fichier << endl;
         for (int i(0);i<taille_entree;i++)
             file >> entrees[i]; // on insère les valeurs dans entrees
         return true;
     }
 }
 
-int countExemples(){ //surcharge
-    return countExemples(g_dir_exemples); //par défaut ...
+int compteurExemples(){ //surcharge
+    return compteurExemples(g_dir_exemples); //par défaut ...
 }
-int countExemples(const char* directory){
-    int nombre_fichiers(0);     //Initialisation
+int compteurExemples(const char* directory){
+    int nombre_fichiers(0);
     DIR* dp;
     struct dirent* ep;
     dp = opendir(directory);    //On ouvre le répertoire contenant les images avant de le parcourir
     if (dp != NULL) //Si l'ouverture du répertoire a fonctionné
     {
         while ((ep = readdir(dp))) //On parcourt le répertoire
+        {
             if (strlen(ep->d_name) >= 4) //Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp (sinon le programme détecte d'autres fichiers invisibles bizarres)
                 nombre_fichiers++;
+        }
         closedir (dp);   //Fermeture du répertoire d'images
     }
     return nombre_fichiers;
 }
 
-void getArrayOfFileNames(char** tabloFichiers){ //surcharge
-    getArrayOfFileNames(tabloFichiers,g_dir_exemples); //par déa
+void getTabloFichier(char** tabloFichiers){ //surcharge
+    getTabloFichier(tabloFichiers,g_dir_exemples); //par déa
 }
-void getArrayOfFileNames(char** tabloFichiers,const char* directory){
+void getTabloFichier(char** tabloFichiers,const char* directory){
     int compteur(0);
     DIR* dp;
     struct dirent* ep;
@@ -100,29 +101,29 @@ void getArrayOfFileNames(char** tabloFichiers,const char* directory){
     }
 }
 
-void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples){
-    getArrayOfExemples(tabloFichiers, tabloExemple, nb_exemples , g_dir_exemples);
+void getTabloExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples){
+    getTabloExemples(tabloFichiers, tabloExemple, nb_exemples , g_dir_exemples);
 }
-void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory){
-    cout << " Lecture des exemples ... " << flush;
+void getTabloExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory){
+    cout << "Lecture des exemples ... " << flush;
     for (int i(0); i< nb_exemples;i++)
-        readExemple(tabloFichiers[i],tabloExemple[i],FIRST_LAYER_SIZE,directory); //on lit chacun des exemples
-    cout << "Lecture terminée." <<endl;
+        lecture_example(tabloFichiers[i],tabloExemple[i],FIRST_LAYER_SIZE,directory); //on lit chacun des exemples
+    cout << "Lecture terminee." <<endl;
 }
 
-void getMostRecent(Network* net){ //surcharge
-    getMostRecent(net, '_'); //default
+void plus_recent(Network* net){ //surcharge
+    plus_recent(net, '_'); //default
 }
-void getMostRecent(Network* net , char lettre_testee){
+void plus_recent(Network* net , char lettre_testee){
     //on reconstitue le nom du fichier :
     string nom_fichier;
     string nom_db;
     nom_db= string(g_dir_svg) + g_nom_svg+lettre_testee;
     nom_db=nom_db+".txt";
 
-    ifstream file(nom_db.c_str()); //on ouvre le fichier getMostRecent.txt
+    ifstream file(nom_db.c_str()); //on ouvre le fichier plus_recent.txt
     file >> nom_fichier; //on lit son contenu
-    cout << "Reseau " << lettre_testee << " - recuperation du fichier : " << nom_fichier << endl;
+    cout << "Reseau " << lettre_testee << " - recuperation : " << nom_fichier << endl;
     net->recup(nom_fichier); // On récupère le réseau stocké dans le fichier de svg le plus récent
 }
 
@@ -206,7 +207,7 @@ void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabl
     net->save(lettre_testee,nom_fichier);
 
     cout << "apprentissage ok : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
-    cout << " avec " << successes << "succes, effectué en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
+    cout << " avec " << successes << "succes, effectue en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
     //quelques infos
     cout << "dist :  "   << dist << endl;
     cout << "count : " << count << endl;
@@ -217,6 +218,13 @@ void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabl
     for(exemple = 0; exemple<nb_exemples; exemple++){
         net->initNetwork(inputs[exemple]);
         net->launch(exp_output);
+        /*
+        cout << tabloFichiers[exemple] ;
+        //displayArray(inputs[exemple], FIRST_LAYER_SIZE);
+        cout << "\t=>\t";
+        displayArray(exp_output, *length);
+        cout << endl;
+        */
         if(tabloFichiers[exemple][0]==lettre_testee){ att_output[0]=1; }
         else{ att_output[0] =0; }
         distance_totale+=distance(exp_output, att_output , LAST_LAYER_SIZE );
@@ -243,7 +251,7 @@ void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabl
     net-> save(lettre_testee,nom_fichier);
 
     double temps_mis(((float)(clock()-t0)/CLOCKS_PER_SEC));
-    cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
+    cout << "Apprentissage effectue en " << temps_mis << " secondes" << endl;
 
     // On met à jour la data base
     write_compte_rendu(net,(count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
@@ -252,7 +260,7 @@ void apprend(Network* net,char lettre_testee, const int nb_exemples, char** tabl
 
 Network** createurs_reseaux(){
     Network** tablo_net = new Network*[LENGTH_ALPHABET];
-    cout << "Creation des réseaux ... " << flush ;
+    cout << "Creation des reseaux ... " << flush ;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
         tablo_net[i] = new Network;//LE réseau
@@ -264,32 +272,30 @@ Network** createurs_reseaux(){
         //cout << "l1 : " << l1 << "tablo :" << tablo_net[i]->getFirstLayer() << endl;
         //cout << "tablo créé avec" << tablo_net[i]->getFirstLayerSize() << endl;
     }
-    cout << "Reseaux créés !" << endl;
+    cout << "Reseaux crees !" << endl;
     return tablo_net;
 }
 
 void destructeur_reseaux(Network** tablo_net){
     char nom_fichier[MAX_LENGTH_NAME_FILE];
-    cout << "Sauvegarde et destruction des réseaux ..." << flush;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
         tablo_net[i]->save(g_alphabet[i],nom_fichier);
         delete tablo_net[i];
     }
     delete tablo_net;
-    cout << "Réseaux détruits !" << endl;
 }
 
 void recupere_apprend(){
-    cout << "récupération des réseaux ... " << flush;
+    cout << "recuperation des reseaux ... " << flush;
 
 
     Network** tablo_net(createurs_reseaux());
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
-        getMostRecent(tablo_net[i],g_alphabet[i]);
+        plus_recent(tablo_net[i],g_alphabet[i]);
 
 
-    cout << "réseaux récupérés." << endl;
+    cout << "reseaux recuperes." << endl;
     apprend_tous(tablo_net);
 }
 
@@ -299,23 +305,23 @@ Network** apprend_nouveau(){
     //cout << fixed;//afficher tous les chiffres après la virgule
     clock_t t0(clock());//temps de départ du programme
     */
-    cout << "Création du réseau ... " <<flush;
+    cout << "Creation du reseau ... " <<flush;
 
     Network** tablo_net(createurs_reseaux());
 
-    cout << "le réseau est créé."<<endl;
+    cout << "le reseau est cree."<<endl;
     apprend_tous(tablo_net);
     return tablo_net;
 }
 
 void apprend_tous(Network** tablo_net){
-    cout << "Bienvenue dans le gestionnaire d'apprentissage du réseau de neurones" << endl << endl;
+    cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones" << endl << endl;
 
-    cout << "Initialisation des paramètres." << endl;
+    cout << "Initialisation des parametres." << endl;
     clock_t t0(clock());//temps de départ du programme
 
     //nombre d'exemples à traiter
-    int const nb_exemples(countExemples());
+    int const nb_exemples(compteurExemples());
 
     // Les tableaux contenant les donnees des exemples
     char** tabloFichiers = new char*[nb_exemples];
@@ -325,9 +331,9 @@ void apprend_tous(Network** tablo_net){
         tabloFichiers[i] = new char[MAX_LENGTH_NAME_FILE];
         inputs[i] = new double[FIRST_LAYER_SIZE];
     }
-    getArrayOfFileNames(tabloFichiers); //on récupère les noms des ficheirs d'exemples
-    getArrayOfExemples(tabloFichiers,inputs,nb_exemples); //on récupère les donnees des exemples
-    cout << "Initialisation effectuée en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." <<endl <<endl;
+    getTabloFichier(tabloFichiers); //on récupère les noms des ficheirs d'exemples
+    getTabloExemples(tabloFichiers,inputs,nb_exemples); //on récupère les donnees des exemples
+    cout << "Initialisation effectuee en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." <<endl <<endl;
 
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
@@ -337,24 +343,21 @@ void apprend_tous(Network** tablo_net){
 
 }
 
+
 char tester(Network** tablo_net, double input[]){
     char lettre_trouvee('_');
     double maxi(BORNE_INF_DISTINCTION);
     //double *exp_output = new double[LAST_LAYER_SIZE];//valeur prototypale en sortie du réseau
     double exp_output[LENGTH_ALPHABET][LAST_LAYER_SIZE];
-    cout << "Results : ";
     for (int i = 0; i < LENGTH_ALPHABET ; ++i)
     {
         tablo_net[i]->initNetwork(input);
         tablo_net[i]->launch(exp_output[i]);
-        if (exp_output[i][0]>(BORNE_INF_DISTINCTION/10))
-            cout << g_alphabet[i] << " : " << exp_output[i][0]*100 << "% -- " ;
         if (maxi<exp_output[i][0]){
             maxi=exp_output[i][0];
             lettre_trouvee=g_alphabet[i];
         }
     }
-    cout << endl;
     return lettre_trouvee;
 }
 /*
@@ -363,7 +366,7 @@ char teste_Pierrot(char* nom_fichier, const char* directory){
     Network** tablo_net(createurs_reseaux());
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
-        getMostRecent(tablo_net[i],g_alphabet[i]);
+        plus_recent(tablo_net[i],g_alphabet[i]);
     }
     cout << "reseaux recuperes." << endl;
 
@@ -371,7 +374,7 @@ char teste_Pierrot(char* nom_fichier, const char* directory){
 
 
     cout << "Lecture de l'exemple .." << flush;
-    readExemple(nom_fichier,input,FIRST_LAYER_SIZE,directory);
+    lecture_example(nom_fichier,input,FIRST_LAYER_SIZE,directory);
     cout << "Exemple lu." << endl;
 
     int* length = new int;//la taille du tableau de sortie (en réalité on peut s'en passer mais bon)
@@ -385,14 +388,14 @@ char* recupere_teste(const char* directory){
     Network** tablo_net(createurs_reseaux());
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
-        getMostRecent(tablo_net[i],g_alphabet[i]);
+        plus_recent(tablo_net[i],g_alphabet[i]);
     }
     cout << "reseaux recuperes." << endl;
 
     cout << "Initialisation des parametres." << endl;
     clock_t t0(clock());//temps de départ du programme
     //nombre d'exemples à traiter
-    int const nb_exemples(countExemples(directory));
+    int const nb_exemples(compteurExemples(directory));
     cout << "Nombre d'exemples : " << nb_exemples <<endl;
     int* length = new int;//la taille du tableau de sortie (en réalité on peut s'en passer mais bon)
     char* outputs= new char[nb_exemples];
@@ -403,8 +406,8 @@ char* recupere_teste(const char* directory){
         tabloFichiers[i]=new char[MAX_LENGTH_NAME_FILE]; //initialisation du ta*bleau
         inputs[i]=new double[FIRST_LAYER_SIZE];
     }
-    getArrayOfFileNames(tabloFichiers,directory); //on récupère les noms des ficheirs d'exemples
-    getArrayOfExemples(tabloFichiers,inputs,nb_exemples,directory); //on récupère les donnees des exemples
+    getTabloFichier(tabloFichiers,directory); //on récupère les noms des ficheirs d'exemples
+    getTabloExemples(tabloFichiers,inputs,nb_exemples,directory); //on récupère les donnees des exemples
     cout << "Initialisation effectuee en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, le test commence." <<endl <<endl;
 
     for (int i = 0; i < nb_exemples; ++i)

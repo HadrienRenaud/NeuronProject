@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="Binding.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="156" topLine="0" />
+	</File>
+	<File name="Layer.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="4943" topLine="27" />
+	</File>
+	<File name="Network.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="4459" topLine="79" />
+	</File>
+	<File name="Network.h" open="0" top="0" tabpos="5">
+		<Cursor position="2114" topLine="33" />
+	</File>
+	<File name="Neuron.cpp" open="0" top="0" tabpos="7">
+		<Cursor position="4587" topLine="109" />
+	</File>
+	<File name="Neuron.h" open="0" top="0" tabpos="9">
+		<Cursor position="2004" topLine="21" />
+	</File>
+	<File name="apprentissage.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="1398" topLine="32" />
+	</File>
+	<File name="apprentissage.h" open="0" top="0" tabpos="3">
+		<Cursor position="724" topLine="0" />
+	</File>
+	<File name="buttons.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="802" topLine="15" />
+	</File>
+	<File name="buttons.h" open="0" top="0" tabpos="5">
+		<Cursor position="886" topLine="17" />
+	</File>
+	<File name="database.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="1406" topLine="35" />
+	</File>
+	<File name="database.h" open="0" top="0" tabpos="0">
+		<Cursor position="614" topLine="2" />
+	</File>
+	<File name="filtres2.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="498" topLine="0" />
+	</File>
+	<File name="filtres2.h" open="0" top="0" tabpos="0">
+		<Cursor position="3653" topLine="33" />
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="600" topLine="5" />
+	</File>
+	<File name="menu.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="3881" topLine="34" />
+	</File>
+	<File name="menu.h" open="0" top="0" tabpos="3">
+		<Cursor position="496" topLine="6" />
+	</File>
+	<File name="system.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="557" topLine="11" />
+	</File>
+	<File name="system.h" open="0" top="0" tabpos="6">
+		<Cursor position="186" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

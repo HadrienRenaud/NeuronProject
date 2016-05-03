@@ -1,0 +1,743 @@
+# depslib dependency file v1.0
+1461069725 source:d:\pbrowne\programmation\programmation c\neuronproject\main.cpp
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+	"filtres2.h"
+	"menu.h"
+	"system.h"
+	"database.h"
+	"buttons.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hints.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<iconv.h>
+	<sal.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_config.h
+	"SDL_platform.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\begin_code.h
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\close_code.h
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	<mbarrier.h>
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<altivec.h>
+	<mmintrin.h>
+	<mm3dnow.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_pixels.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_scancode.h
+	"SDL_stdinc.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451768294 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1451803974 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1454366534 d:\pbrowne\programmation\programmation c\codeblocks\sdl2-2.0.4\i686-w64-mingw32\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1460899083 d:\pbrowne\programmation\programmation c\neuronproject\filtres2.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1461069725 d:\pbrowne\programmation\programmation c\neuronproject\menu.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1460969851 d:\pbrowne\programmation\programmation c\neuronproject\system.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1460975132 source:d:\pbrowne\programmation\programmation c\neuronproject\system.cpp
+	"system.h"
+
+1461072951 source:d:\pbrowne\programmation\programmation c\neuronproject\filtres2.cpp
+	"filtres2.h"
+
+1460892997 d:\pbrowne\programmation\programmation c\neuronproject\database.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1461072299 source:d:\pbrowne\programmation\programmation c\neuronproject\menu.cpp
+	"filtres2.h"
+	"menu.h"
+	"system.h"
+	"database.h"
+	"buttons.h"
+
+1461072844 source:d:\pbrowne\programmation\programmation c\neuronproject\database.cpp
+	"database.h"
+	"filtres2.h"
+
+1460998249 d:\pbrowne\programmation\programmation c\neuronproject\buttons.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1461012646 source:d:\pbrowne\programmation\programmation c\neuronproject\buttons.cpp
+	"buttons.h"
+	"system.h"
+
+1461322887 source:c:\users\pierre\dropbox\neuronproject\buttons.cpp
+	"buttons.h"
+	"system.h"
+
+1461254777 c:\users\pierre\dropbox\neuronproject\buttons.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1460969851 c:\users\pierre\dropbox\neuronproject\system.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1462113220 source:c:\users\pierre\dropbox\neuronproject\database.cpp
+	"database.h"
+	"filtres2.h"
+
+1462224520 c:\users\pierre\dropbox\neuronproject\database.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1462107876 c:\users\pierre\dropbox\neuronproject\filtres2.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1462111043 source:c:\users\pierre\dropbox\neuronproject\filtres2.cpp
+	"filtres2.h"
+
+1461333085 source:c:\users\pierre\dropbox\neuronproject\system.cpp
+	"system.h"
+
+1462124351 source:c:\users\pierre\dropbox\neuronproject\binding.cpp
+	"Binding.h"
+	<iostream>
+
+1462119134 c:\users\pierre\dropbox\neuronproject\binding.h
+	"Neuron.h"
+
+1461187753 c:\users\pierre\dropbox\neuronproject\neuron.h
+	<vector>
+	<cmath>
+	"Layer.h"
+	"Binding.h"
+
+1461175948 c:\users\pierre\dropbox\neuronproject\layer.h
+	<vector>
+	"Neuron.h"
+	"Network.h"
+
+1462303321 c:\users\pierre\dropbox\neuronproject\network.h
+	"Layer.h"
+	<string>
+	<cstring>
+
+1461182315 source:c:\users\pierre\dropbox\neuronproject\layer.cpp
+	"Layer.h"
+	<iostream>
+	<stdlib.h>
+	<ctime>
+
+1462303290 source:c:\users\pierre\dropbox\neuronproject\network.cpp
+	"Network.h"
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<cstring>
+	<cstdlib>
+	<ctime>
+	<iomanip>
+	<algorithm>
+
+1462225028 source:c:\users\pierre\dropbox\neuronproject\neuron.cpp
+	"Neuron.h"
+	<iostream>
+
+1462117627 source:c:\users\pierre\dropbox\neuronproject\apprentissage.cpp
+	"apprentissage.h"
+	<iostream>
+	<cstdlib>
+	<fstream>
+	<string>
+	<dirent.h>
+	<cstring>
+	<time.h>
+
+1462304698 c:\users\pierre\dropbox\neuronproject\apprentissage.h
+	"Network.h"
+
+1462117627 source:c:\users\pierre\dropbox\neuronproject\main.cpp
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+	"filtres2.h"
+	"menu.h"
+	"system.h"
+	"database.h"
+	"buttons.h"
+
+1462224705 c:\users\pierre\dropbox\neuronproject\menu.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+	"filtres2.h"
+	"system.h"
+	"database.h"
+	"buttons.h"
+	"apprentissage.h"
+
+1462303499 source:c:\users\pierre\dropbox\neuronproject\menu.cpp
+	"menu.h"
+
+1461182315 source:d:\neuronproject\layer.cpp
+	"Layer.h"
+	<iostream>
+	<stdlib.h>
+	<ctime>
+
+1461175948 d:\neuronproject\layer.h
+	<vector>
+	"Neuron.h"
+	"Network.h"
+
+1461187753 d:\neuronproject\neuron.h
+	<vector>
+	<cmath>
+	"Layer.h"
+	"Binding.h"
+
+1461138437 d:\neuronproject\binding.h
+	"Neuron.h"
+
+1461938202 d:\neuronproject\network.h
+	"Layer.h"
+	<string>
+	<cstring>
+
+1462110281 source:d:\neuronproject\neuron.cpp
+	"Neuron.h"
+	<iostream>
+
+1461322887 source:d:\neuronproject\buttons.cpp
+	"buttons.h"
+	"system.h"
+
+1461254777 d:\neuronproject\buttons.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1460969851 d:\neuronproject\system.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1461333085 source:d:\neuronproject\system.cpp
+	"system.h"
+
+1461937686 source:d:\neuronproject\binding.cpp
+	"Binding.h"
+	<iostream>
+
+1462116473 source:d:\neuronproject\apprentissage.cpp
+	"apprentissage.h"
+	<iostream>
+	<cstdlib>
+	<fstream>
+	<string>
+	<dirent.h>
+	<cstring>
+	<time.h>
+
+1462107798 d:\neuronproject\apprentissage.h
+	"Network.h"
+
+1462110032 source:d:\neuronproject\network.cpp
+	"Network.h"
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<cstring>
+	<cstdlib>
+	<ctime>
+	<iomanip>
+	<algorithm>
+
+1462113220 source:d:\neuronproject\database.cpp
+	"database.h"
+	"filtres2.h"
+
+1461946421 d:\neuronproject\database.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1462107876 d:\neuronproject\filtres2.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+
+1462111043 source:d:\neuronproject\filtres2.cpp
+	"filtres2.h"
+
+1462117024 source:d:\neuronproject\main.cpp
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+	"filtres2.h"
+	"menu.h"
+	"system.h"
+	"database.h"
+	"buttons.h"
+
+1462117024 d:\neuronproject\menu.h
+	<cstdlib>
+	<cstdio>
+	<iostream>
+	<fstream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<string.h>
+	<dirent.h>
+	<math.h>
+	"filtres2.h"
+	"system.h"
+	"database.h"
+	"buttons.h"
+	"apprentissage.h"
+
+1462117024 source:d:\neuronproject\menu.cpp
+	"menu.h"
+
