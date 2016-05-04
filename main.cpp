@@ -1,6 +1,3 @@
-//Pour compiler sur linux utiliser les packages libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev et la commande :
-//      g++ *.cpp `sdl2-config --libs --cflags` -lSDL2_image -lSDL2_ttf -std=c++14 -o NeuronProject
-
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>

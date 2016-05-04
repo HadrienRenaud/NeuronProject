@@ -223,7 +223,7 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
     net->save(lettre_testee,nom_fichier);
 
     //Affichages ...
-    if (count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
+    if (count >= MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
         cout << "apprentissage INFRUCTUEUX sur count = " << count ;
     else
         cout << "apprentissage productif : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
