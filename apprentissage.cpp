@@ -223,7 +223,7 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
     net->save(lettre_testee,nom_fichier);
 
     //Affichages ...
-    if (count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
+    if (count >= MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
         cout << "apprentissage INFRUCTUEUX sur count = " << count ;
     else
         cout << "apprentissage productif : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
@@ -250,9 +250,8 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
     double temps_mis(((float)(clock()-t0)/CLOCKS_PER_SEC));
     cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
 
-    // On met à jour les données
+    // On met à jour les données dans le fichier
     writeReport(net,(count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
-
 }
 
 Network** createNetworks(){
