@@ -40,5 +40,13 @@ Thumbs.db
 ##############################
 *.svg_reseau
 *.png
+<<<<<<< HEAD
 *plus_recent_*
 .NeuronProject
+=======
+svg_reseau
+images
+test/*
+images/*
+test
+>>>>>>> master
