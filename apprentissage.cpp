@@ -252,7 +252,6 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
 
     // On met à jour les données dans le fichier
     writeReport(net,(count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
-
 }
 
 Network** createNetworks(){
