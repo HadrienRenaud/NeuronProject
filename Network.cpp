@@ -10,29 +10,31 @@
 #include <algorithm>
 using namespace std;
 
-Network::Network():m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false),m_firstLayer(0),m_lettre_testee('_'){
-    m_momentum = ALPHA;
+Network::Network(){
+    Network('_');
 }
-Network::Network(int lettre_testee):m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false), m_firstLayer(0), m_lettre_testee(lettre_testee) {
+Network::Network(char lettre_testee):
+    m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
+    m_firstLayer(0), m_lettre_testee(lettre_testee),
+    m_nameFile(new char[MAX_LENGTH_NAME_FILE]) {
     m_momentum = ALPHA;
-}
-
-Network::Network(string nom_fichier,int lettre_testee):m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),m_lettre_testee(lettre_testee){
-    recuperateur(nom_fichier);
+    }
+Network::Network(string nom_fichier,int lettre_testee):
+    m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
+    m_lettre_testee(lettre_testee),
+    m_nameFile(new char[MAX_LENGTH_NAME_FILE]) {
+    strcpy(m_nameFile,nom_fichier.c_str());
     m_momentum = ALPHA;
-}
+    recuperateur();
+    }
 
 Network::~Network(){
-    delete m_firstLayer;
+    delete m_nameFile; //allocation dynamique
+    delete m_firstLayer; //supprime TOUTES les couches
 }
 
-void Network::recup(string nom_fichier){
-    //if (m_firstLayer!=nullptr){delete m_firstLayer;} //Si le réseau est non vide, on le vide
-    recuperateur(nom_fichier);
-}
-
-void Network::recuperateur(string nom_fichier){
-    ifstream file(nom_fichier.c_str()); // On ouvre le fichier
+void Network::recuperateur(){
+    ifstream file(m_nameFile); // On ouvre le fichier
     int nbTotalLayer, lengthLayer,neurbis,i,j;
     double weight;
     char* pEnd(0);
@@ -41,61 +43,51 @@ void Network::recuperateur(string nom_fichier){
     Layer *layer,*previousLayer(0);
     file >> nbTotalLayer; // On lit le nombre total de couches
     file >> lengthLayer; // On lit le nombre de neurones de la premiere couche, dont on a pas besoin de récupérer les liasons
+
     while(getline(file,ligne)){ // pour chaque couche
-        //cout << "Network : Network1 layer " << layer << " previousLayer " << previousLayer <<endl ;
         istringstream ligne_stream(ligne); //objet crée pour le traitement de la ligne récupérée
         layer = new Layer(this,lengthLayer,previousLayer); // nouvelle couche créée
         i=0; // initialisation de l'indice du neurone recevant la liaison sur le couche layer
-        //cout << "Network : Network2 layer " << layer << " previousLayer " << previousLayer <<endl ;
         if ( previousLayer != 0 ){ // si on est pas sur la première couche
+
             while (getline(ligne_stream,neurone_str,',')) // pour tout neurone de la couche
             {
                 j=0; // indice de la liaison arrivant au neurone considéré
                 istringstream neurone_stream(neurone_str); // objet créé pour le traitement du string récupéré
-                //cout << "Network : Network3 while neurone_str " << neurone_str << endl ;
                 neurone = layer -> getNeuron(i); // neurone considéré
                 while (getline(neurone_stream,weight_str,' ')) // pour toute liaison arrivant au neurone
                 {
                     if(weight_str.size()){ // si ce n'est pas un faux poids vide
                         weight=strtod(weight_str.c_str(),&pEnd); //on récupère le poids de la liaison
-                        //cout << "Network : Network3 while weight_str " << weight_str << " weight " << weight << endl ;
-                        //cout << "Network : Network3 while neurone " << neurone << " weight " << weight << endl ;
                         neurone->getBinding(j)->setWeight(weight); //on change le poids de la liaison
-                    j++;
+                        j++;
                     }
                 }
                 i++;
             }
         }
         previousLayer=layer;
-        //cout << "Network : Network4 layer " << layer << " previousLayer " << previousLayer <<endl ;
         file >> lengthLayer; // on lit la longueur de la prochaine couche
     }
 }
-char* Network::save(){
-    char* nom_fichier;
-    return save(nom_fichier);
-}
-char* Network::save(char* char_nom_fichier){
+void Network::save(){
     // On trouve le nom du fichier
     time_t t = time(0); // l'heure
     ostringstream temps; //flux pour traitement
     temps << asctime(localtime(&t)); //on récupère le flux correspondant au temps
-    string nom_fichier(temps.str()); // on crée un string correspondant au flux
-    for(int i(0);i<nom_fichier.size();i++){ // on parcourt le nom du fichier
-        if(!isalnum(nom_fichier[i])){   // et on remplace tout ce qui ne va pas dans un
-            nom_fichier[i]='_';         // nom de fichier par '_'
-        }
-    }
-    string dir_svg(g_dir_svg);
-    nom_fichier= dir_svg + nom_fichier + "_" + m_lettre_testee + g_extension_svg ; // adresse complete
+    string str_nom_fichier(temps.str()); // on crée un string correspondant au flux
+    for(int i(0);i<str_nom_fichier.size();i++) // on parcourt le nom du fichier
+        if(!isalnum(str_nom_fichier[i]))  // et on remplace tout ce qui ne va pas dans un
+            str_nom_fichier[i]='_';         // nom de fichier par '_'
+    str_nom_fichier= string(g_dir_svg) + str_nom_fichier + "_" + m_lettre_testee + string(g_extension_svg) ; // adresse complete
+    strcpy(m_nameFile,str_nom_fichier.c_str());
+
     //on écrit dans le fichier
-    ofstream file(nom_fichier.c_str()); // flux sortant dans le fichier
-    file << this->getTotalLayerNumber() << ' '; // on entre le nombre total de couches
-    Layer *layer(this->getFirstLayer()); // on initialise la premiere couche
+    ofstream file(m_nameFile); // flux sortant dans le fichier
+    file << getTotalLayerNumber() << ' '; // on entre le nombre total de couches
+    Layer *layer(getFirstLayer()); // on initialise la premiere couche
     file << layer -> getSize() << ' ';   // en donnant sa longueur
     Neuron *neurone;
-    Binding *binding;
     while (layer->getNextLayer()!=0){//pour toute couche
         layer = layer -> getNextLayer(); // on prend la suivante
         file << endl << layer -> getSize() << ' '; // on donne sa taille
@@ -107,27 +99,19 @@ char* Network::save(char* char_nom_fichier){
             file << ','; //séparateur
         }
     }
-    //cout << "réseau enregistre dans le fichier : " << nom_fichier << endl;
-    // on sauvegarde le dernier fichier enregistré dans getMostRecent.txt :
-    string getMostRecent;
-    getMostRecent = g_dir_svg + string(g_nom_svg) + m_lettre_testee;
-    getMostRecent = getMostRecent + ".txt";
-    ofstream fichier_recent(getMostRecent.c_str());
-    fichier_recent << nom_fichier.c_str();
-    //cout << "fichier " << getMostRecent << " mis à jour." <<endl;
-    strcpy(char_nom_fichier, nom_fichier.c_str());
-    return char_nom_fichier;
+
+    // on sauvegarde le dernier fichier enregistré dans mostRecent.txt :
+    string mostRecent;
+    mostRecent = g_dir_svg + string(g_nom_svg) + m_lettre_testee + string(g_extension_svg);
+    ofstream fichier_recent(mostRecent.c_str());
+    fichier_recent << m_nameFile;
 }
 
 void Network::setFirstLayer(Layer* layer){
-    if(layer){
+    if(layer) //Si ce n'est pas un pointeur vide
         m_firstLayer = layer;
-    }
-    else
-    {
-        m_firstLayer = new Layer(this);
-    }
-
+    else //si c'est un pointeur vide
+        m_firstLayer = new Layer(this); // on crée une nouvelle couche
 }
 
 Layer* Network::getFirstLayer()const{
@@ -135,25 +119,21 @@ Layer* Network::getFirstLayer()const{
 }
 
 Layer* Network::getLastLayer()const{
-    //cout << "getLastLayer appelée ";
-    Layer* temp = m_firstLayer;
-    do{
-        //cout << temp <<endl;
-        temp = temp->getNextLayer();
-        //cout << "getLastLayer récupère " << temp << endl ;
-    }while(temp->getNextLayer()!=m_firstLayer&&temp->getNextLayer()!=0);
-    //cout << "end getLastLayer"<<endl;
-    return temp;
+    Layer* temp = m_firstLayer; //initialisation à la première couche
+    do
+        temp = temp->getNextLayer(); //on parcourt les couches
+    while(temp->getNextLayer()!=m_firstLayer&&temp->getNextLayer()!=0); //jusqu'à ce qu'il n'y en ai plus après
+    return temp; //on retourne la dernière
 }
 
 int Network::getTotalLayerNumber(){
-    Layer* temp = m_firstLayer;
+    Layer* temp = m_firstLayer; //initialisation à la première couche
     int i =0;
     do{
-        temp = temp->getNextLayer();
-        i++;
-    }while(temp->getNextLayer()!=m_firstLayer&&temp->getNextLayer()!=0);
-    return i;
+        temp = temp->getNextLayer(); //on parcourt les couches
+        i++; //en incrémentant le compteur
+    }while(temp->getNextLayer()!=m_firstLayer&&temp->getNextLayer()!=0); //jusqu'à ce qu'il n'y en ai plus
+    return i; // on retourne le compteur
 }
 
 int Network::getFirstLayerSize()const{
@@ -162,19 +142,13 @@ int Network::getFirstLayerSize()const{
 
 void Network::initNetwork(double *inputs){
     //on initialise la premiere couche avec les inputs
-    //cout << " Network : initNetwork" << getFirstLayerSize() << " : " << getFirstLayer() << endl;
     for(int i = 0; i< getFirstLayerSize(); i++){
-        if (inputs[i]!=inputs[i]){cout << "Network : initNetwork : inputs [i ="<<i<<"] = " << inputs[i] << endl ; displayArray(inputs,getFirstLayerSize());}
-        //cout << "coucou0"<<endl;
-        //cout << getFirstLayer()->getNeuron(i) << endl;
         getFirstLayer()->getNeuron(i)->initNeuron(inputs[i]);
-        //cout << "coucou1" << endl;
     }
+
     //puis on réinitialise tous les aures neurones du réseau
-    //cout <<"Coucou" << endl;
     Layer* temp = m_firstLayer;
     do{
-        //cout << temp;
         temp = temp->getNextLayer();
         temp->resetNeurons();
     }while(temp->getNextLayer()!=m_firstLayer&&temp->getNextLayer()!=0);
@@ -183,11 +157,11 @@ void Network::initNetwork(double *inputs){
 
 void Network::initNetworkGradient(double* expectedOutputs){
     //on initialise la dernière couche
-    for(int i = 0; i< getLastLayer()->getSize(); i++){
+    for(int i = 0; i< getLastLayer()->getSize(); i++)
         getLastLayer()->getNeuron(i)->initNeuronGradient(expectedOutputs[i]);
-    }
     //dans cette boucle, on parcourt toutes les layer (sauf la dernière), et on
     //mets les gradient à zéro
+
     Layer* last = getLastLayer();
     Layer* temp = last;
     do{
@@ -197,20 +171,12 @@ void Network::initNetworkGradient(double* expectedOutputs){
     m_gradientInitialized = true;
 }
 
-int Network::getTotalBindingsNumber()const{
-        return m_totalBindingsNumber;
-}
-
-void Network::increaseTotalBindingsNumber(int n){
-    m_totalBindingsNumber+=n;
-}
-
 bool Network::isALoop()const{//on regarde si le réseau se mord la queue
     Layer* temp = m_firstLayer;
-    do{
+    do
         temp = temp->getNextLayer();
-    }while(temp!=m_firstLayer&&temp!=0);
-    if(temp)
+    while(temp!=m_firstLayer&&temp!=0);
+    if(temp) //si la dernière couche est la premiere ...
         return true;
     else
         return false;
@@ -225,15 +191,10 @@ void Network::launch(double outputs[]){
         }//lorsque sort, la dernière couche a été stimulée : c'est bon.
 
         //maintenant on récupère la sortie dans un tableau
-        //double* outputs = new double[temp->getSize()];
-        //cout << "outputs : ";
-        for(int i = 0; i<temp->getSize(); i++){
+        for(int i = 0; i<temp->getSize(); i++)
             outputs[i] = temp->getNeuron(i)->getOutput();
-            //cout << outputs[i] ;
-        }
-        //cout << endl;
+
         m_initialized = false;//le réseau n'est plus utilisable pour l'instant
-        //return outputs;
     }
 }
 
@@ -273,20 +234,20 @@ double Network::getMomentum(){
 
 void Network::getMostRecent(){
     //initialisations
-    string nom_fichier;
+    string str_nom_fichier;
     string nom_db;
 
     //on reconstitue le nom du fichier :
-    nom_db= string(g_dir_svg) + g_nom_svg+m_lettre_testee;
-    nom_db=nom_db+".txt";
+    nom_db= string(g_dir_svg) + g_nom_svg+m_lettre_testee+ string(g_extension_svg);
 
     ifstream file(nom_db.c_str()); //on ouvre le fichier getMostRecent.txt
-    file >> nom_fichier; //on lit son contenu
-    cout << "Reseau " << m_lettre_testee << " - recuperation du fichier : " << nom_fichier << endl;
-    recup(nom_fichier); // On récupère le réseau stocké dans le fichier de svg le plus récent
+    file >> str_nom_fichier; //on lit son contenu
+    strcpy(m_nameFile,str_nom_fichier.c_str());
+    cout << "Reseau " << m_lettre_testee << " - recuperation du fichier : " << str_nom_fichier << endl;
+    recuperateur(); // On récupère le réseau stocké dans le fichier de svg le plus récent
 }
 
-void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char* nom_fichier){
+void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires){
     //initialisations
     ofstream base_donnes;
     time_t rawtime;
@@ -296,7 +257,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
     Layer* temp ;
 
     //Inscription des premières données
-    base_donnes.open("../Compte_rendu_test_toutes.csv",ios::out|ios::app);
+    base_donnes.open("Compte_rendu_test_toutes.csv",ios::out|ios::app);
     timeinfo = localtime (&rawtime);
     strftime(buffer,80,"%d/%m/%y",timeinfo);
     base_donnes << buffer << ',';
@@ -315,7 +276,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 
     //fin de l'inscription des données
     base_donnes << count << ',' << distance_moyenne << ',' << DISTANCE_MAXIMALE  << ',';
-    cout << resultat << ',' << temps_mis <<','<< commentaires << ',' << nom_fichier << endl;
+    base_donnes << resultat << ',' << temps_mis <<','<< commentaires << ',' << m_nameFile << endl;
 }
 
 void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs){
@@ -330,7 +291,6 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     double dist = 0;//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
     double att_output[LAST_LAYER_SIZE];//valeur attendue en sortie du réseau
     double exp_output[LAST_LAYER_SIZE];//valeur prototypale en sortie du réseau
-    char nom_fichier[MAX_LENGTH_NAME_FILE];
     double distance_totale(0);
 
 
@@ -378,7 +338,7 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     }
 
     //On sauvegarde le réseau
-    save(nom_fichier);
+    save();
 
     //Affichages ...
     if (count >= MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
@@ -410,13 +370,13 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
 
     // On met à jour les données dans le fichier
     writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,
-    distance_totale/nb_exemples,temps_mis," ",nom_fichier);
+    distance_totale/nb_exemples,temps_mis," ");
 }
 
 char Network::getLettreTestee(){
-    return m_lettre_testee;
+    return m_lettre_testee; //récupère la lettre testee.
 }
-void Network::setLettreTestee(char lettre_testee){
+void Network::setLettreTestee(char lettre_testee){ //change la lettre
     cout << "Network " << m_lettre_testee << " change de lettre et devient ";
     m_lettre_testee = lettre_testee;
     cout << m_lettre_testee << endl;

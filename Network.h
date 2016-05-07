@@ -14,7 +14,7 @@ using namespace std;
 #define ALPHA 0.05 //momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE 100
 #define NB_APPRENTISSAGE 10
-#define DISTANCE_MAXIMALE 0.1
+#define DISTANCE_MAXIMALE 1
 #define MAX_LIMIT_LOOP 20
 #define LENGTH_ALPHABET 52
 #define BORNE_INF_DISTINCTION 0.1
@@ -25,7 +25,7 @@ class Layer;//on dit qu'on va utiliser la classe layer
 class Network{
 public :
     Network();//rien a mettre de-dans
-    Network(int lettre_testee);
+    Network(char lettre_testee);
     Network( string nom_fichier , int lettre_testee);
     ~Network();//destructeur
 
@@ -44,21 +44,19 @@ public :
                                 //destiné à stocké la taille du tableau retourné
     bool launchGradient();//lancer la rétropropagation du gradient
     bool learn();//;)
-    char* save();
-    char* save(char* char_nom_fichier); //sauver l'etat du réseau
-    void recup(string nom_fichier);// récupérer le réseau depuis le fichier
+    void save(); //sauver l'etat du réseau
     //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet
     double getMomentum();
+    void recuperateur();// fonction appelée pour récupérer à partir d'un fichier
 
     void getMostRecent(); //actualise le réseau
-    void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char* nom_fichier);
+    void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
     void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
 
     char getLettreTestee();
     void setLettreTestee(char lettre_testee);
 
 private :
-    void recuperateur(string nom_fichier);// fonction appelée pour récupérer à partir d'un fichier
     Layer* m_firstLayer;//seule la première couche suffit
     int m_totalBindingsNumber;
     bool m_initialized;//on procede à la propagation seulement si m_initialized
@@ -66,6 +64,7 @@ private :
     bool m_gradientInitialized;//pareil pour la rétro
     double m_momentum;//facteur d'inertie, define -> ALPHA
     char m_lettre_testee;
+    char* m_nameFile;
 };
 
 
