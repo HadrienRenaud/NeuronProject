@@ -1,5 +1,5 @@
-#ifndef APPRENTISSAGE_H_INCLUDED
-#define APPRENTISSAGE_H_INCLUDED
+#ifndef NETWORKARRAY_H_INCLUDED
+#define NETWORKARRAY_H_INCLUDED
 
 #include "Network.h"
 
@@ -37,4 +37,4 @@ char testNetworks(Network** tablo_net, double input[]);
 //char teste_Pierrot(char* nom_fichier, const char* directory);
 //char* recupere_teste();
 //char* recupere_teste(const char* directory);
-#endif //APPRENTISSAGE_H_INCLUDED
+#endif //NETWORKARRAY_H_INCLUDED

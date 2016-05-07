@@ -535,7 +535,7 @@
 	<iostream>
 
 1462117627 source:c:\users\pierre\dropbox\neuronproject\apprentissage.cpp
-	"apprentissage.h"
+	"NetworkArray.h"
 	<iostream>
 	<cstdlib>
 	<fstream>
@@ -544,7 +544,7 @@
 	<cstring>
 	<time.h>
 
-1462304698 c:\users\pierre\dropbox\neuronproject\apprentissage.h
+1462304698 c:\users\pierre\dropbox\neuronproject\NetworkArray.h
 	"Network.h"
 
 1462117627 source:c:\users\pierre\dropbox\neuronproject\main.cpp
@@ -579,7 +579,7 @@
 	"system.h"
 	"database.h"
 	"buttons.h"
-	"apprentissage.h"
+	"NetworkArray.h"
 
 1462303499 source:c:\users\pierre\dropbox\neuronproject\menu.cpp
 	"menu.h"
@@ -649,7 +649,7 @@
 	<iostream>
 
 1462116473 source:d:\neuronproject\apprentissage.cpp
-	"apprentissage.h"
+	"NetworkArray.h"
 	<iostream>
 	<cstdlib>
 	<fstream>
@@ -658,7 +658,7 @@
 	<cstring>
 	<time.h>
 
-1462107798 d:\neuronproject\apprentissage.h
+1462107798 d:\neuronproject\NetworkArray.h
 	"Network.h"
 
 1462110032 source:d:\neuronproject\network.cpp
@@ -736,7 +736,7 @@
 	"system.h"
 	"database.h"
 	"buttons.h"
-	"apprentissage.h"
+	"NetworkArray.h"
 
 1462117024 source:d:\neuronproject\menu.cpp
 	"menu.h"

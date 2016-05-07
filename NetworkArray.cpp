@@ -1,4 +1,4 @@
-#include "apprentissage.h"
+#include "NetworkArray.h"
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
