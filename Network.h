@@ -25,7 +25,8 @@ class Layer;//on dit qu'on va utiliser la classe layer
 class Network{
 public :
     Network();//rien a mettre de-dans
-    Network( string );
+    Network(char lettre_testee);
+    Network( string nom_fichier , char lettre_testee);
     ~Network();//destructeur
 
     void setFirstLayer(Layer* layer=0);//changer la première couche
@@ -43,19 +44,18 @@ public :
                                 //destiné à stocké la taille du tableau retourné
     bool launchGradient();//lancer la rétropropagation du gradient
     bool learn();//;)
-    char* save(char* char_nom_fichier);
-    char* save(char lettre_testee);
-    char* save(char lettre_testee,char* char_nom_fichier); //sauver l'etat du réseau
+    char* save();
+    char* save(char* char_nom_fichier); //sauver l'etat du réseau
     void recup(string nom_fichier);// récupérer le réseau depuis le fichier
     //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet
     double getMomentum();
 
     void getMostRecent(); //actualise le réseau
-    void getMostRecent(char lettre_testee);//sur la lettre donnée
+        void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char* nom_fichier);
+    void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
 
-    void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee, char* nom_fichier);
-    void learnNetwork(char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs);
-
+    char getLettreTestee();
+    void setLettreTestee(char lettre_testee);
 
 private :
     void recuperateur(string nom_fichier);// fonction appelée pour récupérer à partir d'un fichier
@@ -65,6 +65,7 @@ private :
                         //est vrai
     bool m_gradientInitialized;//pareil pour la rétro
     double m_momentum;//facteur d'inertie, define -> ALPHA
+    char m_lettre_testee;
 };
 
 

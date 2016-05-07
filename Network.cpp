@@ -12,11 +12,16 @@ using namespace std;
 
 Network::Network():m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false),m_firstLayer(0){
     m_momentum = ALPHA;
+    m_lettre_testee = '_';
 }
-
-Network::Network(string nom_fichier):m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false){
+Network::Network(char lettre_testee){
+    m_momentum = ALPHA;
+    m_lettre_testee = lettre_testee;
+}
+Network::Network(string nom_fichier,char lettre_testee):m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false){
     recuperateur(nom_fichier);
     m_momentum = ALPHA;
+    m_lettre_testee = lettre_testee;
 }
 
 Network::~Network(){
@@ -69,12 +74,11 @@ void Network::recuperateur(string nom_fichier){
         file >> lengthLayer; // on lit la longueur de la prochaine couche
     }
 }
-char* Network::save(char lettre_testee){
+char* Network::save(){
     char* nom_fichier;
-    return save(lettre_testee,nom_fichier);
+    return save(nom_fichier);
 }
-char* Network::save(char* char_nom_fichier){return save('_',char_nom_fichier);}
-char* Network::save(char lettre_testee,char* char_nom_fichier){
+char* Network::save(char* char_nom_fichier){
     // On trouve le nom du fichier
     time_t t = time(0); // l'heure
     ostringstream temps; //flux pour traitement
@@ -86,7 +90,7 @@ char* Network::save(char lettre_testee,char* char_nom_fichier){
         }
     }
     string dir_svg(g_dir_svg);
-    nom_fichier= dir_svg + nom_fichier + "_" + lettre_testee + g_extension_svg ; // adresse complete
+    nom_fichier= dir_svg + nom_fichier + "_" + m_lettre_testee + g_extension_svg ; // adresse complete
     //on écrit dans le fichier
     ofstream file(nom_fichier.c_str()); // flux sortant dans le fichier
     file << this->getTotalLayerNumber() << ' '; // on entre le nombre total de couches
@@ -108,7 +112,7 @@ char* Network::save(char lettre_testee,char* char_nom_fichier){
     //cout << "réseau enregistre dans le fichier : " << nom_fichier << endl;
     // on sauvegarde le dernier fichier enregistré dans getMostRecent.txt :
     string getMostRecent;
-    getMostRecent = g_dir_svg + string(g_nom_svg) + lettre_testee;
+    getMostRecent = g_dir_svg + string(g_nom_svg) + m_lettre_testee;
     getMostRecent = getMostRecent + ".txt";
     ofstream fichier_recent(getMostRecent.c_str());
     fichier_recent << nom_fichier.c_str();
@@ -269,25 +273,22 @@ double Network::getMomentum(){
     return m_momentum;
 }
 
-void Network::getMostRecent(){ //surcharge
-    getMostRecent('_'); //default
-}
-void Network::getMostRecent(char lettre_testee){
+void Network::getMostRecent(){
     //initialisations
     string nom_fichier;
     string nom_db;
 
     //on reconstitue le nom du fichier :
-    nom_db= string(g_dir_svg) + g_nom_svg+lettre_testee;
+    nom_db= string(g_dir_svg) + g_nom_svg+m_lettre_testee;
     nom_db=nom_db+".txt";
 
     ifstream file(nom_db.c_str()); //on ouvre le fichier getMostRecent.txt
     file >> nom_fichier; //on lit son contenu
-    cout << "Reseau " << lettre_testee << " - recuperation du fichier : " << nom_fichier << endl;
+    cout << "Reseau " << m_lettre_testee << " - recuperation du fichier : " << nom_fichier << endl;
     recup(nom_fichier); // On récupère le réseau stocké dans le fichier de svg le plus récent
 }
 
-void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee,char* nom_fichier){
+void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char* nom_fichier){
     //initialisations
     ofstream base_donnes;
     time_t rawtime;
@@ -302,7 +303,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
     strftime(buffer,80,"%d/%m/%y",timeinfo);
     base_donnes << buffer << ',';
     strftime(buffer,80,"%H:%M:%S",timeinfo);
-    base_donnes << buffer << ","<< lettre_testee << "," << getTotalLayerNumber()+1 << ',';
+    base_donnes << buffer << ","<< m_lettre_testee << "," << getTotalLayerNumber()+1 << ',';
 
     //inscription des couches
     temp = m_firstLayer;
@@ -319,10 +320,10 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
     cout << resultat << ',' << temps_mis <<','<< commentaires << ',' << nom_fichier << endl;
 }
 
-void Network::learnNetwork(char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs){
+void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs){
     clock_t t0(clock());//temps de départ du programme
 
-    cout << "Apprentissage de la lettre " << lettre_testee << " ..." << endl;
+    cout << "Apprentissage de la lettre " << m_lettre_testee << " ..." << endl;
 
     // Initialisations
     int exemple=0;//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
@@ -345,7 +346,7 @@ void Network::learnNetwork(char lettre_testee, const int nb_exemples, char** tab
         count++;
 
         //Résultat attendu
-        if(tabloFichiers[exemple][0]==lettre_testee)
+        if(tabloFichiers[exemple][0]==m_lettre_testee)
             att_output[0]=1;
         else
             att_output[0] =0;
@@ -379,7 +380,7 @@ void Network::learnNetwork(char lettre_testee, const int nb_exemples, char** tab
     }
 
     //On sauvegarde le réseau
-    save(lettre_testee,nom_fichier);
+    save(nom_fichier);
 
     //Affichages ...
     if (count >= MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
@@ -392,7 +393,7 @@ void Network::learnNetwork(char lettre_testee, const int nb_exemples, char** tab
     //Calcul de la distance moyenne
     for(exemple = 0; exemple<nb_exemples; exemple++){
         //Réponse attendue
-        if(tabloFichiers[exemple][0]==lettre_testee)
+        if(tabloFichiers[exemple][0]==m_lettre_testee)
             att_output[0]=1;
         else
             att_output[0] =0;
@@ -410,7 +411,14 @@ void Network::learnNetwork(char lettre_testee, const int nb_exemples, char** tab
     cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
 
     // On met à jour les données dans le fichier
-    writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
+    writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",nom_fichier);
+}
+
+char Network::getLettreTestee(){
+    return m_lettre_testee;
+}
+void Network::setLettreTestee(char lettre_testee){
+    m_lettre_testee = lettre_testee;
 }
 
 template <class T>

@@ -24,6 +24,8 @@ NetworkArray::NetworkArray(){
        Layer* l2= new Layer(m_tablo_net[i], 100, l1, 0); //seconde
        Layer* l3= new Layer(m_tablo_net[i], 10, l2, 0); //troisieme
        Layer* lend= new Layer(m_tablo_net[i],LAST_LAYER_SIZE,l3, 0); //couche de fin
+
+       m_tablo_net[i]->setLettreTestee(g_alphabet[i]);
    }
    cout << "Reseaux créés !" << endl;
 }
@@ -32,7 +34,7 @@ NetworkArray::~NetworkArray(){
     cout << "Sauvegarde et destruction des réseaux ..." << flush;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
-        m_tablo_net[i]->save(g_alphabet[i]);
+        m_tablo_net[i]->save();
         delete m_tablo_net[i];
     }
     delete m_tablo_net;
@@ -65,7 +67,7 @@ void NetworkArray::learnAllNetworks(){
     //Apprentissage
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
-        m_tablo_net[i]->learnNetwork(g_alphabet[i],nb_exemples,tabloFichiers,inputs);
+        m_tablo_net[i]->learnNetwork(nb_exemples,tabloFichiers,inputs);
         cout << endl << endl;
     }
 }
@@ -101,7 +103,7 @@ char NetworkArray::testNetworks(double input[]){
 
 void NetworkArray::getMostRecent(){
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
-        m_tablo_net[i]->getMostRecent(g_alphabet[i]);
+        m_tablo_net[i]->getMostRecent();
 }
 
 // ####### Hors de NetworkArray #########
