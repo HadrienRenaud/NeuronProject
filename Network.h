@@ -13,6 +13,13 @@ using namespace std;
 #define LAST_LAYER_SIZE 1//nombe de neurones de la dernière couche
 #define ALPHA 0.05 //momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE 100
+#define NB_APPRENTISSAGE 10
+#define DISTANCE_MAXIMALE 0.1
+#define MAX_LIMIT_LOOP 20
+#define LENGTH_ALPHABET 52
+#define BORNE_INF_DISTINCTION 0.1
+#define BORNE_MAX_CASSE 10
+
 
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network{
@@ -43,6 +50,13 @@ public :
     //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet
     double getMomentum();
 
+    void getMostRecent(); //actualise le réseau
+    void getMostRecent(char lettre_testee);//sur la lettre donnée
+
+    void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee, char* nom_fichier);
+    void learnNetwork(char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs);
+
+
 private :
     void recuperateur(string nom_fichier);// fonction appelée pour récupérer à partir d'un fichier
     Layer* m_firstLayer;//seule la première couche suffit
@@ -56,6 +70,8 @@ private :
 
 template <class T>
 void displayArray(T* data, int length);//affichage d'un tableau
+double distance(double* data1, double* data2, int length);//calcul d'écart
+double distanceMod(double* data1, double* data2, int length);//calcul d'écart
 
 
 #endif

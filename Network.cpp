@@ -269,10 +269,174 @@ double Network::getMomentum(){
     return m_momentum;
 }
 
+void Network::getMostRecent(){ //surcharge
+    getMostRecent('_'); //default
+}
+void Network::getMostRecent(char lettre_testee){
+    //initialisations
+    string nom_fichier;
+    string nom_db;
+
+    //on reconstitue le nom du fichier :
+    nom_db= string(g_dir_svg) + g_nom_svg+lettre_testee;
+    nom_db=nom_db+".txt";
+
+    ifstream file(nom_db.c_str()); //on ouvre le fichier getMostRecent.txt
+    file >> nom_fichier; //on lit son contenu
+    cout << "Reseau " << lettre_testee << " - recuperation du fichier : " << nom_fichier << endl;
+    recup(nom_fichier); // On récupère le réseau stocké dans le fichier de svg le plus récent
+}
+
+void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char lettre_testee,char* nom_fichier){
+    //initialisations
+    ofstream base_donnes;
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer [80];
+    time (&rawtime);
+    Layer* temp ;
+
+    //Inscription des premières données
+    base_donnes.open("../Compte_rendu_test_toutes.csv",ios::out|ios::app);
+    timeinfo = localtime (&rawtime);
+    strftime(buffer,80,"%d/%m/%y",timeinfo);
+    base_donnes << buffer << ',';
+    strftime(buffer,80,"%H:%M:%S",timeinfo);
+    base_donnes << buffer << ","<< lettre_testee << "," << getTotalLayerNumber()+1 << ',';
+
+    //inscription des couches
+    temp = m_firstLayer;
+    do
+    {
+        base_donnes << temp->getSize() << ',' ;
+        temp = temp->getNextLayer();
+    } while (temp!=0);
+    for (int i(0);i<(4-(getTotalLayerNumber()));i++)
+        base_donnes << ',';
+
+    //fin de l'inscription des données
+    base_donnes << count << ',' << distance_moyenne << ',' << DISTANCE_MAXIMALE  << ',';
+    cout << resultat << ',' << temps_mis <<','<< commentaires << ',' << nom_fichier << endl;
+}
+
+void Network::learnNetwork(char lettre_testee, const int nb_exemples, char** tabloFichiers, double** inputs){
+    clock_t t0(clock());//temps de départ du programme
+
+    cout << "Apprentissage de la lettre " << lettre_testee << " ..." << endl;
+
+    // Initialisations
+    int exemple=0;//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
+    int successes = 0;//le réseau doit enchainer nb_exemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
+    int count = 0;//nombre de passage dans la boucle
+    double dist = 0;//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
+    double att_output[LAST_LAYER_SIZE];//valeur attendue en sortie du réseau
+    double exp_output[LAST_LAYER_SIZE];//valeur prototypale en sortie du réseau
+    char nom_fichier[MAX_LENGTH_NAME_FILE];
+    double distance_totale(0);
+
+
+    clock_t t1(clock());
+
+    //APPRENTISSAGE
+    while((successes<nb_exemples) && (count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)){//tant qu'on a pas enchaîner nb_exemples succès
+        //incrémentation
+    	exemple ++;
+    	exemple%=nb_exemples;//On ne dépasse pas nb_exemples
+        count++;
+
+        //Résultat attendu
+        if(tabloFichiers[exemple][0]==lettre_testee)
+            att_output[0]=1;
+        else
+            att_output[0] =0;
+
+        //Calcul de la réponse du réseau
+        initNetwork(inputs[exemple]); //on initialise avec les valeurs inputs
+    	launch(exp_output);//on lance et on récupère les outputs
+
+        //Calcul de l'écart
+        if (count < nb_exemples * NB_APPRENTISSAGE * BORNE_MAX_CASSE && false)
+            dist = distance(exp_output, att_output , LAST_LAYER_SIZE );//on calcule l'écart
+        else
+            dist = distanceMod(exp_output, att_output , LAST_LAYER_SIZE );//on calcule l'écart
+
+        //On apprend, ou pas en fonction du résultat
+        if(dist<DISTANCE_MAXIMALE){//si c'est assez petit, c'est un succès
+            successes++;
+        }else{//sinon c'est un echec et le réseau recalcule les poids des liaisons
+            initNetworkGradient(att_output);
+            learn();
+            successes = 0;//on réinitialise aussi les nombre de succès enchaînés
+        }
+
+        // Affichages de temps en temps ...
+        if(count%(NB_APPRENTISSAGE*nb_exemples)==0)//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
+        {
+            cout << "count = " << count << " soit " << count / nb_exemples << " boucles d'apprentissage";
+            cout << " ( " << NB_APPRENTISSAGE << " boucles  en : " << ((float)(clock()-t1)/CLOCKS_PER_SEC) << " s. ) ." << endl;
+            t1 = clock();
+        }
+    }
+
+    //On sauvegarde le réseau
+    save(lettre_testee,nom_fichier);
+
+    //Affichages ...
+    if (count >= MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
+        cout << "apprentissage INFRUCTUEUX sur count = " << count ;
+    else
+        cout << "apprentissage productif : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
+
+    cout << " avec " << successes << "succes, effectué en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
+
+    //Calcul de la distance moyenne
+    for(exemple = 0; exemple<nb_exemples; exemple++){
+        //Réponse attendue
+        if(tabloFichiers[exemple][0]==lettre_testee)
+            att_output[0]=1;
+        else
+            att_output[0] =0;
+        //Réponse du réseau
+        initNetwork(inputs[exemple]);
+        launch(exp_output);
+
+        //Calcul de la distance
+        distance_totale+=distance(exp_output, att_output , LAST_LAYER_SIZE );
+    }
+    cout << "distance moyenne sur les exemples : " << distance_totale / nb_exemples << endl ;
+
+    //Calcul du temps mis
+    double temps_mis(((float)(clock()-t0)/CLOCKS_PER_SEC));
+    cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
+
+    // On met à jour les données dans le fichier
+    writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
+}
+
 template <class T>
 void displayArray(T* data, int length){//afficher un tableau de valeur
     cout << "[";
     for(int i = 0; i<length-1; i++)
         cout << (data[i]>=0 ? "+" : "") << data[i] << "," ;
     cout << (data[length-1]>=0 ? "+" : "") << data[length-1] << "]";
+}
+
+double distance(double* data1, double* data2, int length){//on fait la moyenne des carrés de chaque écart entre data1 et data2
+    double res = 0; //initialisation
+    for(int i = 0; i<length; i++) //on parcourt la liste
+        res+=((data1[i]-data2[i])*(data1[i]-data2[i])); //On augmente la moyenne du carré de la distance entre data1 et data2 ~ Variance
+    res/=length; // On moyenne
+    return res;
+}
+
+double distanceMod(double* data1, double* data2, int length){
+    double res=0; //initialisation
+    int j=-1; //initialisation
+    for (int i=0; i<length; i++){
+        res += ((data1[i]-data2[i])*(data1[i]-data2[i])); //carré de la distance
+        j = (i+26)%length; //position de la majuscule
+        res += ((data1[i]-data2[j])*(data1[i]-data2[j])); //carré de la distance à la majuscule
+    }
+    res/=length*2; // on moyenne
+    return res;
 }
