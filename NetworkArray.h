@@ -13,8 +13,12 @@ class NetworkArray{
         char testNetworks(double input[]);
         void learnAllNetworks();
         void getMostRecent();
+        void getLettresTestees();
+        char* getAlphabet();
+        void setAlphabet(char* alphabet);
     private :
         Network** m_tablo_net; //le tableau des networks
+        const char* m_alphabet;
 };
 
 template <class T>

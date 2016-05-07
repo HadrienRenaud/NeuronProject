@@ -10,18 +10,16 @@
 #include <algorithm>
 using namespace std;
 
-Network::Network():m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false),m_firstLayer(0){
+Network::Network():m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false),m_firstLayer(0),m_lettre_testee('_'){
     m_momentum = ALPHA;
-    m_lettre_testee = '_';
 }
-Network::Network(char lettre_testee){
+Network::Network(int lettre_testee):m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false), m_firstLayer(0), m_lettre_testee(lettre_testee) {
     m_momentum = ALPHA;
-    m_lettre_testee = lettre_testee;
 }
-Network::Network(string nom_fichier,char lettre_testee):m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false){
+
+Network::Network(string nom_fichier,int lettre_testee):m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),m_lettre_testee(lettre_testee){
     recuperateur(nom_fichier);
     m_momentum = ALPHA;
-    m_lettre_testee = lettre_testee;
 }
 
 Network::~Network(){
@@ -411,14 +409,17 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
 
     // On met à jour les données dans le fichier
-    writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",nom_fichier);
+    writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,
+    distance_totale/nb_exemples,temps_mis," ",nom_fichier);
 }
 
 char Network::getLettreTestee(){
     return m_lettre_testee;
 }
 void Network::setLettreTestee(char lettre_testee){
+    cout << "Network " << m_lettre_testee << " change de lettre et devient ";
     m_lettre_testee = lettre_testee;
+    cout << m_lettre_testee << endl;
 }
 
 template <class T>

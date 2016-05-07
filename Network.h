@@ -25,8 +25,8 @@ class Layer;//on dit qu'on va utiliser la classe layer
 class Network{
 public :
     Network();//rien a mettre de-dans
-    Network(char lettre_testee);
-    Network( string nom_fichier , char lettre_testee);
+    Network(int lettre_testee);
+    Network( string nom_fichier , int lettre_testee);
     ~Network();//destructeur
 
     void setFirstLayer(Layer* layer=0);//changer la première couche
@@ -51,7 +51,7 @@ public :
     double getMomentum();
 
     void getMostRecent(); //actualise le réseau
-        void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char* nom_fichier);
+    void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires,char* nom_fichier);
     void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
 
     char getLettreTestee();

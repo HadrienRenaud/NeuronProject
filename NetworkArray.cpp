@@ -13,21 +13,20 @@ const char* g_dir_exemples("texts/"  ); //dossier ou sont contenus tous les fich
 const char* g_dir_test("test/");
 const char g_alphabet[LENGTH_ALPHABET] {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
-NetworkArray::NetworkArray(){
-   Network** m_tablo_net = new Network*[LENGTH_ALPHABET]; //Création du tableau
+
+
+NetworkArray::NetworkArray():m_alphabet(g_alphabet),m_tablo_net(new Network*[LENGTH_ALPHABET]){
    cout << "Creation des réseaux ... " << flush ;
    for (int i = 0; i < LENGTH_ALPHABET; ++i)
    {
-       m_tablo_net[i] = new Network;//Le réseau
+       m_tablo_net[i] = new Network(g_alphabet[i]);//Le réseau
        //Layer* l = new Layer(adresse du réseau, nombre de neurones dans la couche, adresse de la couche précédente, adresse de la couche suivante, fonction de transfert des neuronres de la couche);
        Layer* l1= new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0); //première couche
        Layer* l2= new Layer(m_tablo_net[i], 100, l1, 0); //seconde
        Layer* l3= new Layer(m_tablo_net[i], 10, l2, 0); //troisieme
        Layer* lend= new Layer(m_tablo_net[i],LAST_LAYER_SIZE,l3, 0); //couche de fin
-
-       m_tablo_net[i]->setLettreTestee(g_alphabet[i]);
-   }
-   cout << "Reseaux créés !" << endl;
+    }
+    cout << "Reseaux créés !" << endl;
 }
 
 NetworkArray::~NetworkArray(){
@@ -104,6 +103,13 @@ char NetworkArray::testNetworks(double input[]){
 void NetworkArray::getMostRecent(){
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
         m_tablo_net[i]->getMostRecent();
+}
+
+void NetworkArray::getLettresTestees(){
+    cout << "NetworkArray : " << this << " tablo_net : "<< m_tablo_net << endl;
+    for (int j = 0; j < LENGTH_ALPHABET; ++j)
+        m_tablo_net[j]->getLettreTestee();
+    cout << endl;
 }
 
 // ####### Hors de NetworkArray #########
@@ -184,19 +190,3 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
         readExemple(tabloFichiers[i],tabloExemple[i],FIRST_LAYER_SIZE,directory); //on lit chacun des exemples
     cout << "Lecture terminée." <<endl;
 }
-
-
-
-/*
-void getAndLearn(){
-    cout << "récupération des réseaux ... " << flush;
-
-    Network** tablo_net(createNetworks());//initialisation
-
-    for (int i = 0; i < LENGTH_ALPHABET; ++i)
-        getMostRecent(tablo_net[i],g_alphabet[i]); // on récupère le plus récent
-
-    cout << "réseaux récupérés." << endl;
-    learnAllNetworks(tablo_net);
-}
-*/
