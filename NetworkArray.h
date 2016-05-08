@@ -19,10 +19,13 @@ class NetworkArray{
         void setAlphabet(char* alphabet);
         double getMaximalDistance();
         void setMaximalDistance(double maximal_distance);
+        int getMaxLimitLoop();
+        void setMaxLimitLoop(int maxLimitLoop);
 
     private :
         Network** m_tablo_net; //le tableau des networks
         double m_maximal_distance;
+        int m_maxLimitLoop;
         const char* m_alphabet;
 };
 

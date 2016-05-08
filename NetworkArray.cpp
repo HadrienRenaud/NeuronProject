@@ -15,10 +15,13 @@ const char g_alphabet[LENGTH_ALPHABET] {'a','b','c','d','e','f','g','h','i','j',
 
 
 
-NetworkArray::NetworkArray():m_alphabet(g_alphabet),m_tablo_net(new Network*[LENGTH_ALPHABET]), m_maximal_distance(DISTANCE_MAXIMALE)   {
-   cout << "Creation des réseaux ... " << flush ;
-   for (int i = 0; i < LENGTH_ALPHABET; ++i)
-   {
+NetworkArray::NetworkArray():
+    m_alphabet(g_alphabet), m_tablo_net(new Network*[LENGTH_ALPHABET]),
+    m_maximal_distance(DISTANCE_MAXIMALE), m_maxLimitLoop(MAX_LIMIT_LOOP*NB_APPRENTISSAGE)
+    {
+    cout << "Creation des réseaux ... " << flush ;
+    for (int i = 0; i < LENGTH_ALPHABET; ++i)
+    {
        m_tablo_net[i] = new Network(g_alphabet[i]);//Le réseau
        //Layer* l = new Layer(adresse du réseau, nombre de neurones dans la couche, adresse de la couche précédente, adresse de la couche suivante, fonction de transfert des neuronres de la couche);
        Layer* l1= new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0); //première couche
@@ -121,8 +124,14 @@ void NetworkArray::setMaximalDistance(double maximal_distance){
     m_maximal_distance=maximal_distance;
 }
 
-
-
+int NetworkArray::getMaxLimitLoop(){
+    return m_maxLimitLoop;
+}
+void NetworkArray::setMaxLimitLoop(int maxLimitLoop) {
+    for (int i = 0; i < LENGTH_ALPHABET; ++i)
+        m_tablo_net[i]->setMaxLimitLoop(maxLimitLoop);
+    m_maxLimitLoop=maxLimitLoop;
+}
 
 // ######################### Hors de NetworkArray ##############################
 

@@ -57,6 +57,8 @@ public :
     void setLettreTestee(char lettre_testee);
     double getMaximalDistance();
     void setMaximalDistance(double maximal_distance);
+    int getMaxLimitLoop();
+    void setMaxLimitLoop(int maxLimitLoop);
 
 private :
     Layer* m_firstLayer;//seule la première couche suffit
@@ -66,6 +68,7 @@ private :
     bool m_gradientInitialized;//pareil pour la rétro
     double m_momentum;//facteur d'inertie, define -> ALPHA
     double m_maximal_distance;
+    int m_maxLimitLoop;
     char m_lettre_testee;
     char* m_nameFile;
 };

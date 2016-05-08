@@ -16,14 +16,14 @@ Network::Network(){
 Network::Network(char lettre_testee):
     m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
     m_firstLayer(0), m_lettre_testee(lettre_testee),m_maximal_distance(DISTANCE_MAXIMALE),
-    m_nameFile(new char[MAX_LENGTH_NAME_FILE])
+    m_nameFile(new char[MAX_LENGTH_NAME_FILE]),m_maxLimitLoop(NB_APPRENTISSAGE*MAX_LIMIT_LOOP)
     {
     m_momentum = ALPHA;
     }
 Network::Network(string nom_fichier,int lettre_testee,double maximal_distance):
     m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
     m_lettre_testee(lettre_testee),m_maximal_distance(maximal_distance),
-    m_nameFile(new char[MAX_LENGTH_NAME_FILE])
+    m_nameFile(new char[MAX_LENGTH_NAME_FILE]),m_maxLimitLoop(NB_APPRENTISSAGE*MAX_LIMIT_LOOP)
     {
     strcpy(m_nameFile,nom_fichier.c_str());
     m_momentum = ALPHA;
@@ -299,7 +299,7 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     clock_t t1(clock());
 
     //APPRENTISSAGE
-    while((successes<nb_exemples) && (count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)){//tant qu'on a pas enchaîner nb_exemples succès
+    while((successes<nb_exemples) && (count < m_maxLimitLoop*nb_exemples)){//tant qu'on a pas enchaîner nb_exemples succès
         //incrémentation
     	exemple ++;
     	exemple%=nb_exemples;//On ne dépasse pas nb_exemples
@@ -343,10 +343,10 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     save();
 
     //Affichages ...
-    if (count >= MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples)
+    if (count >= m_maxLimitLoop*nb_exemples)
         cout << "apprentissage INFRUCTUEUX sur count = " << count ;
     else
-        cout << "apprentissage productif : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
+        cout << "apprentissage productif : count = " << count << " sur " << m_maxLimitLoop*nb_exemples ;
 
     cout << " avec " << successes << "succes, effectué en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
 
@@ -371,7 +371,7 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
 
     // On met à jour les données dans le fichier
-    writeReport((count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,
+    writeReport((count < m_maxLimitLoop*nb_exemples),count/nb_exemples,
     distance_totale/nb_exemples,temps_mis," ");
 }
 
@@ -391,6 +391,13 @@ void Network::setMaximalDistance(double maximal_distance){
     cout << "Network " << m_lettre_testee << " change pour la distance ";
     m_maximal_distance = maximal_distance;
     cout << m_maximal_distance << endl;
+}
+
+int Network::getMaxLimitLoop(){
+    return m_maxLimitLoop;
+}
+void Network::setMaxLimitLoop(int maxLimitLoop){
+    m_maxLimitLoop=maxLimitLoop;
 }
 
 template <class T>
