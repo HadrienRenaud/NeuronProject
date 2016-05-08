@@ -14,10 +14,15 @@ class NetworkArray{
         void learnAllNetworks();
         void getMostRecent();
         void getLettresTestees();
+
         char* getAlphabet();
         void setAlphabet(char* alphabet);
+        double getMaximalDistance();
+        void setMaximalDistance(double maximal_distance);
+
     private :
         Network** m_tablo_net; //le tableau des networks
+        double m_maximal_distance;
         const char* m_alphabet;
 };
 

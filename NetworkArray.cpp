@@ -15,7 +15,7 @@ const char g_alphabet[LENGTH_ALPHABET] {'a','b','c','d','e','f','g','h','i','j',
 
 
 
-NetworkArray::NetworkArray():m_alphabet(g_alphabet),m_tablo_net(new Network*[LENGTH_ALPHABET]){
+NetworkArray::NetworkArray():m_alphabet(g_alphabet),m_tablo_net(new Network*[LENGTH_ALPHABET]), m_maximal_distance(DISTANCE_MAXIMALE)   {
    cout << "Creation des réseaux ... " << flush ;
    for (int i = 0; i < LENGTH_ALPHABET; ++i)
    {
@@ -112,7 +112,22 @@ void NetworkArray::getLettresTestees(){
     cout << endl;
 }
 
-// ####### Hors de NetworkArray #########
+double NetworkArray::getMaximalDistance(){
+    return m_maximal_distance;
+}
+void NetworkArray::setMaximalDistance(double maximal_distance){
+    for (int i = 0; i < LENGTH_ALPHABET; ++i)
+        m_tablo_net[i]->setMaximalDistance(maximal_distance);
+    m_maximal_distance=maximal_distance;
+}
+
+
+
+
+// ######################### Hors de NetworkArray ##############################
+
+
+
 
 template <class T>
 void displayArray(T* data, int length){//afficher un tableau de valeur

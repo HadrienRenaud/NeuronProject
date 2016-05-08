@@ -15,14 +15,16 @@ Network::Network(){
 }
 Network::Network(char lettre_testee):
     m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-    m_firstLayer(0), m_lettre_testee(lettre_testee),
-    m_nameFile(new char[MAX_LENGTH_NAME_FILE]) {
+    m_firstLayer(0), m_lettre_testee(lettre_testee),m_maximal_distance(DISTANCE_MAXIMALE),
+    m_nameFile(new char[MAX_LENGTH_NAME_FILE])
+    {
     m_momentum = ALPHA;
     }
-Network::Network(string nom_fichier,int lettre_testee):
+Network::Network(string nom_fichier,int lettre_testee,double maximal_distance):
     m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-    m_lettre_testee(lettre_testee),
-    m_nameFile(new char[MAX_LENGTH_NAME_FILE]) {
+    m_lettre_testee(lettre_testee),m_maximal_distance(maximal_distance),
+    m_nameFile(new char[MAX_LENGTH_NAME_FILE])
+    {
     strcpy(m_nameFile,nom_fichier.c_str());
     m_momentum = ALPHA;
     recuperateur();
@@ -275,7 +277,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
         base_donnes << ',';
 
     //fin de l'inscription des données
-    base_donnes << count << ',' << distance_moyenne << ',' << DISTANCE_MAXIMALE  << ',';
+    base_donnes << count << ',' << distance_moyenne << ',' << m_maximal_distance << ',';
     base_donnes << resultat << ',' << temps_mis <<','<< commentaires << ',' << m_nameFile << endl;
 }
 
@@ -320,7 +322,7 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
             dist = distanceMod(exp_output, att_output , LAST_LAYER_SIZE );//on calcule l'écart
 
         //On apprend, ou pas en fonction du résultat
-        if(dist<DISTANCE_MAXIMALE){//si c'est assez petit, c'est un succès
+        if(dist<m_maximal_distance){//si c'est assez petit, c'est un succès
             successes++;
         }else{//sinon c'est un echec et le réseau recalcule les poids des liaisons
             initNetworkGradient(att_output);
@@ -380,6 +382,15 @@ void Network::setLettreTestee(char lettre_testee){ //change la lettre
     cout << "Network " << m_lettre_testee << " change de lettre et devient ";
     m_lettre_testee = lettre_testee;
     cout << m_lettre_testee << endl;
+}
+
+double Network::getMaximalDistance(){
+    return m_maximal_distance;
+}
+void Network::setMaximalDistance(double maximal_distance){
+    cout << "Network " << m_lettre_testee << " change pour la distance ";
+    m_maximal_distance = maximal_distance;
+    cout << m_maximal_distance << endl;
 }
 
 template <class T>

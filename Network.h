@@ -26,7 +26,7 @@ class Network{
 public :
     Network();//rien a mettre de-dans
     Network(char lettre_testee);
-    Network( string nom_fichier , int lettre_testee);
+    Network( string nom_fichier , int lettre_testee, double maximal_distance);
     ~Network();//destructeur
 
     void setFirstLayer(Layer* layer=0);//changer la première couche
@@ -55,6 +55,8 @@ public :
 
     char getLettreTestee();
     void setLettreTestee(char lettre_testee);
+    double getMaximalDistance();
+    void setMaximalDistance(double maximal_distance);
 
 private :
     Layer* m_firstLayer;//seule la première couche suffit
@@ -63,6 +65,7 @@ private :
                         //est vrai
     bool m_gradientInitialized;//pareil pour la rétro
     double m_momentum;//facteur d'inertie, define -> ALPHA
+    double m_maximal_distance;
     char m_lettre_testee;
     char* m_nameFile;
 };
