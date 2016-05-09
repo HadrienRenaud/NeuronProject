@@ -10,7 +10,7 @@
 #include <algorithm>
 using namespace std;
 
-Network::Network():m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false),m_firstLayer(0){
+Network::Network():m_firstLayer(0),m_totalBindingsNumber(0),m_initialized(false),m_gradientInitialized(false){
     m_momentum = ALPHA;
 }
 
@@ -30,7 +30,7 @@ void Network::recup(string nom_fichier){
 
 void Network::recuperateur(string nom_fichier){
     ifstream file(nom_fichier.c_str()); // On ouvre le fichier
-    int nbTotalLayer, lengthLayer,neurbis,i,j;
+    int nbTotalLayer, lengthLayer,i,j;
     double weight;
     char* pEnd(0);
     Neuron* neurone;
@@ -80,7 +80,7 @@ char* Network::save(char lettre_testee,char* char_nom_fichier){
     ostringstream temps; //flux pour traitement
     temps << asctime(localtime(&t)); //on récupère le flux correspondant au temps
     string nom_fichier(temps.str()); // on crée un string correspondant au flux
-    for(int i(0);i<nom_fichier.size();i++){ // on parcourt le nom du fichier
+    for(int i(0);i<(int)nom_fichier.size();i++){ // on parcourt le nom du fichier
         if(!isalnum(nom_fichier[i])){   // et on remplace tout ce qui ne va pas dans un
             nom_fichier[i]='_';         // nom de fichier par '_'
         }
@@ -93,7 +93,7 @@ char* Network::save(char lettre_testee,char* char_nom_fichier){
     Layer *layer(this->getFirstLayer()); // on initialise la premiere couche
     file << layer -> getSize() << ' ';   // en donnant sa longueur
     Neuron *neurone;
-    Binding *binding;
+    //Binding *binding; -> unused variable ?
     while (layer->getNextLayer()!=0){//pour toute couche
         layer = layer -> getNextLayer(); // on prend la suivante
         file << endl << layer -> getSize() << ' '; // on donne sa taille

@@ -104,10 +104,10 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
     getArrayOfExemples(tabloFichiers, tabloExemple, nb_exemples , g_dir_exemples); // Par défaut, directory = g_dir_exemples
 }
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory){
-    cout << " Lecture des exemples ... " << flush;
+    cout << "Lecture des exemples ... " << flush;
     for (int i(0); i< nb_exemples;i++)
         readExemple(tabloFichiers[i],tabloExemple[i],FIRST_LAYER_SIZE,directory); //on lit chacun des exemples
-    cout << "Lecture terminée." <<endl;
+    cout << "Lecture terminee." <<endl;
 }
 
 void getMostRecent(Network* net){ //surcharge
@@ -228,7 +228,7 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
     else
         cout << "apprentissage productif : count = " << count << " sur " << MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples ;
 
-    cout << " avec " << successes << "succes, effectué en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
+    cout << " avec " << successes << "succes, effectue en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
 
     //Calcul de la distance moyenne
     for(exemple = 0; exemple<nb_exemples; exemple++){
@@ -266,47 +266,47 @@ Network** createNetworks(){
         Layer* l3= new Layer(tablo_net[i], 10, l2, 0); //troisieme
         Layer* lend= new Layer(tablo_net[i],LAST_LAYER_SIZE,l3, 0); //couche de fin
     }
-    cout << "Reseaux créés !" << endl;
+    cout << "Reseaux crees !" << endl;
     return tablo_net;
 }
 
 void destroyNetworks(Network** tablo_net){
-    cout << "Sauvegarde et destruction des réseaux ..." << flush;
+    cout << "Sauvegarde et destruction des reseaux ..." << flush;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
         tablo_net[i]->save(g_alphabet[i]);
         delete tablo_net[i];
     }
     delete tablo_net;
-    cout << "Réseaux détruits !" << endl;
+    cout << "Reseaux detruits !" << endl;
 }
 
 void getAndLearn(){
-    cout << "récupération des réseaux ... " << flush;
+    cout << "Recuperation des reseaux ... " << flush;
 
     Network** tablo_net(createNetworks());//initialisation
 
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
         getMostRecent(tablo_net[i],g_alphabet[i]); // on récupère le plus récent
 
-    cout << "réseaux récupérés." << endl;
+    cout << "reseaux recuperes." << endl;
     learnAllNetworks(tablo_net);
 }
 
 Network** createNewAndLearn(){
-    cout << "Création du réseau ... " <<flush;
+    cout << "Creation du réseau ... " <<flush;
 
     Network** tablo_net(createNetworks()); //on crée le réseau
 
-    cout << "le réseau est créé."<<endl;
+    cout << "le reseau est cree."<<endl;
     learnAllNetworks(tablo_net); // et on apprend
     return tablo_net;
 }
 
 void learnAllNetworks(Network** tablo_net){
-    cout << "Bienvenue dans le gestionnaire d'apprentissage du réseau de neurones" << endl << endl;
+    cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones." << endl << endl;
 
-    cout << "Initialisation des paramètres." << endl;
+    cout << "Initialisation des parametres." << endl;
     clock_t t0(clock());//temps de départ du programme
 
     //nombre d'exemples à traiter
@@ -324,7 +324,7 @@ void learnAllNetworks(Network** tablo_net){
     //Récupération des données des fichiers
     getArrayOfFileNames(tabloFichiers); //on récupère les noms des ficheirs d'exemples
     getArrayOfExemples(tabloFichiers,inputs,nb_exemples); //on récupère les donnees des exemples
-    cout << "Initialisation effectuée en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." <<endl <<endl;
+    cout << "Initialisation effectuee en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." <<endl <<endl;
 
     //Apprentissage
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
@@ -341,7 +341,7 @@ char testNetworks(Network** tablo_net, double input[]){
     double exp_output[LENGTH_ALPHABET][LAST_LAYER_SIZE];
 
     //tests
-    cout << "Results : ";
+    cout << "Resultats : ";
     for (int i = 0; i < LENGTH_ALPHABET ; ++i) //pour chaque réseau
     {
         //on récupère la réponse

@@ -41,11 +41,11 @@ void database(bool sauvegarde, bool filtre)
         {
             if (strlen(ep->d_name) >= 4)
             {
-                cout << "Chargement : " << 100*compteurPolices/nombrePolices << "% - ";
+                cout << endl << "Chargement : " << 100*compteurPolices/nombrePolices << "% - ";
                 cout << ep->d_name << " : traitement ... ";
                 filterPngs(ep->d_name,sauvegarde, filtre, pixelsR, pixelsG, pixelsB);
                 compteurPolices++;
-                cout << "Traitee." << endl;
+                cout << endl << "Traitee." << endl;
             }
         }
         (void) closedir (dp);

@@ -584,40 +584,40 @@
 1462303499 source:c:\users\pierre\dropbox\neuronproject\menu.cpp
 	"menu.h"
 
-1461182315 source:d:\neuronproject\layer.cpp
+1462820972 source:d:\neuronproject\layer.cpp
 	"Layer.h"
 	<iostream>
 	<stdlib.h>
 	<ctime>
 
-1461175948 d:\neuronproject\layer.h
+1462820972 d:\neuronproject\layer.h
 	<vector>
 	"Neuron.h"
 	"Network.h"
 
-1461187753 d:\neuronproject\neuron.h
+1462820972 d:\neuronproject\neuron.h
 	<vector>
 	<cmath>
 	"Layer.h"
 	"Binding.h"
 
-1461138437 d:\neuronproject\binding.h
+1462820972 d:\neuronproject\binding.h
 	"Neuron.h"
 
-1461938202 d:\neuronproject\network.h
+1462820972 d:\neuronproject\network.h
 	"Layer.h"
 	<string>
 	<cstring>
 
-1462110281 source:d:\neuronproject\neuron.cpp
+1462821761 source:d:\neuronproject\neuron.cpp
 	"Neuron.h"
 	<iostream>
 
-1461322887 source:d:\neuronproject\buttons.cpp
+1462820973 source:d:\neuronproject\buttons.cpp
 	"buttons.h"
 	"system.h"
 
-1461254777 d:\neuronproject\buttons.h
+1462820973 d:\neuronproject\buttons.h
 	<cstdlib>
 	<cstdio>
 	<iostream>
@@ -629,7 +629,7 @@
 	<dirent.h>
 	<math.h>
 
-1460969851 d:\neuronproject\system.h
+1462821022 d:\neuronproject\system.h
 	<cstdlib>
 	<cstdio>
 	<iostream>
@@ -641,14 +641,14 @@
 	<dirent.h>
 	<math.h>
 
-1461333085 source:d:\neuronproject\system.cpp
+1462821021 source:d:\neuronproject\system.cpp
 	"system.h"
 
-1461937686 source:d:\neuronproject\binding.cpp
+1462820972 source:d:\neuronproject\binding.cpp
 	"Binding.h"
 	<iostream>
 
-1462116473 source:d:\neuronproject\apprentissage.cpp
+1462822136 source:d:\neuronproject\apprentissage.cpp
 	"apprentissage.h"
 	<iostream>
 	<cstdlib>
@@ -658,10 +658,10 @@
 	<cstring>
 	<time.h>
 
-1462107798 d:\neuronproject\apprentissage.h
+1462820972 d:\neuronproject\apprentissage.h
 	"Network.h"
 
-1462110032 source:d:\neuronproject\network.cpp
+1462821777 source:d:\neuronproject\network.cpp
 	"Network.h"
 	<iostream>
 	<fstream>
@@ -673,11 +673,11 @@
 	<iomanip>
 	<algorithm>
 
-1462113220 source:d:\neuronproject\database.cpp
+1462822195 source:d:\neuronproject\database.cpp
 	"database.h"
 	"filtres2.h"
 
-1461946421 d:\neuronproject\database.h
+1462820973 d:\neuronproject\database.h
 	<cstdlib>
 	<cstdio>
 	<iostream>
@@ -689,7 +689,7 @@
 	<dirent.h>
 	<math.h>
 
-1462107876 d:\neuronproject\filtres2.h
+1462820973 d:\neuronproject\filtres2.h
 	<cstdlib>
 	<cstdio>
 	<iostream>
@@ -701,10 +701,10 @@
 	<dirent.h>
 	<math.h>
 
-1462111043 source:d:\neuronproject\filtres2.cpp
+1462822590 source:d:\neuronproject\filtres2.cpp
 	"filtres2.h"
 
-1462117024 source:d:\neuronproject\main.cpp
+1462821021 source:d:\neuronproject\main.cpp
 	<cstdlib>
 	<cstdio>
 	<iostream>
@@ -721,7 +721,7 @@
 	"database.h"
 	"buttons.h"
 
-1462117024 d:\neuronproject\menu.h
+1462821021 d:\neuronproject\menu.h
 	<cstdlib>
 	<cstdio>
 	<iostream>
@@ -738,6 +738,6 @@
 	"buttons.h"
 	"apprentissage.h"
 
-1462117024 source:d:\neuronproject\menu.cpp
+1462821021 source:d:\neuronproject\menu.cpp
 	"menu.h"
 
