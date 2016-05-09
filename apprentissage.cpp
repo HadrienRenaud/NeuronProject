@@ -248,7 +248,7 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
 
     //Calcul du temps mis
     double temps_mis(((float)(clock()-t0)/CLOCKS_PER_SEC));
-    cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
+    cout << "Apprentissage effectue en " << temps_mis << " secondes" << endl;
 
     // On met à jour les données dans le fichier
     writeReport(net,(count < MAX_LIMIT_LOOP*NB_APPRENTISSAGE*nb_exemples),count/nb_exemples,distance_totale/nb_exemples,temps_mis," ",lettre_testee,nom_fichier);
@@ -256,7 +256,7 @@ void learnNetworks(Network* net,char lettre_testee, const int nb_exemples, char*
 
 Network** createNetworks(){
     Network** tablo_net = new Network*[LENGTH_ALPHABET]; //Création du tableau
-    cout << "Creation des réseaux ... " << flush ;
+    cout << "Creation des reseaux ... " << flush ;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
         tablo_net[i] = new Network;//Le réseau
@@ -294,7 +294,7 @@ void getAndLearn(){
 }
 
 Network** createNewAndLearn(){
-    cout << "Creation du réseau ... " <<flush;
+    cout << "Creation du reseau ... " <<flush;
 
     Network** tablo_net(createNetworks()); //on crée le réseau
 
