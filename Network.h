@@ -13,12 +13,20 @@ using namespace std;
 #define LAST_LAYER_SIZE 1//nombe de neurones de la dernière couche
 #define ALPHA 0.05 //momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE 100
+#define NB_APPRENTISSAGE 10
+#define DISTANCE_MAXIMALE 1
+#define MAX_LIMIT_LOOP 20
+#define LENGTH_ALPHABET 52
+#define BORNE_INF_DISTINCTION 0.1
+#define BORNE_MAX_CASSE 10
+
 
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network{
 public :
     Network();//rien a mettre de-dans
-    Network( string );
+    Network(char lettre_testee);
+    Network( string nom_fichier , int lettre_testee, double maximal_distance);
     ~Network();//destructeur
 
     void setFirstLayer(Layer* layer=0);//changer la première couche
@@ -36,26 +44,40 @@ public :
                                 //destiné à stocké la taille du tableau retourné
     bool launchGradient();//lancer la rétropropagation du gradient
     bool learn();//;)
-    char* save(char* char_nom_fichier);
-    char* save(char lettre_testee);
-    char* save(char lettre_testee,char* char_nom_fichier); //sauver l'etat du réseau
-    void recup(string nom_fichier);// récupérer le réseau depuis le fichier
+    void save(); //sauver l'etat du réseau
     //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet
     double getMomentum();
+    void recuperateur();// fonction appelée pour récupérer à partir d'un fichier
+
+    void getMostRecent(); //actualise le réseau
+    void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
+    void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
+
+    char getLettreTestee();
+    void setLettreTestee(char lettre_testee);
+    double getMaximalDistance();
+    void setMaximalDistance(double maximal_distance);
+    int getMaxLimitLoop();
+    void setMaxLimitLoop(int maxLimitLoop);
 
 private :
-    void recuperateur(string nom_fichier);// fonction appelée pour récupérer à partir d'un fichier
     Layer* m_firstLayer;//seule la première couche suffit
     int m_totalBindingsNumber;
     bool m_initialized;//on procede à la propagation seulement si m_initialized
                         //est vrai
     bool m_gradientInitialized;//pareil pour la rétro
     double m_momentum;//facteur d'inertie, define -> ALPHA
+    double m_maximal_distance;
+    int m_maxLimitLoop;
+    char m_lettre_testee;
+    char* m_nameFile;
 };
 
 
 template <class T>
 void displayArray(T* data, int length);//affichage d'un tableau
+double distance(double* data1, double* data2, int length);//calcul d'écart
+double distanceMod(double* data1, double* data2, int length);//calcul d'écart
 
 
 #endif

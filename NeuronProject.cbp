@@ -43,7 +43,7 @@
 		<Unit filename="Neuron.cpp" />
 		<Unit filename="Neuron.h" />
 		<Unit filename="apprentissage.cpp" />
-		<Unit filename="apprentissage.h" />
+		<Unit filename="NetworkArray.h" />
 		<Unit filename="buttons.cpp" />
 		<Unit filename="buttons.h" />
 		<Unit filename="database.cpp" />

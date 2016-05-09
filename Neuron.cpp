@@ -53,7 +53,6 @@ void Neuron::sendGradient(){//rétrop propager le gradient aux neurones des couc
 
 void Neuron::addBinding(Binding* binding){
     m_bindings.push_back(binding);
-    m_layer->increaseBindingsNumber();
 }
 
 void Neuron::addBinding(Neuron* neuron, double weight){

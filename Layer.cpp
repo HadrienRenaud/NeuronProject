@@ -126,12 +126,6 @@ int Layer::getBindingsNumber()const{
     return m_bindingsNumber;
 }
 
-void Layer::increaseBindingsNumber(){
-    m_bindingsNumber++;
-    getNetwork()->increaseTotalBindingsNumber();//le réseau a la somme totale
-}
-
-
 Network* Layer::getNetwork()const{
     return m_network;
 }
