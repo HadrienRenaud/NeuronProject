@@ -6,6 +6,8 @@
 *.o
 *.so
 *.dll
+*.depend
+*.layout
 
 # Packages #
 ############
@@ -45,6 +47,7 @@ Thumbs.db
 *.txt
 *plus_recent_*
 .NeuronProject
+<<<<<<< HEAD
 svg_reseau
 images
 test
@@ -53,3 +56,14 @@ test/*
 images/*
 texts/*
 test_texts/*
+=======
+svg_reseau/*
+fonts/*
+texts/*
+images/*
+test/*
+images/*
+test
+*.txt
+*.orig
+>>>>>>> refs/remotes/origin/Pierre

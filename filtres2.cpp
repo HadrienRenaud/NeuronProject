@@ -68,7 +68,7 @@ void filtres(const char* repertory_dep, const char* repertory_arr){
         }
     }
     (void) closedir (dp);   //Fermeture du répertoire d'images
-    cout << "Chargement : " << 100*compteurimages/nombreimages << "% - Programme termine !" << endl;
+    cout << "Chargement : " << 100*compteurimages/nombreimages << "% - Programme termine !" << endl << endl;
     }
 
 

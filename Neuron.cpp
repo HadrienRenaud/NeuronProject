@@ -115,7 +115,7 @@ int Neuron::getIndexInLayer()const{
 
 void Neuron::learn(){//Le neuron recalcule le poids de toutes ces liaisons avec les neurones précédents
     //la fonction utilise MU, le gradient du neuron présent et l'output du neuron qui est à l'autre bout de la laison
-    for(int i=0; i<m_bindings.size(); i++){
+    for(int i=0; i<(int)m_bindings.size(); i++){
         m_bindings[i]->addWeight((m_gradient)*MU*(m_bindings[i]->getNeuron()->m_output));
     }
 }
