@@ -1,1 +1,1 @@
-Filtres2 - Bug 1 : L'image test/texts n'a pas pu être ouverte.
+Filtres2 - Bug 1 : L'image test/texts n'a pas pu etre ouverte.

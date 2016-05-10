@@ -15,7 +15,7 @@
 #include "system.h"
 #include "database.h"
 #include "buttons.h"
-#include "apprentissage.h"
+#include "NetworkArray.h"
 
 #define DOSSIERTEST "test/"
 #define DOSSIERTESTTEXT "test_texts/"

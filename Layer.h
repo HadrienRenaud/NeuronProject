@@ -29,7 +29,6 @@ public:
     void calculate() const;//demander à chaque neurone d'envoyer la sauce
     void calculateGradient() const;//demander à chaque neurone d'envoyer le gradient
     int getBindingsNumber()const;//renvoi le nombre de liaisons partant de cette couche
-    void increaseBindingsNumber();//c'est juste pour compter le nombre de liaison, ça ne sert à rien mais c'est marrant
     Network* getNetwork()const;//réseau parent
     bool learn();//dit a chaque neurone de learn()
     void resetNeurons()const;//préparer les neurones à propager

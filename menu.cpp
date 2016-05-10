@@ -79,11 +79,11 @@ void menu(SDL_Renderer *ren)
     SDL_RenderPresent(ren);
 
     cout << "Recuperation des reseaux ... " << flush;
-    Network** tablo_net(createNetworks());
+    NetworkArray* tablo_net= new NetworkArray;
 
-    for (int i = 0; i < LENGTH_ALPHABET; ++i)
-        getMostRecent(tablo_net[i],g_alphabet[i]);
+    tablo_net -> getLettresTestees();
 
+    tablo_net->getMostRecent();
     cout << "Reseaux recuperes." << endl;
 
     double input[FIRST_LAYER_SIZE];
@@ -198,7 +198,7 @@ void menu(SDL_Renderer *ren)
 
                     cout << "testedImageName : " << testedImageName << endl;
                     if(readExemple(testedImageText,input,FIRST_LAYER_SIZE,DOSSIERTESTTEXT))
-                        testResult[strlen(testResult) - 1] = testNetworks(tablo_net,input);
+                        testResult[strlen(testResult) - 1] = tablo_net->testNetworks(input);
                     else
                         testResult[strlen(testResult) - 1] = '_';
                     cout << "testResult : " << testResult << endl;
@@ -258,10 +258,12 @@ void menu(SDL_Renderer *ren)
             SDL_RenderPresent(ren);
 
             if (!caseLearn.hasBeenPressed()){
-                tablo_net = createNewAndLearn();
+                delete tablo_net;
+                NetworkArray* tablo_net= new NetworkArray;
+                tablo_net->learnAllNetworks();
             }
             else
-                learnAllNetworks(tablo_net);
+                tablo_net->learnAllNetworks();
         }
 
         else if (testButton.hasBeenPressed())
@@ -286,5 +288,5 @@ void menu(SDL_Renderer *ren)
         else
             SDL_RenderPresent(ren);
     }
-    destroyNetworks(tablo_net);
+    delete tablo_net;
 }
