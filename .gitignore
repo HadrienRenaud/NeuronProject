@@ -42,10 +42,14 @@ Thumbs.db
 *.svg_reseau
 *.png
 *.csv
+*.txt
 *plus_recent_*
 .NeuronProject
 svg_reseau
 images
+test
+texts
 test/*
 images/*
-test
+texts/*
+test_texts/*
