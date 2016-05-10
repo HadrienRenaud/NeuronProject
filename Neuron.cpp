@@ -27,7 +27,7 @@ Neuron::Neuron(Layer* layer,transfert trsf):m_input(0),
 //il faut utiliser la fonction addNeuron() sur la couche concernée.
 
 Neuron::~Neuron(){//destructeur, inintéressant
-    for(int i = 0; i<(int)m_bindings.size(); i++){
+    for(int i = 0; i<m_bindings.size(); i++){
         delete m_bindings[i];
         m_bindings.pop_back();
     }
@@ -39,21 +39,20 @@ Layer* Neuron::getLayer()const{return m_layer;}
 int Neuron::getBindingsNumber()const{return m_bindings.size();}
 
 void Neuron::receive(){//le neurone calcule son input en récupérant la somme pondérée de neurones d'avant
-    for(int i = 0; i<(int)m_bindings.size(); i++)
+    for(int i = 0; i<m_bindings.size(); i++)
         m_input+=(m_bindings[i]->getNeuron()->getOutput())*(m_bindings[i]->getWeight());
     //enfin, calcul de l'output avec la fonction de transfert
     m_output = m_trsf(m_input);
 }
 
 void Neuron::sendGradient(){//rétrop propager le gradient aux neurones des couches d'avant
-    for(int i = 0; i<(int)m_bindings.size(); i++)
+    for(int i = 0; i<m_bindings.size(); i++)
         m_bindings[i]->getNeuron()->m_gradient+=(m_gradient*(m_bindings[i]->getWeight())/*trsf[1]*/*sigmo1(m_bindings[i]->getNeuron()->m_input));
         // gradien_du_neurone_précédent+=(gradient_actuel*pods_de_la_liaison*dérivée_de_sigmo_en(m_input));
 }
 
 void Neuron::addBinding(Binding* binding){
     m_bindings.push_back(binding);
-    m_layer->increaseBindingsNumber();
 }
 
 void Neuron::addBinding(Neuron* neuron, double weight){

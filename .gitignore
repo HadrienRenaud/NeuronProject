@@ -27,6 +27,7 @@
 *.log
 *.sql
 *.sqlite
+*.txt
 
 # OS generated files #
 ######################
@@ -42,7 +43,7 @@ Thumbs.db
 ##############################
 *.svg_reseau
 *.png
-*.txt
+*.csv
 *plus_recent_*
 .NeuronProject
 svg_reseau/*
@@ -50,3 +51,7 @@ fonts/*
 texts/*
 images/*
 test/*
+images/*
+test
+*.txt
+*.orig
