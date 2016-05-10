@@ -62,7 +62,6 @@ void filtres(const char* repertory_dep, const char* repertory_arr){
             cout << "Chargement : " << 100*compteurimages/nombreimages << "% - ";
             cout << ep->d_name << " : traitement ... ";
             lettre = NULL;
-            cout << ep->d_name << " : traitement ... " << flush;
             filtres_indiv(ep->d_name, pixelsR, pixelsG, pixelsB, lettre, repertory_dep, repertory_arr);
             compteurimages++;
             cout << " Traitee." << endl;
