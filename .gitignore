@@ -6,6 +6,8 @@
 *.o
 *.so
 *.dll
+*.depend
+*.layout
 
 # Packages #
 ############
@@ -40,13 +42,11 @@ Thumbs.db
 ##############################
 *.svg_reseau
 *.png
-<<<<<<< HEAD
+*.txt
 *plus_recent_*
 .NeuronProject
-=======
-svg_reseau
-images
-test/*
+svg_reseau/*
+fonts/*
+texts/*
 images/*
-test
->>>>>>> master
+test/*
