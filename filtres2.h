@@ -43,6 +43,7 @@ using namespace std;
 void filtres(); //Fonction à appeler pour filtrer tout le dossier d'images
 void filtres(const char* repertory); //Fonction à appeler pour filtrer un dossier spécifique
 void filtres(const char* repertory, const char* repertory_arr); //Fonction à appeler pour filtrer un dossier spécifique
+void filtres(const char* repertory, const char* repertory_arr, bool selectif); //Fonction à appeler pour filtrer un dossier spécifique avec sélection des images non déja filtrées ou non
 void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixelsB, SDL_Surface *lettre); //Fonction appellée par filtres pour chaque image, correspond à la quasi totalité de l'ancienne fonction main
 void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixelsB, SDL_Surface *lettre, const char* repertory_dep, const char* repertory_arr); //Fonction appellée par filtres pour chaque image, correspond à la quasi totalité de l'ancienne fonction main
 
@@ -50,6 +51,7 @@ Uint32 getPixel(SDL_Surface * surface, int x, int y);   //Renvoie un Uint32 cont
 void margeLigne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);  //Délimite l'espace que l'on peut rogner en haut et en droite
 void margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);    // Idem, en gauche et à droite
 void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Hauteur, int marges[]);  //Transforme le tableau correspondant à l'image rognée au maximum (en conservant une forme carrée) en un tableau 20x20 (moyenne pondérée)
+bool dejaFiltree(const char* repertory_arr, const char* imageName);
 
 
 #endif

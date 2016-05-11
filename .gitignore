@@ -47,6 +47,7 @@ Thumbs.db
 *.csv
 *.txt
 *.orig
+*.o
 *plus_recent_*
 .NeuronProject
 <<<<<<< HEAD
@@ -56,3 +57,5 @@ texts/*
 test/*
 test_texts/*
 images/*
+bin/*
+obj/*
