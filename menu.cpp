@@ -9,6 +9,7 @@ void menu(SDL_Renderer *ren)
 {
     bool quitLoop = false;
     bool testing = false;
+    bool keyboardInput[29] = {false};
     int xMouse(0),yMouse(0);
     int compteurTest = 0;
     int nombreTests = 0;
@@ -98,6 +99,8 @@ void menu(SDL_Renderer *ren)
             case SDL_QUIT:
                 quitLoop = true;
                 break;
+            case SDL_KEYDOWN:
+                keyboard(event,keyboardInput);
             case SDL_MOUSEMOTION:
                 xMouse = event.motion.x;
                 yMouse = event.motion.y;
@@ -119,8 +122,7 @@ void menu(SDL_Renderer *ren)
 
                 break;
 
-                // TODO : METTRE DES RACCOURCIS CLAVIERS
-                // TODO : Interompre l'affichage quand on interrompt le test
+                // TODO : Blitscaled
         }
 
 
@@ -132,8 +134,9 @@ void menu(SDL_Renderer *ren)
             allButtons[i]->renderButton(ren,xMouse,yMouse);
 
 
-        if (testing && previousButton.hasBeenPressed())
+        if (testing && (previousButton.hasBeenPressed() || keyboardInput[27]))
         {
+            keyboardInput[27] = false;
             previousButton.reset();
             if (compteurTest > 1)
             {
@@ -147,8 +150,9 @@ void menu(SDL_Renderer *ren)
             }
         }
 
-        if (testing && nextButton.hasBeenPressed())
+        if (testing && (nextButton.hasBeenPressed() || keyboardInput[28]))
         {
+            keyboardInput[28] = false;
             nextButton.reset();
             ep = readdir(dp);
             compteurTest++;
@@ -224,35 +228,33 @@ void menu(SDL_Renderer *ren)
             }
         }
 
-        if (testing)
-        {
-            renderTexture(ren,resultTex,testingField.x,testingField.y);
-            nextButton.renderButton(ren,xMouse,yMouse);
-            previousButton.renderButton(ren,xMouse,yMouse);
-        }
 
 
-        if (exitButton.hasBeenPressed())
+        if (exitButton.hasBeenPressed() || keyboardInput[26])
         {
+            keyboardInput[26] = false;
             exitButton.reset();
             quitLoop = true;
         }
-        if (databaseButton.hasBeenPressed())
+        else if (databaseButton.hasBeenPressed() || keyboardInput[2])
         {
+            keyboardInput[2] = false;
             databaseButton.reset();
             renderTexture(ren,loading,(400 - loadingText->w / 2) + 30, 50);
             SDL_RenderPresent(ren);
             database(!caseDatabase.hasBeenPressed(),true);
         }
-        else if (filterButton.hasBeenPressed())
+        else if (filterButton.hasBeenPressed() || keyboardInput[5])
         {
+            keyboardInput[5] = false;
             filterButton.reset();
             renderTexture(ren,loading,(400 - loadingText->w / 2) + 30, 50);
             SDL_RenderPresent(ren);
             filtres();
         }
-        else if (learnButton.hasBeenPressed())
+        else if (learnButton.hasBeenPressed() || keyboardInput[11])
         {
+            keyboardInput[11] = false;
             learnButton.reset();
             renderTexture(ren,loading,(400 - loadingText->w / 2) + 30, 50);
             SDL_RenderPresent(ren);
@@ -266,15 +268,16 @@ void menu(SDL_Renderer *ren)
                 tablo_net->learnAllNetworks();
         }
 
-        else if (testButton.hasBeenPressed())
+        else if (testButton.hasBeenPressed() || keyboardInput[19])
         {
+            keyboardInput[19] = false;
             testButton.reset();
             renderTexture(ren,loading,(400 - loadingText->w / 2) + 30, 50);
 
             testing = true;
             nextButton.setPress(true);
 
-            compteurTest = 0;
+            compteurTest = -1;
             nombreTests = countExemples(DOSSIERTEST);
 
             dp = opendir(DOSSIERTEST);
@@ -282,11 +285,55 @@ void menu(SDL_Renderer *ren)
                 exit(1);
 
             SDL_RenderPresent(ren);
-            filtres(DOSSIERTEST,DOSSIERTESTTEXT);
+            filtres(DOSSIERTEST,DOSSIERTESTTEXT,true);
         }
-
+        else if (testing)
+        {
+            renderTexture(ren,resultTex,testingField.x,testingField.y);
+            nextButton.renderButton(ren,xMouse,yMouse);
+            previousButton.renderButton(ren,xMouse,yMouse);
+            SDL_RenderPresent(ren);
+        }
         else
             SDL_RenderPresent(ren);
     }
     delete tablo_net;
+}
+
+
+
+
+void keyboard(SDL_Event event, bool* keyboardInput)
+{
+    switch (event.key.keysym.sym)
+    {
+        case SDLK_c:
+            keyboardInput[2] = true;
+            break;
+
+        case SDLK_f:
+            keyboardInput[5] = true;
+            break;
+
+        case SDLK_t:
+            keyboardInput[19] = true;
+            break;
+
+        case SDLK_l:
+            keyboardInput[11] = true;
+            break;
+
+        case SDLK_ESCAPE:
+            keyboardInput[26] = true;
+            break;
+
+        case SDLK_LEFT:
+            keyboardInput[27] = true;
+            break;
+
+        case SDLK_RIGHT:
+            keyboardInput[28] = true;
+            break;
+
+    }
 }

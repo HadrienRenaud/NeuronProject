@@ -14,16 +14,16 @@ Network::Network(){
     Network('_');
 }
 Network::Network(char lettre_testee):
-    m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-    m_firstLayer(0), m_lettre_testee(lettre_testee),m_maximal_distance(DISTANCE_MAXIMALE),
-    m_nameFile(new char[MAX_LENGTH_NAME_FILE]),m_maxLimitLoop(NB_APPRENTISSAGE*MAX_LIMIT_LOOP)
+    m_firstLayer(0), m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
+    m_maximal_distance(DISTANCE_MAXIMALE),m_maxLimitLoop(NB_APPRENTISSAGE*MAX_LIMIT_LOOP),
+    m_lettre_testee(lettre_testee),m_nameFile(new char[MAX_LENGTH_NAME_FILE])
     {
     m_momentum = ALPHA;
     }
 Network::Network(string nom_fichier,int lettre_testee,double maximal_distance):
     m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-    m_lettre_testee(lettre_testee),m_maximal_distance(maximal_distance),
-    m_nameFile(new char[MAX_LENGTH_NAME_FILE]),m_maxLimitLoop(NB_APPRENTISSAGE*MAX_LIMIT_LOOP)
+    m_maximal_distance(maximal_distance),m_maxLimitLoop(NB_APPRENTISSAGE*MAX_LIMIT_LOOP),
+    m_lettre_testee(lettre_testee),m_nameFile(new char[MAX_LENGTH_NAME_FILE])
     {
     strcpy(m_nameFile,nom_fichier.c_str());
     m_momentum = ALPHA;
@@ -37,7 +37,7 @@ Network::~Network(){
 
 void Network::recuperateur(){
     ifstream file(m_nameFile); // On ouvre le fichier
-    int nbTotalLayer, lengthLayer,neurbis,i,j;
+    int nbTotalLayer, lengthLayer,i,j;
     double weight;
     char* pEnd(0);
     Neuron* neurone;
@@ -78,7 +78,7 @@ void Network::save(){
     ostringstream temps; //flux pour traitement
     temps << asctime(localtime(&t)); //on récupère le flux correspondant au temps
     string str_nom_fichier(temps.str()); // on crée un string correspondant au flux
-    for(int i(0);i<str_nom_fichier.size();i++) // on parcourt le nom du fichier
+    for(int i(0);i<(int)str_nom_fichier.size();i++) // on parcourt le nom du fichier
         if(!isalnum(str_nom_fichier[i]))  // et on remplace tout ce qui ne va pas dans un
             str_nom_fichier[i]='_';         // nom de fichier par '_'
     str_nom_fichier= string(g_dir_svg) + str_nom_fichier + "_" + m_lettre_testee + string(g_extension_svg) ; // adresse complete
@@ -245,7 +245,7 @@ void Network::getMostRecent(){
     ifstream file(nom_db.c_str()); //on ouvre le fichier getMostRecent.txt
     file >> str_nom_fichier; //on lit son contenu
     strcpy(m_nameFile,str_nom_fichier.c_str());
-    cout << "Reseau " << m_lettre_testee << " - recuperation du fichier : " << str_nom_fichier << endl;
+    cout << "Reseau " << m_lettre_testee << " - recuperation de : " << str_nom_fichier << endl;
     recuperateur(); // On récupère le réseau stocké dans le fichier de svg le plus récent
 }
 
@@ -348,7 +348,7 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
     else
         cout << "apprentissage productif : count = " << count << " sur " << m_maxLimitLoop*nb_exemples ;
 
-    cout << " avec " << successes << "succes, effectué en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
+    cout << " avec " << successes << " succes, effectue en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes" << endl;
 
     //Calcul de la distance moyenne
     for(exemple = 0; exemple<nb_exemples; exemple++){
@@ -368,7 +368,7 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
 
     //Calcul du temps mis
     double temps_mis(((float)(clock()-t0)/CLOCKS_PER_SEC));
-    cout << "Apprentissage effectué en " << temps_mis << " secondes" << endl;
+    cout << "Apprentissage effectue en " << temps_mis << " secondes" << endl;
 
     // On met à jour les données dans le fichier
     writeReport((count < m_maxLimitLoop*nb_exemples),count/nb_exemples,

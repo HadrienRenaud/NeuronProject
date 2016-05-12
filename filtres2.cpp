@@ -12,7 +12,11 @@ void filtres(){
 void filtres(const char* repertory_dep){
     filtres(repertory_dep,DOSSIERTEXTES);
 }
+
 void filtres(const char* repertory_dep, const char* repertory_arr){
+    filtres(repertory_dep,DOSSIERTEXTES,false);
+}
+void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif){
 	int nombreimages = 0, compteurimages = 0;
     DIR *dp;
     struct dirent *ep;
@@ -45,7 +49,10 @@ void filtres(const char* repertory_dep, const char* repertory_arr){
         while ((ep = readdir(dp))) //On parcourt le répertoire
         {
             if (strlen(ep->d_name) >= 4) //Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp (sinon le programme détecte d'autres fichiers)
-                nombreimages++;
+            {
+                if (!selectif || !dejaFiltree(repertory_arr,ep->d_name)) //Il y a évaluation paresseuse : pas d'appels inutiles à déjaFiltree
+                    nombreimages++;
+            }
         }
         (void) closedir (dp);   //Fermeture du répertoire d'images
     }
@@ -59,12 +66,15 @@ void filtres(const char* repertory_dep, const char* repertory_arr){
     {
         if (strlen(ep->d_name) >= 4)
         {
-            cout << "Chargement : " << 100*compteurimages/nombreimages << "% - ";
-            cout << ep->d_name << " : traitement ... ";
-            lettre = NULL;
-            filtres_indiv(ep->d_name, pixelsR, pixelsG, pixelsB, lettre, repertory_dep, repertory_arr);
-            compteurimages++;
-            cout << " Traitee." << endl;
+            if (!selectif || !dejaFiltree(repertory_arr,ep->d_name))
+            {
+                cout << "Chargement : " << 100*compteurimages/nombreimages << "% - ";
+                cout << ep->d_name << " : traitement ... ";
+                lettre = NULL;
+                filtres_indiv(ep->d_name, pixelsR, pixelsG, pixelsB, lettre, repertory_dep, repertory_arr);
+                compteurimages++;
+                cout << " Traitee." << endl;
+            }
         }
     }
     (void) closedir (dp);   //Fermeture du répertoire d'images
@@ -84,6 +94,8 @@ void filtres(const char* repertory_dep, const char* repertory_arr){
     free(pixelsB);
 
 }
+
+
 
 void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixelsB, SDL_Surface *lettre)
 {
@@ -492,3 +504,19 @@ void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Haute
     }
 
 }
+
+
+bool dejaFiltree(const char* repertory_arr, const char* imageName)
+{
+    char textName[200];
+
+    strcpy(textName,repertory_arr);
+    strcat(textName,imageName);
+    textName[strlen(textName)-4]='\0';
+    strcat(textName,".txt");
+
+    ifstream file(textName);
+
+    return file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
+}
+

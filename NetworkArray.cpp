@@ -16,10 +16,10 @@ const char g_alphabet[LENGTH_ALPHABET] {'a','b','c','d','e','f','g','h','i','j',
 
 
 NetworkArray::NetworkArray():
-    m_alphabet(g_alphabet), m_tablo_net(new Network*[LENGTH_ALPHABET]),
-    m_maximal_distance(DISTANCE_MAXIMALE), m_maxLimitLoop(MAX_LIMIT_LOOP*NB_APPRENTISSAGE)
+    m_tablo_net(new Network*[LENGTH_ALPHABET]),
+    m_maximal_distance(DISTANCE_MAXIMALE), m_maxLimitLoop(MAX_LIMIT_LOOP*NB_APPRENTISSAGE), m_alphabet(g_alphabet)
     {
-    cout << "Creation des réseaux ... " << flush ;
+    cout << "Creation des reseaux ... " << flush ;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
        m_tablo_net[i] = new Network(g_alphabet[i]);//Le réseau
@@ -29,24 +29,24 @@ NetworkArray::NetworkArray():
        Layer* l3= new Layer(m_tablo_net[i], 10, l2, 0); //troisieme
        Layer* lend= new Layer(m_tablo_net[i],LAST_LAYER_SIZE,l3, 0); //couche de fin
     }
-    cout << "Reseaux créés !" << endl;
+    cout << "Reseaux crees !" << endl;
 }
 
 NetworkArray::~NetworkArray(){
-    cout << "Sauvegarde et destruction des réseaux ..." << flush;
+    cout << "Sauvegarde et destruction des reseaux ..." << flush;
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
     {
         m_tablo_net[i]->save();
         delete m_tablo_net[i];
     }
     delete m_tablo_net;
-    cout << "Réseaux détruits !" << endl;
+    cout << "Reseaux detruits !" << endl;
 }
 
 void NetworkArray::learnAllNetworks(){
-    cout << "Bienvenue dans le gestionnaire d'apprentissage du réseau de neurones" << endl << endl;
+    cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones" << endl << endl;
 
-    cout << "Initialisation des paramètres." << endl;
+    cout << "Initialisation des parametres." << endl;
     clock_t t0(clock());//temps de départ du programme
 
     //nombre d'exemples à traiter
@@ -64,7 +64,7 @@ void NetworkArray::learnAllNetworks(){
     //Récupération des données des fichiers
     getArrayOfFileNames(tabloFichiers); //on récupère les noms des ficheirs d'exemples
     getArrayOfExemples(tabloFichiers,inputs,nb_exemples); //on récupère les donnees des exemples
-    cout << "Initialisation effectuée en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." <<endl <<endl;
+    cout << "Initialisation effectuee en " << ((float)(clock()-t0)/CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." <<endl <<endl;
 
     //Apprentissage
     for (int i = 0; i < LENGTH_ALPHABET; ++i)
@@ -209,8 +209,8 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
     getArrayOfExemples(tabloFichiers, tabloExemple, nb_exemples , g_dir_exemples); // Par défaut, directory = g_dir_exemples
 }
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples,const char* directory){
-    cout << " Lecture des exemples ... " << flush;
+    cout << "Lecture des exemples ... " << flush;
     for (int i(0); i< nb_exemples;i++)
         readExemple(tabloFichiers[i],tabloExemple[i],FIRST_LAYER_SIZE,directory); //on lit chacun des exemples
-    cout << "Lecture terminée." <<endl;
+    cout << "Lecture terminee." <<endl;
 }

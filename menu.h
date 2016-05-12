@@ -22,7 +22,7 @@
 #define TESTING_BACKGROUND_DIMENSIONS 300
 
 void menu(SDL_Renderer *ren);
-bool isPng(char* filename);
+void keyboard(SDL_Event event, bool* keyboardInput);
 
 
 
