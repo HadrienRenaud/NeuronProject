@@ -45,7 +45,6 @@ Thumbs.db
 *.orig
 *plus_recent_*
 .NeuronProject
-<<<<<<< HEAD
 **.dll
 **.depend
 **.cbp
