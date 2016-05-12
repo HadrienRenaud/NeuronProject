@@ -101,9 +101,10 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
 {
 	filtres_indiv(nomFichierPng, pixelsR, pixelsG, pixelsB, lettre, DOSSIERIMAGES, DOSSIERTEXTES);
 }
+
+
 void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixelsB, SDL_Surface *lettre, const char* repertory_dep, const char* repertory_arr)
 {
-	int i = 0;
 	int x = 0, y = 0;
 	int hauteur, largeur;   //Les vraies dimensions de l'image, calculées après calcul des marges à rogner
 	int distancemax[3];   //Le max de la "distance chromatique" séparant les pixels du pixel de référence (voir plus bas)
@@ -116,10 +117,6 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
 
 	int reference [3] = {0};    //La "référence" de couleur, qui sera définie comme la couleur du pixel de coordonnées (0,0)
 	int marges[4] = {0};
-
-    //Les variables suivantes sont nécessaires pour des fonctions que je n'ai pas codé moi même : récupération de la couleur des pixels et parcours du répertoire d'images
-	Uint8 red, green, blue;
-    Uint32 infopixel;
 
     FILE* fichier = NULL;   //Un pointeur de fichier
     char nomFichierTxt[300] = "";   //Le nom du fichier texte associé
@@ -162,48 +159,11 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
     }
 	else //Si l'ouverture a réussi
 	{
-    //La couleur du pixel de référence
-    infopixel = getPixel(lettre, 0,0);
-    SDL_GetRGB(infopixel, lettre->format, &red, &green, &blue);
-    reference[0] = (int)red;
-    reference[1] = (int)green;
-    reference[2] = (int)blue;
 
-    for(i = 0; i < 3; i++)  //On réinitialise la distance chromatique
-        distancemax[i] = 0;
+    analysePixel(lettre, pixelsR, pixelsG, pixelsB);
+    distanceChro(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, distancemax);
 
-
-    SDL_LockSurface(lettre);    //On verouille la surface SDL (indispensable pour lire les pixels)
-    for(y = 0; y < lettre->h ; y++) //On parcourt tous les pixels de l'image
-    {
-        for(x = 0; x < lettre->w ; x++)
-        {
-            //On récupère les infos d'un pixel dans infopixel ses composantes dans red, green, blue
-            infopixel = getPixel(lettre, x,y);
-            SDL_GetRGB(infopixel, lettre->format, &red, &green, &blue);
-            //On place le tout dans les tableaux correspondants
-            pixelsR[y][x] = (int)red;
-            pixelsG[y][x] = (int)green;
-            pixelsB[y][x] = (int)blue;
-
-            //Calcul de la distance chromatique à la référence maximale : si le pixel considéré possède une distance chromatique moyenne à la référence supérieure à la moyenne des distancemax[i], on actualise distancemax
-            if (distancemax[0] + distancemax[1] + distancemax[2] < abs(red - reference[0]) + abs(green - reference[1]) + abs(blue - reference[2]))
-            {
-                distancemax[0] = abs(red - reference[0]);
-                distancemax[1] = abs(green - reference[1]);
-                distancemax[2] = abs(blue - reference[2]);
-            }
-        }
-    }
-
-    SDL_UnlockSurface(lettre);  //On déverouille la surface
-
-    //Les tableaux qui contiendront le nombre de pixels à rogner, respectivement en haut, en bas, à gauche, à droite :
-    marges[0] = 0;
-    marges[1] = 0;
-    marges[2] = 0;
-    marges[3] = 0;
-    //On calcule ces marges : on rogne le plus possible de lignes/colonnes contenant uniquement des pixels de la couleur de référence
+    //On calcule les marges : on rogne le plus possible de lignes/colonnes contenant uniquement des pixels de la couleur de référence
     margeLigne(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, marges);
     margeColonne(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, marges);
 
@@ -216,70 +176,15 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
         for(y = 0; y < TAILLE ; y++)
         {
             for(x = 0; x < TAILLE ; x++)
-                {
                     fprintf(fichier, "-1 ");
-                }
+
             fprintf(fichier, "\n ");
         }
         }
     else    //Sinon, on rend l'image carrée en diminuant alternativement les marges gauche/droite ou haut/bas selon si la hauteur est plus grande que la largeur ou non
     {
-        while(hauteur < largeur)
-            {
-            if (i == 0)
-            {
-                i = 1;
-                marges[0]--;
-            }
-            else
-            {
-                i = 0;
-                marges[1]--;
-            }
-            hauteur = lettre->h - marges[0] - marges[1];
-            }
-            //Dans le cas où l'une des marges est négative, cela signifie que rendre l'image carrée et centrée sur la lettre est impossible sans dépasser de l'image totale
-            //On diminue alors l'autre marge d'autant que nécessaire pour rendre nulle celle qui était négative (super clair comme phrase)
-            if (marges[0] < 0)
-                {
-                    marges[1]+=marges[0];
-                    marges[0] = 0;
-                }
-            if (marges[1] < 0)
-                {
-                    marges[0]+=marges[1];
-                    marges[1] = 0;
-                }
+        margeSynthese(lettre->w, lettre->h, marges);
 
-        hauteur = lettre->h - marges[0] - marges[1];
-
-        while(largeur < hauteur)
-            {
-            if (i == 0)
-            {
-                i = 1;
-                marges[2]--;
-            }
-            else
-            {
-                i = 0;
-                marges[3]--;
-            }
-            largeur = lettre->w - marges[2] - marges[3];
-            }
-        if (marges[2] < 0)
-            {
-                marges[3]+=marges[2];
-                marges[2] = 0;
-            }
-        if (marges[3] < 0)
-            {
-                marges[2]+=marges[3];
-                marges[3] = 0;
-            }
-
-        largeur = lettre->w - marges[2] - marges[3];
-        //A ce stade, largeur = hauteur, et si l'image initiale le permettait, les marges sont telles qu'une fois rognées, on obtient une image carrée centrée sur la lettre
         //La fonction pixelsfinal calcule alors une image 20x20 (stockée dans pixelsRfinal, etc.) avec la fameuse moyenne pondérée (la fonction est cauchemardesque à coder)
         pixelsfinal(pixelsR, pixelsRfinal, lettre->w, lettre->h, marges);
         pixelsfinal(pixelsG, pixelsGfinal, lettre->w, lettre->h, marges);
@@ -334,6 +239,9 @@ Uint32 getPixel(SDL_Surface * surface, int x, int y)
 
 void margeLigne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[])
 {
+    marges[0] = 0;
+    marges[1] = 0;
+
     int interrA = 0;
     int interrB = 0;
     int x = 0, y = 0;
@@ -384,6 +292,9 @@ void margeLigne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int ha
 
 void margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[])
 {
+    marges[2] = 0;
+    marges[3] = 0;
+
     int interrA = 0;
     int interrB = 0;
     int x = 0, y = 0;
@@ -428,6 +339,71 @@ void margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int 
         }
     }
 }
+
+void margeSynthese(int imageWidth, int imageHeight, int marges[])
+{
+    int hauteur = imageHeight - marges[0] - marges[1];
+    int largeur = imageWidth - marges[2] - marges[3];
+    int i = 0;
+
+    while(hauteur < largeur)
+        {
+        if (i == 0)
+        {
+            i = 1;
+            marges[0]--;
+        }
+        else
+        {
+            i = 0;
+            marges[1]--;
+        }
+        hauteur = imageHeight - marges[0] - marges[1];
+        }
+        //Dans le cas où l'une des marges est négative, cela signifie que rendre l'image carrée et centrée sur la lettre est impossible sans dépasser de l'image totale
+        //On diminue alors l'autre marge d'autant que nécessaire pour rendre nulle celle qui était négative (super clair comme phrase)
+        if (marges[0] < 0)
+            {
+                marges[1]+=marges[0];
+                marges[0] = 0;
+            }
+        if (marges[1] < 0)
+            {
+                marges[0]+=marges[1];
+                marges[1] = 0;
+            }
+
+    hauteur = imageHeight - marges[0] - marges[1];
+
+    while(largeur < hauteur)
+        {
+        if (i == 0)
+        {
+            i = 1;
+            marges[2]--;
+        }
+        else
+        {
+            i = 0;
+            marges[3]--;
+        }
+        largeur = imageWidth - marges[2] - marges[3];
+        }
+    if (marges[2] < 0)
+        {
+            marges[3]+=marges[2];
+            marges[2] = 0;
+        }
+    if (marges[3] < 0)
+        {
+            marges[2]+=marges[3];
+            marges[3] = 0;
+        }
+
+    largeur = imageWidth - marges[2] - marges[3];
+    //A ce stade, largeur = hauteur, et si l'image initiale le permettait, les marges sont telles qu'une fois rognées, on obtient une image carrée centrée sur la lettre
+}
+
 
 void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Hauteur, int marges[])
 {
@@ -506,6 +482,60 @@ void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Haute
 }
 
 
+void analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixelsB)
+{
+    Uint8 red, green, blue;
+    Uint32 infopixel;
+
+    SDL_LockSurface(image);    //On verouille la surface SDL (indispensable pour lire les pixels)
+    for(int y = 0; y < image->h ; y++) //On parcourt tous les pixels de l'image
+    {
+        for(int x = 0; x < image->w ; x++)
+        {
+            //On récupère les infos d'un pixel dans infopixel puis ses composantes dans red, green, blue
+            infopixel = getPixel(image, x,y);
+            SDL_GetRGB(infopixel, image->format, &red, &green, &blue);
+            //On place le tout dans les tableaux correspondants
+            pixelsR[y][x] = (int)red;
+            pixelsG[y][x] = (int)green;
+            pixelsB[y][x] = (int)blue;
+        }
+    }
+
+    SDL_UnlockSurface(image);  //On déverouille la surface
+
+}
+
+void distanceChro(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int distancemax[])
+{
+    for(int i = 0; i < 3; i++)  //On réinitialise la distance chromatique
+        distancemax[i] = 0;
+
+    reference[0] = pixelsR[0][0];
+    reference[1] = pixelsG[0][0];
+    reference[2] = pixelsB[0][0];
+    int red, green, blue;
+
+    for(int y = 0; y < hauteur ; y++) //On parcourt tous les pixels de l'image
+    {
+        for(int x = 0; x < largeur ; x++)
+        {
+            red = pixelsR[y][x];
+            green = pixelsG[y][x];
+            blue = pixelsB[y][x];
+
+            //Calcul de la distance chromatique à la référence maximale : si le pixel considéré possède une distance chromatique moyenne à la référence supérieure à la moyenne des distancemax[i], on actualise distancemax
+            if (distancemax[0] + distancemax[1] + distancemax[2] < abs(red - reference[0]) + abs(green - reference[1]) + abs(blue - reference[2]))
+            {
+                distancemax[0] = abs(red - reference[0]);
+                distancemax[1] = abs(green - reference[1]);
+                distancemax[2] = abs(blue - reference[2]);
+            }
+        }
+    }
+}
+
+
 bool dejaFiltree(const char* repertory_arr, const char* imageName)
 {
     char textName[200];
@@ -519,4 +549,6 @@ bool dejaFiltree(const char* repertory_arr, const char* imageName)
 
     return file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
 }
+
+
 

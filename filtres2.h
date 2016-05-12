@@ -50,8 +50,10 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
 Uint32 getPixel(SDL_Surface * surface, int x, int y);   //Renvoie un Uint32 contenant les composantes en rouge, vert, bleu du pixel de coordonnées x, y de l'image chargée sur surface
 void margeLigne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);  //Délimite l'espace que l'on peut rogner en haut et en droite
 void margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);    // Idem, en gauche et à droite
+void margeSynthese(int imageWidth, int imageHeight, int marges[]);
 void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Hauteur, int marges[]);  //Transforme le tableau correspondant à l'image rognée au maximum (en conservant une forme carrée) en un tableau 20x20 (moyenne pondérée)
 bool dejaFiltree(const char* repertory_arr, const char* imageName);
-
+void analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixelsB); // Réalise une analyse pixel par pixel de image et stocke les composantes dans les 3 tableaux donnés
+void distanceChro(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int distancemax[]);
 
 #endif

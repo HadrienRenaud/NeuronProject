@@ -123,6 +123,7 @@ void menu(SDL_Renderer *ren)
                 break;
 
                 // TODO : Blitscaled
+                // TODO : Rendre tous les arguments optionnels quand possible
         }
 
 
