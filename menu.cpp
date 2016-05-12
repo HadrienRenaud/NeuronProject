@@ -122,8 +122,6 @@ void menu(SDL_Renderer *ren)
 
                 break;
 
-                // TODO : Améliorer les raccourcis claviers (UP / DOWN ?)
-                // TODO : Interompre l'affichage quand on interrompt le test
                 // TODO : Blitscaled
         }
 
@@ -230,12 +228,6 @@ void menu(SDL_Renderer *ren)
             }
         }
 
-        if (testing)
-        {
-            renderTexture(ren,resultTex,testingField.x,testingField.y);
-            nextButton.renderButton(ren,xMouse,yMouse);
-            previousButton.renderButton(ren,xMouse,yMouse);
-        }
 
 
         if (exitButton.hasBeenPressed() || keyboardInput[26])
@@ -244,7 +236,7 @@ void menu(SDL_Renderer *ren)
             exitButton.reset();
             quitLoop = true;
         }
-        if (databaseButton.hasBeenPressed() || keyboardInput[2])
+        else if (databaseButton.hasBeenPressed() || keyboardInput[2])
         {
             keyboardInput[2] = false;
             databaseButton.reset();
@@ -295,7 +287,13 @@ void menu(SDL_Renderer *ren)
             SDL_RenderPresent(ren);
             filtres(DOSSIERTEST,DOSSIERTESTTEXT,true);
         }
-
+        else if (testing)
+        {
+            renderTexture(ren,resultTex,testingField.x,testingField.y);
+            nextButton.renderButton(ren,xMouse,yMouse);
+            previousButton.renderButton(ren,xMouse,yMouse);
+            SDL_RenderPresent(ren);
+        }
         else
             SDL_RenderPresent(ren);
     }
