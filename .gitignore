@@ -5,10 +5,6 @@
 *.exe
 *.o
 *.so
-*.dll
-*.depend
-*.cbp
-*.layout
 
 # Packages #
 ############
@@ -47,10 +43,15 @@ Thumbs.db
 *.csv
 *.txt
 *.orig
-*.o
 *plus_recent_*
 .NeuronProject
 <<<<<<< HEAD
+*.dll
+*.depend
+*.cbp
+*.layout
+*.o
+*.exe
 svg_reseau/*
 fonts/*
 texts/*
