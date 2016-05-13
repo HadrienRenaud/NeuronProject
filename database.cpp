@@ -42,7 +42,7 @@ void database(bool sauvegarde, bool filtre)
             if (strlen(ep->d_name) >= 4)
             {
                 cout << endl << "Chargement : " << 100*compteurPolices/nombrePolices << "% - ";
-                cout << ep->d_name << " : traitement ... ";
+                cout << ep->d_name << " : traitement ... " << flush;
                 filterPngs(ep->d_name,sauvegarde, filtre, pixelsR, pixelsG, pixelsB);
                 compteurPolices++;
                 cout << endl << "Traitee." << endl;
@@ -94,7 +94,7 @@ void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **p
         cout << "Creation des images : ";
         for (i = 0; i < CHARNUMBER; i++)
         {
-            cout << caracteres[i] << " ";
+            cout << caracteres[i] << " " << flush;
             strcpy(fontname,DOSSIERIMAGES);
             strcat(fontname,caracteres[i]);
             if (i < 26)
