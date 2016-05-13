@@ -42,15 +42,14 @@ void Network::recuperateur(){
     char* pEnd(0);
     Neuron* neurone;
     string ligne, weight_str, neurone_str;
-    Layer *layer,*previousLayer(0);
+    Layer *layer(getFirstLayer());
     file >> nbTotalLayer; // On lit le nombre total de couches
     file >> lengthLayer; // On lit le nombre de neurones de la premiere couche, dont on a pas besoin de récupérer les liasons
 
     while(getline(file,ligne)){ // pour chaque couche
         istringstream ligne_stream(ligne); //objet crée pour le traitement de la ligne récupérée
-        layer = new Layer(this,lengthLayer,previousLayer); // nouvelle couche créée
         i=0; // initialisation de l'indice du neurone recevant la liaison sur le couche layer
-        if ( previousLayer != 0 ){ // si on est pas sur la première couche
+        if ( layer -> getPreviousLayer() != 0 ){ // si on est pas sur la première couche
 
             while (getline(ligne_stream,neurone_str,',')) // pour tout neurone de la couche
             {
@@ -68,7 +67,7 @@ void Network::recuperateur(){
                 i++;
             }
         }
-        previousLayer=layer;
+        layer = layer -> getNextLayer();
         file >> lengthLayer; // on lit la longueur de la prochaine couche
     }
 }
