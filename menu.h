@@ -18,7 +18,7 @@
 #include "NetworkArray.h"
 
 #define DOSSIERTEST "test/"
-#define DOSSIERTESTTEXT "test_texts/"
+#define DOSSIERTESTTEXT "test/texts/"
 #define TESTING_BACKGROUND_DIMENSIONS 300
 
 void menu(SDL_Renderer *ren);

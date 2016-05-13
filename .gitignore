@@ -51,6 +51,7 @@ Thumbs.db
 **.layout
 **.o
 **.exe
+.~lock.**
 svg_reseau/**
 fonts/**
 texts/**
