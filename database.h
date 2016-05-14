@@ -21,6 +21,7 @@
 #define DOSSIERIMAGES "images/"
 
 void database(bool sauvegarde, bool filtre);
-void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB);
+void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB);
+void pathNames(char* pathPng, char* pathTxt, char* nameFont, const char* repertoryPng, const char* repertoryTxt, int i);
 
 #endif // DATABASE_H_INCLUDED

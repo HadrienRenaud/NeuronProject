@@ -5,7 +5,7 @@ Voir la description dans filtres2.h
 
 
 #include "filtres2.h"
-
+/*
 void filtres(){
     filtres(DOSSIERIMAGES);
 }
@@ -15,12 +15,17 @@ void filtres(const char* repertory_dep){
 
 void filtres(const char* repertory_dep, const char* repertory_arr){
     filtres(repertory_dep,DOSSIERTEXTES,false);
-}
-void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif){
+}*/
+void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif)
+{
 	int nombreimages = 0, compteurimages = 0;
+
     DIR *dp;
     struct dirent *ep;
-    SDL_Surface *lettre = NULL; //Une surface SDL, structure la plus utilisée de la SDL
+    SDL_Surface *lettre;
+
+    char pathPng[150];   //Le nom du répertoire d'images
+    char pathTxt[150];   //Le nom du répertoire où seront créés les fichiers textes
 
 
     //Allocation dynamique d'espace et création des trois tableaux 2D qui contiendront les composantes rouges, vertes, bleues, de chaque pixel de l'image
@@ -69,9 +74,24 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
             if (!selectif || !dejaFiltree(repertory_arr,ep->d_name))
             {
                 cout << "Chargement : " << 100*compteurimages/nombreimages << "% - ";
-                cout << ep->d_name << " : traitement ... ";
-                lettre = NULL;
-                filtres_indiv(ep->d_name, pixelsR, pixelsG, pixelsB, lettre, repertory_dep, repertory_arr);
+                cout << ep->d_name << " : traitement ... " << flush;
+
+
+                pathNames(pathPng, pathTxt, ep->d_name, repertory_dep, repertory_arr);
+
+                lettre = IMG_Load(pathPng);     //On charge dans une surface SDL l'image à laquelle on accède par le chemin relatif dossierPng
+                if (lettre == NULL)     //Si il y a eu un souci d'ouverture de l'image, on écrit une erreur dans erreur.txt
+                {
+                    ofstream file("erreur.txt",ofstream::ate);
+                    file << "Filtres2 - Bug 1 : L'image " << pathPng << " n'a pas pu etre ouverte." << endl;
+                    cout << "Filtres2 - Bug 1 : L'image " << pathPng << " n'a pas pu etre ouverte." << endl;
+                }
+                else
+                    filtres_indiv(lettre, pathTxt, pixelsR, pixelsG, pixelsB);
+
+
+
+
                 compteurimages++;
                 cout << " Traitee." << endl;
             }
@@ -97,65 +117,25 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
 
 
 
-void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixelsB, SDL_Surface *lettre)
+void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixelsG, int **pixelsB)
 {
-	filtres_indiv(nomFichierPng, pixelsR, pixelsG, pixelsB, lettre, DOSSIERIMAGES, DOSSIERTEXTES);
-}
+	bool notEmpty = true;
 
-
-void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixelsB, SDL_Surface *lettre, const char* repertory_dep, const char* repertory_arr)
-{
-	int x = 0, y = 0;
-	int hauteur, largeur;   //Les vraies dimensions de l'image, calculées après calcul des marges à rogner
 	int distancemax[3];   //Le max de la "distance chromatique" séparant les pixels du pixel de référence (voir plus bas)
-
-	double moyenne = 0;
-	//Les tableaux qui contiendront les composantes finales des 400 pixels
-	int pixelsRfinal[TAILLE][TAILLE];
-	int pixelsGfinal[TAILLE][TAILLE];
-	int pixelsBfinal[TAILLE][TAILLE];
-
 	int reference [3] = {0};    //La "référence" de couleur, qui sera définie comme la couleur du pixel de coordonnées (0,0)
 	int marges[4] = {0};
 
     FILE* fichier = NULL;   //Un pointeur de fichier
-    char nomFichierTxt[300] = "";   //Le nom du fichier texte associé
-    char dossierPng[100];   //Le nom du répertoire d'images
-    char dossierTxt[100];   //Le nom du répertoire où seront créés les fichiers textes
 
-    //Traitement des noms de fichiers : le but est de créer un fichier txt de même nom que l'image traitée, et de le place dans le sous dossier "textes"
-	strcpy(dossierPng, repertory_dep);
-    strcpy(dossierTxt, repertory_arr);
-	dossierPng[strlen(repertory_dep)]='\0'; //On coupe la chaîne correspondant au chemin relatif du fichier .png
-    dossierTxt[strlen(repertory_arr)]='\0'; //Idem pour le .txt
+    SDL_Surface *resized = SDL_CreateRGBSurface(SDL_SWSURFACE, TAILLE, TAILLE, 32, 0, 0, 0, 255);
 
-    //On récupère le nom du fichier dans chaque chaîne
-    strcpy(nomFichierTxt, nomFichierPng);
-    nomFichierTxt[strlen(nomFichierPng)-4]='\0';    //Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
-    strcat(nomFichierTxt,".txt");   //Puis on lui ajoute ".txt"
+    fichier = fopen(pathTxt,"w+");   //On ouvre (ou on créé) un fichier txt
 
-
-    strcat(dossierPng,nomFichierPng);   //On obtient le chemin relatif menant à l'image en concaténant "images/" et le nom de l'image
-    strcat(dossierTxt,nomFichierTxt);   //Idem pour le dossier "textes/" et le fichier ".txt"
-
-    if (lettre == NULL)
-        lettre = IMG_Load(dossierPng);  //On charge dans une surface SDL l'image à laquelle on accède par le chemin relatif dossierPng
-
-    if (lettre == NULL) //Si il y a eu un souci d'ouverture de l'image, on écrit une erreur dans erreur.txt
+    if (fichier == NULL)   //Si l'ouverture du fichier texte a échoué, on inscrit une erreur dans erreur.txt
     {
         ofstream file("erreur.txt",ofstream::ate);
-        file << "Filtres2 - Bug 1 : L'image " << dossierPng << " n'a pas pu etre ouverte." << endl;
-        cout << "Filtres2 - Bug 1 : L'image " << dossierPng << " n'a pas pu etre ouverte." << endl;
-    }
-    else
-    {
-
-    fichier = fopen(dossierTxt,"w+");   //On ouvre (ou on créé) un fichier txt
-
-    if (fichier == NULL){    //Si l'ouverture du fichier texte a échoué, on inscrit une erreur dans erreur.txt
-        ofstream file("erreur.txt",ofstream::ate);
-        file << "Filtres2 - Bug 2 : Le fichier " << dossierTxt << " n'a pas pu etre ouvert." <<endl;
-        cout << "Filtres2 - Bug 2 : Le fichier " << dossierTxt << " n'a pas pu etre ouvert." <<endl;
+        file << "Filtres2 - Bug 2 : Le fichier " << pathTxt << " n'a pas pu etre ouvert." <<endl;
+        cout << "Filtres2 - Bug 2 : Le fichier " << pathTxt << " n'a pas pu etre ouvert." <<endl;
     }
 	else //Si l'ouverture a réussi
 	{
@@ -166,50 +146,31 @@ void filtres_indiv(char* nomFichierPng, int **pixelsR, int **pixelsG, int **pixe
     //On calcule les marges : on rogne le plus possible de lignes/colonnes contenant uniquement des pixels de la couleur de référence
     margeLigne(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, marges);
     margeColonne(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, marges);
+    notEmpty = margeSynthese(lettre->w, lettre->h, marges); //on rend l'image carrée en diminuant alternativement les marges gauche/droite ou haut/bas selon si la hauteur est plus grande que la largeur ou non
 
-    //On calcule les nouvelles dimensions de l'image
-    hauteur = lettre->h - marges[0] - marges[1];
-    largeur = lettre->w - marges[2] - marges[3];
+    resize(lettre, resized, reference, marges);
+    ecritureTxt(fichier, resized, reference, marges, distancemax, notEmpty);
 
-    if (hauteur <= 0 || largeur <= 0)   //Dans le cas où l'une des dimensions est négative, cela signifie que l'image a été totalement rognée : on n'inscrit alors que des -1 dans le fichier textes
-        {
-        for(y = 0; y < TAILLE ; y++)
-        {
-            for(x = 0; x < TAILLE ; x++)
-                    fprintf(fichier, "-1 ");
-
-            fprintf(fichier, "\n ");
-        }
-        }
-    else    //Sinon, on rend l'image carrée en diminuant alternativement les marges gauche/droite ou haut/bas selon si la hauteur est plus grande que la largeur ou non
-    {
-        margeSynthese(lettre->w, lettre->h, marges);
-
-        //La fonction pixelsfinal calcule alors une image 20x20 (stockée dans pixelsRfinal, etc.) avec la fameuse moyenne pondérée (la fonction est cauchemardesque à coder)
-        pixelsfinal(pixelsR, pixelsRfinal, lettre->w, lettre->h, marges);
-        pixelsfinal(pixelsG, pixelsGfinal, lettre->w, lettre->h, marges);
-        pixelsfinal(pixelsB, pixelsBfinal, lettre->w, lettre->h, marges);
-
-        //On parcourt le tableau final de pixels pour écrire le résultat dans le fichier
-        for(y = 0; y < TAILLE ; y++)
-        {
-            for(x = 0; x < TAILLE ; x++)
-                {
-                    //On calcule le rapport de la distance chromatique à la référence du pixel et de distancemax, la distance chromatique maximale
-                    moyenne = abs(pixelsRfinal[y][x] - reference[0]) + abs(pixelsGfinal[y][x] - reference[1]) + abs(pixelsBfinal[y][x] - reference[2]);
-                    moyenne /= (distancemax[0] + distancemax[1] + distancemax[2]);
-                    //moyenne = 2*moyenne -1; //On transforme le résultat ([0, 1] -> [-1, 1])
-                    fprintf(fichier, "%.2f " , moyenne);    //On écrit le résultat avec 2 décimales
-                }
-            fprintf(fichier, "\n ");    //Au bout d'une ligne de pixels, on revient à la ligne avant d'écrire la ligne suivante (choix arbitraire, ajustable)
-        }
-
-
-    }
     fclose(fichier);
     }
-    }
 
+
+}
+
+void pathNames(char* pathPng, char* pathTxt, char* namePng, const char* repertory_dep, const char* repertory_arr)
+{
+    char nameTxt[100] = "";   //Le nom du fichier texte associé
+
+    //Traitement des noms de fichiers : le but est de créer un fichier txt de même nom que l'image traitée, et de le place dans le sous dossier "textes"
+	strcpy(pathPng, repertory_dep);
+    strcat(pathPng,namePng);   //On obtient le chemin relatif menant à l'image en concaténant "images/" et le nom de l'image
+
+    strcpy(nameTxt,namePng);
+    nameTxt[strlen(nameTxt)-4]='\0';    //Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
+    strcat(nameTxt,".txt");   //Puis on lui ajoute ".txt"
+
+    strcpy(pathTxt, repertory_arr);
+    strcat(pathTxt, nameTxt);
 
 }
 
@@ -340,10 +301,16 @@ void margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int 
     }
 }
 
-void margeSynthese(int imageWidth, int imageHeight, int marges[])
+bool margeSynthese(int imageWidth, int imageHeight, int marges[])
 {
     int hauteur = imageHeight - marges[0] - marges[1];
     int largeur = imageWidth - marges[2] - marges[3];
+
+    if (hauteur <= 0 || largeur <= 0)   //Dans le cas où l'une des dimensions est négative, cela signifie que l'image a été totalement rognée : on n'inscrit alors que des -1 dans le fichier textes
+        return false;
+
+    else
+    {
     int i = 0;
 
     while(hauteur < largeur)
@@ -402,9 +369,135 @@ void margeSynthese(int imageWidth, int imageHeight, int marges[])
 
     largeur = imageWidth - marges[2] - marges[3];
     //A ce stade, largeur = hauteur, et si l'image initiale le permettait, les marges sont telles qu'une fois rognées, on obtient une image carrée centrée sur la lettre
+
+    return true;
+    }
 }
 
 
+
+
+void analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixelsB)
+{
+    Uint8 red, green, blue;
+    Uint32 infopixel;
+
+    SDL_LockSurface(image);    //On verouille la surface SDL (indispensable pour lire les pixels)
+    for(int y = 0; y < image->h ; y++) //On parcourt tous les pixels de l'image
+    {
+        for(int x = 0; x < image->w ; x++)
+        {
+            //On récupère les infos d'un pixel dans infopixel puis ses composantes dans red, green, blue
+            infopixel = getPixel(image, x,y);
+            SDL_GetRGB(infopixel, image->format, &red, &green, &blue);
+            //On place le tout dans les tableaux correspondants
+            pixelsR[y][x] = (int)red;
+            pixelsG[y][x] = (int)green;
+            pixelsB[y][x] = (int)blue;
+        }
+    }
+
+    SDL_UnlockSurface(image);  //On déverouille la surface
+
+}
+
+void distanceChro(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int distancemax[])
+{
+    for(int i = 0; i < 3; i++)  //On réinitialise la distance chromatique
+        distancemax[i] = 0;
+
+    reference[0] = pixelsR[0][0];
+    reference[1] = pixelsG[0][0];
+    reference[2] = pixelsB[0][0];
+    int red, green, blue;
+
+    for(int y = 0; y < hauteur ; y++) //On parcourt tous les pixels de l'image
+    {
+        for(int x = 0; x < largeur ; x++)
+        {
+            red = pixelsR[y][x];
+            green = pixelsG[y][x];
+            blue = pixelsB[y][x];
+
+            //Calcul de la distance chromatique à la référence maximale : si le pixel considéré possède une distance chromatique moyenne à la référence supérieure à la moyenne des distancemax[i], on actualise distancemax
+            if (distancemax[0] + distancemax[1] + distancemax[2] < abs(red - reference[0]) + abs(green - reference[1]) + abs(blue - reference[2]))
+            {
+                distancemax[0] = abs(red - reference[0]);
+                distancemax[1] = abs(green - reference[1]);
+                distancemax[2] = abs(blue - reference[2]);
+            }
+        }
+    }
+}
+
+
+bool dejaFiltree(const char* repertory_arr, const char* imageName)
+{
+    char textName[200];
+
+    strcpy(textName,repertory_arr);
+    strcat(textName,imageName);
+    textName[strlen(textName)-4]='\0';
+    strcat(textName,".txt");
+
+    ifstream file(textName);
+
+    return file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
+}
+
+
+void resize(SDL_Surface *lettre, SDL_Surface *resized, int reference[], int marges[])
+{
+    SDL_Rect dest;
+    dest.x = marges[2] ;
+    dest.y = marges[0];
+    dest.w = lettre->w - marges[3] - marges[2];
+    dest.h = lettre->h - marges[1] - marges[0];
+
+    SDL_FillRect(resized, NULL, SDL_MapRGB(resized->format, reference[0], reference[1], reference[2]));
+    SDL_BlitScaled(lettre,&dest,resized,NULL);
+}
+
+void ecritureTxt(FILE* fichier, SDL_Surface *resized, int reference[], int marges[], int distancemax[], bool notEmpty)
+{
+	Uint8 red, green, blue;
+    double moyenne = 0;
+
+    if (!notEmpty)
+    {
+        for(int y = 0; y < TAILLE ; y++)
+        {
+            for(int x = 0; x < TAILLE ; x++)
+                    fprintf(fichier, "0.00 ");
+
+            fprintf(fichier, "\n ");
+        }
+    }
+    else
+    {
+
+    SDL_LockSurface(resized);    //On verouille la surface SDL (indispensable pour lire les pixels)
+
+    for(int y = 0; y < resized->h ; y++) //On parcourt tous les pixels de l'image
+    {
+        for(int x = 0; x < resized->w ; x++)
+        {
+            SDL_GetRGB(getPixel(resized, x,y), resized->format, &red, &green, &blue);
+
+            //On calcule le rapport de (la distance chromatique à la référence du pixel) et de (distancemax), la distance chromatique maximale
+            moyenne = abs((int)red - reference[0]) + abs((int)green - reference[1]) + abs((int)blue - reference[2]);
+            moyenne /= (distancemax[0] + distancemax[1] + distancemax[2]);
+
+            fprintf(fichier, "%.2f ", moyenne);    //On écrit le résultat avec 2 décimales
+        }
+        fprintf(fichier, "\n ");    //Au bout d'une ligne de pixels, on revient à la ligne avant d'écrire la ligne suivante (choix arbitraire, ajustable)
+    }
+
+    SDL_UnlockSurface(resized);  //On déverouille la surface
+    }
+}
+
+/*
 void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Hauteur, int marges[])
 {
     int x = 0,y = 0, i = 0, j = 0;
@@ -479,76 +572,5 @@ void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Haute
         }
     }
 
-}
-
-
-void analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixelsB)
-{
-    Uint8 red, green, blue;
-    Uint32 infopixel;
-
-    SDL_LockSurface(image);    //On verouille la surface SDL (indispensable pour lire les pixels)
-    for(int y = 0; y < image->h ; y++) //On parcourt tous les pixels de l'image
-    {
-        for(int x = 0; x < image->w ; x++)
-        {
-            //On récupère les infos d'un pixel dans infopixel puis ses composantes dans red, green, blue
-            infopixel = getPixel(image, x,y);
-            SDL_GetRGB(infopixel, image->format, &red, &green, &blue);
-            //On place le tout dans les tableaux correspondants
-            pixelsR[y][x] = (int)red;
-            pixelsG[y][x] = (int)green;
-            pixelsB[y][x] = (int)blue;
-        }
-    }
-
-    SDL_UnlockSurface(image);  //On déverouille la surface
-
-}
-
-void distanceChro(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int distancemax[])
-{
-    for(int i = 0; i < 3; i++)  //On réinitialise la distance chromatique
-        distancemax[i] = 0;
-
-    reference[0] = pixelsR[0][0];
-    reference[1] = pixelsG[0][0];
-    reference[2] = pixelsB[0][0];
-    int red, green, blue;
-
-    for(int y = 0; y < hauteur ; y++) //On parcourt tous les pixels de l'image
-    {
-        for(int x = 0; x < largeur ; x++)
-        {
-            red = pixelsR[y][x];
-            green = pixelsG[y][x];
-            blue = pixelsB[y][x];
-
-            //Calcul de la distance chromatique à la référence maximale : si le pixel considéré possède une distance chromatique moyenne à la référence supérieure à la moyenne des distancemax[i], on actualise distancemax
-            if (distancemax[0] + distancemax[1] + distancemax[2] < abs(red - reference[0]) + abs(green - reference[1]) + abs(blue - reference[2]))
-            {
-                distancemax[0] = abs(red - reference[0]);
-                distancemax[1] = abs(green - reference[1]);
-                distancemax[2] = abs(blue - reference[2]);
-            }
-        }
-    }
-}
-
-
-bool dejaFiltree(const char* repertory_arr, const char* imageName)
-{
-    char textName[200];
-
-    strcpy(textName,repertory_arr);
-    strcat(textName,imageName);
-    textName[strlen(textName)-4]='\0';
-    strcat(textName,".txt");
-
-    ifstream file(textName);
-
-    return file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
-}
-
-
+}*/
 
