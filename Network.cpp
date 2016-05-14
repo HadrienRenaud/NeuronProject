@@ -402,27 +402,33 @@ void Network::setMaxLimitLoop(int maxLimitLoop){
 template <class T>
 void displayArray(T* data, int length){//afficher un tableau de valeur
     cout << "[";
-    for(int i = 0; i<length-1; i++)
-        cout << (data[i]>=0 ? "+" : "") << data[i] << "," ;
-    cout << (data[length-1]>=0 ? "+" : "") << data[length-1] << "]";
+    for( int i = 0; i < length-1; i++)
+        cout << (data[i] >= 0 ? "+" : "") << data[i] << "," ;
+    cout << (data[length-1] >= 0 ? "+" : "") << data[length-1] << "]";
 }
 
 double distance(double* data1, double* data2, int length){//on fait la moyenne des carrés de chaque écart entre data1 et data2
     double res = 0; //initialisation
-    for(int i = 0; i<length; i++) //on parcourt la liste
-        res+=((data1[i]-data2[i])*(data1[i]-data2[i])); //On augmente la moyenne du carré de la distance entre data1 et data2 ~ Variance
-    res/=length; // On moyenne
+
+    for (int i = 0; i < length; i++) //on parcourt la liste
+        res += ((data1[i] - data2[i]) * (data1[i] - data2[i])); //On augmente la moyenne du carré de la distance entre data1 et data2 ~ Variance
+    res /= length; // On moyenne
+    
     return res;
 }
 
-double distanceMod(double* data1, double* data2, int length){
-    double res=0; //initialisation
-    int j=-1; //initialisation
-    for (int i=0; i<length; i++){
-        res += ((data1[i]-data2[i])*(data1[i]-data2[i])); //carré de la distance
-        j = (i+26)%length; //position de la majuscule
-        res += ((data1[i]-data2[j])*(data1[i]-data2[j])); //carré de la distance à la majuscule
+double distanceMod(double* data1, double* data2, int length)
+{
+    double res = 0; //initialisation
+    int j = -1; //initialisation
+
+    for (int i = 0; i < length; i++)
+    {
+        res += ((data1[i] - data2[i]) * (data1[i] - data2[i])); //carré de la distance
+        j = (i + 26) % length; //position de la majuscule
+        res += ((data1[i] - data2[j]) * (data1[i] - data2[j])); //carré de la distance à la majuscule
     }
-    res/=length*2; // on moyenne
+    res /= length * 2; // on moyenne
+
     return res;
 }
