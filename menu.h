@@ -11,6 +11,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <math.h>
+#include <time.h>
 #include "filtres2.h"
 #include "system.h"
 #include "database.h"

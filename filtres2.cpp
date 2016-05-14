@@ -428,7 +428,7 @@ bool dejaFiltree(const char* repertory_arr, const char* imageName)
 
     ifstream file(textName);
 
-    return file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
+    return (bool)file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
 }
 
 
@@ -559,18 +559,3 @@ void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Haute
     }
 
 }*/
-
-
-bool dejaFiltree(const char* repertory_arr, const char* imageName)
-{
-    char textName[200];
-
-    strcpy(textName,repertory_arr);
-    strcat(textName,imageName);
-    textName[strlen(textName)-4]='\0';
-    strcat(textName,".txt");
-
-    ifstream file(textName);
-
-    return (bool)file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
-}
