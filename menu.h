@@ -18,8 +18,9 @@
 #include "NetworkArray.h"
 
 #define DOSSIERTEST "test/"
-#define DOSSIERTESTTEXT "test/texts/"
+#define DOSSIERTESTTEXT "test_texts/"
 #define TESTING_BACKGROUND_DIMENSIONS 300
+#define REFRESH_TIME 0.2
 
 void menu(SDL_Renderer *ren);
 void keyboard(SDL_Event event, bool* keyboardInput);

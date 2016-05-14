@@ -1,1 +1,1 @@
-Filtres2 - Bug 1 : L'image test/texts n'a pas pu etre ouverte.
+Apprentissage - Bug 1 : Exemple test/texts/a_L_verdanab.txt non lu.

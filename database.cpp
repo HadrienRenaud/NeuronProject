@@ -94,7 +94,7 @@ void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **p
         cout << "Creation des images : ";
         for (i = 0; i < CHARNUMBER; i++)
         {
-            cout << caracteres[i] << " ";
+            cout << caracteres[i] << " " << flush;
             strcpy(fontname,DOSSIERIMAGES);
             strcat(fontname,caracteres[i]);
             if (i < 26)
