@@ -14,11 +14,11 @@ using namespace std;
 #define ALPHA 0.05 //momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE 100
 #define NB_APPRENTISSAGE 10
-#define DISTANCE_MAXIMALE 1
-#define MAX_LIMIT_LOOP 20
+#define DISTANCE_MAXIMALE 0.1
+#define MAX_LIMIT_LOOP 100
 #define LENGTH_ALPHABET 52
-#define BORNE_INF_DISTINCTION 0.1
-#define BORNE_MAX_CASSE 10
+#define BORNE_INF_DISTINCTION 0.05
+#define BORNE_MAX_CASSE 1000
 
 
 class Layer;//on dit qu'on va utiliser la classe layer

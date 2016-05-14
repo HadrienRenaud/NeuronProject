@@ -42,7 +42,7 @@ void database(bool sauvegarde, bool filtre)
             if (strlen(ep->d_name) >= 4)
             {
                 cout << endl << "Chargement : " << 100*compteurPolices/nombrePolices << "% - ";
-                cout << ep->d_name << " : traitement ... ";
+                cout << ep->d_name << " : traitement ... " << flush;
                 filterPngs(ep->d_name,sauvegarde, filtre, pixelsR, pixelsG, pixelsB);
                 compteurPolices++;
                 cout << endl << "Traitee." << endl;
@@ -100,7 +100,7 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
         {
             pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i);
 
-            cout << caracteres[i] << " ";
+            cout << caracteres[i] << " " << flush;
             texte = TTF_RenderText_Solid(font, caracteres[i], color);
 
             dest.x = background->w / 2 - texte->w / 2;

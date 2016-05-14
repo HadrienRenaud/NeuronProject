@@ -24,6 +24,7 @@ void menu(SDL_Renderer *ren)
     DIR *dp = NULL;
     struct dirent *ep;
 
+    clock_t t0(clock());//temps de départ du programme
     SDL_Event event;
     SDL_Surface *backgroundSurface = IMG_Load("resources/background.png");
     SDL_Texture *background = SDL_CreateTextureFromSurface(ren,backgroundSurface);
@@ -68,7 +69,7 @@ void menu(SDL_Renderer *ren)
     resultTestPos.x = resultModel->w / 2 - (TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf",30), testResult,color))->w/2;
 
     nameImageTestedPos.y = 5;
-    resultTestPos.y = heightNameImageTested + TESTING_BACKGROUND_DIMENSIONS + 5;
+    resultTestPos.y = heightNameImageTested + TESTING_BACKGROUND_DIMENSIONS + 10;
 
     Button nextButton(ren,"Next",16,235,(backgroundSurface->w/2 + resultModel->w/2 - 100), (testingField.y + resultModel->h),100,30);
     Button previousButton(ren,"Previous",16,235,(backgroundSurface->w/2 - resultModel->w/2), (testingField.y + resultModel->h),100,30);
@@ -100,7 +101,11 @@ void menu(SDL_Renderer *ren)
                 quitLoop = true;
                 break;
             case SDL_KEYDOWN:
-                keyboard(event,keyboardInput);
+                if (((float)(clock()-t0)/CLOCKS_PER_SEC)>REFRESH_TIME)
+                {
+                    keyboard(event,keyboardInput);
+                    t0=clock();
+                }
             case SDL_MOUSEMOTION:
                 xMouse = event.motion.x;
                 yMouse = event.motion.y;
@@ -208,7 +213,7 @@ void menu(SDL_Renderer *ren)
                         testResult[strlen(testResult) - 1] = '_';
                     cout << "testResult : " << testResult << endl;
 
-                    resultTest = TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf",30), testResult, color);
+                    resultTest = TTF_RenderText_Blended(TTF_OpenFont("resources/font_test.ttf",30), testResult, color);
 
                     nameImageTested = TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf",15), ep->d_name, color);
                     nameImageTestedPos.x = result->w/2 - nameImageTested->w/2;

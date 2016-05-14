@@ -5,17 +5,7 @@ Voir la description dans filtres2.h
 
 
 #include "filtres2.h"
-/*
-void filtres(){
-    filtres(DOSSIERIMAGES);
-}
-void filtres(const char* repertory_dep){
-    filtres(repertory_dep,DOSSIERTEXTES);
-}
 
-void filtres(const char* repertory_dep, const char* repertory_arr){
-    filtres(repertory_dep,DOSSIERTEXTES,false);
-}*/
 void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif)
 {
 	int nombreimages = 0, compteurimages = 0;
@@ -76,7 +66,6 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
                 cout << "Chargement : " << 100*compteurimages/nombreimages << "% - ";
                 cout << ep->d_name << " : traitement ... " << flush;
 
-
                 pathNames(pathPng, pathTxt, ep->d_name, repertory_dep, repertory_arr);
 
                 lettre = IMG_Load(pathPng);     //On charge dans une surface SDL l'image à laquelle on accède par le chemin relatif dossierPng
@@ -88,9 +77,6 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
                 }
                 else
                     filtres_indiv(lettre, pathTxt, pixelsR, pixelsG, pixelsB);
-
-
-
 
                 compteurimages++;
                 cout << " Traitee." << endl;
@@ -574,3 +560,17 @@ void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Haute
 
 }*/
 
+
+bool dejaFiltree(const char* repertory_arr, const char* imageName)
+{
+    char textName[200];
+
+    strcpy(textName,repertory_arr);
+    strcat(textName,imageName);
+    textName[strlen(textName)-4]='\0';
+    strcat(textName,".txt");
+
+    ifstream file(textName);
+
+    return (bool)file; //Booléen correspondant au succès de l'ouverture du fichier : vaut vrai si le fichier a été trouvé, faux sinon.
+}
