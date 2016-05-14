@@ -66,13 +66,17 @@ void database(bool sauvegarde, bool filtre)
 
 }
 
-void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB)
+void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB)
 {
     int i = 0;
     char caracteres[CHARNUMBER][2] = CHARS;
-    char fontname[100] = "";
-    strcpy(fontname,DOSSIERPOLICES);
-    strcat(fontname,file);
+
+    char pathFont[150];
+    char pathPng[150];
+    char pathTxt[150];
+
+    strcpy(pathFont,DOSSIERPOLICES);
+    strcat(pathFont,nameFont);
 
     SDL_Surface *texte = NULL;
     SDL_Surface *background = SDL_CreateRGBSurface(SDL_SWSURFACE, 400, 400, 32, 0, 0, 0, 0);
@@ -80,13 +84,13 @@ void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **p
     SDL_FillRect(background, NULL, SDL_MapRGB(background->format, BACKGROUNDCOLOR));
     SDL_Color color = {TEXTCOLOR};
 
-    TTF_Font *font = TTF_OpenFont(fontname, TEXTSIZE);
+    TTF_Font *font = TTF_OpenFont(pathFont, TEXTSIZE);
 
     if(font == NULL)
         {
             ofstream file("erreur.txt");
-            file << "Database - Bug 2 : La police " << fontname << " n'a pas pu etre chargee." << endl;
-            cout << "Database - Bug 2 : La police " << fontname << " n'a pas pu etre chargee." << endl;
+            file << "Database - Bug 2 : La police " << pathFont << " n'a pas pu etre chargee." << endl;
+            cout << "Database - Bug 2 : La police " << pathFont << " n'a pas pu etre chargee." << endl;
         }
     else
     {
@@ -94,18 +98,9 @@ void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **p
         cout << "Creation des images : ";
         for (i = 0; i < CHARNUMBER; i++)
         {
+            pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i);
+
             cout << caracteres[i] << " " << flush;
-            strcpy(fontname,DOSSIERIMAGES);
-            strcat(fontname,caracteres[i]);
-            if (i < 26)
-                strcat(fontname,"_U_");
-            else
-                strcat(fontname,"_L_");
-
-            strcat(fontname,file);
-            fontname[strlen(fontname)-4] = '\0';
-            strcat(fontname,".png");
-
             texte = TTF_RenderText_Solid(font, caracteres[i], color);
 
             dest.x = background->w / 2 - texte->w / 2;
@@ -114,30 +109,22 @@ void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **p
             dest.h = texte->h;
             SDL_BlitSurface(texte,NULL,background,&dest);
 
+
             if (background == NULL)
             {
                 ofstream file("erreur.txt");
-                file << "Database - Bug 2 : L'image " << fontname << " n'a pas pu etre creee." <<endl;
-                cout << "Database - Bug 2 : L'image " << fontname << " n'a pas pu etre creee." <<endl;
+                file << "Database - Bug 2 : L'image " << pathPng << " n'a pas pu etre creee." << endl;
+                cout << "Database - Bug 2 : L'image " << pathPng << " n'a pas pu etre creee." << endl;
             }
             else
             {
 
                 if (sauvegarde)
-                    IMG_SavePNG(background,fontname);
+                    IMG_SavePNG(background,pathPng);
 
-                strcpy(fontname,caracteres[i]);
-                if (i < 26)
-                    strcat(fontname,"_U_");
-                else
-                    strcat(fontname,"_L_");
-
-                strcat(fontname,file);
-                fontname[strlen(fontname)-4] = '\0';
-                strcat(fontname,".png");
 
                 if (filtre)
-                    filtres_indiv(fontname, pixelsR, pixelsG, pixelsB, background);
+                    filtres_indiv(background, pathTxt, pixelsR, pixelsG, pixelsB);
 
                 SDL_FillRect(background, NULL, SDL_MapRGB(background->format, BACKGROUNDCOLOR));
             }
@@ -147,4 +134,28 @@ void filterPngs(char* file, bool sauvegarde, bool filtre, int **pixelsR, int **p
     SDL_FreeSurface(texte);
     SDL_FreeSurface(background);
 
+}
+
+void pathNames(char* pathPng, char* pathTxt, char* nameFont, const char* repertoryPng, const char* repertoryTxt, int i)
+{
+    char caracteres[CHARNUMBER][2] = CHARS;
+    char namePng[150];
+
+
+    strcpy(namePng,caracteres[i]);
+    if (i < 26)
+    strcat(namePng,"_L_");
+    else
+    strcat(namePng,"_U_");
+
+    strcat(namePng,nameFont);
+    namePng[strlen(namePng)-4] = '\0';
+
+    strcpy(pathTxt,repertoryTxt);
+    strcat(pathTxt,namePng);
+    strcat(pathTxt,".txt");
+
+    strcat(namePng,".png");
+    strcpy(pathPng,repertoryPng);
+    strcat(pathPng,namePng);
 }
