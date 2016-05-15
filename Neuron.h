@@ -31,8 +31,8 @@ public:
 	int			getBindingsNumber() const;						//donne le nombre de liaisons avec les neurones des couches PRECEDENTES
 	void		receive();										//le neurone récupère la somme pondérée des outputs des neurones des couches d'avant auxquels il est connecté
 	void		sendGradient();									//le neurone envoie son propre gradient aux neurones précedents, pondérée par le poids de chaque liaison
-	void		addBinding(Binding* binding);					//nouvelle liaison
-	void		addBinding(Neuron* neuron, double weight = 1);	//invoque la méthode précédente
+	void		addBinding(Binding* binding);//nouvelle liaison
+	void		addBinding(Neuron* neuron, double weight = 1);
 	double		getInput() const;
 	double		getOutput() const;
 	double		getGradient() const;

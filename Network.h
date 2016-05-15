@@ -6,6 +6,8 @@
 #include <cstring>
 using namespace std;
 
+#define DIR_EXEMPLE				"texts/" //dossier ou sont contenus tous les fichiers d'exemples
+#define g_dir_test				"test/"
 #define g_dir_svg				"svg_reseau/"
 #define g_nom_svg				"plus_recent_"
 #define g_extension_svg			".svg_reseau"
@@ -24,7 +26,7 @@ using namespace std;
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network {
 public:
-	Network();									//rien a mettre de-dans
+	Network();									//rien a mettre dedans
 	Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
 	~Network();									//destructeur
 

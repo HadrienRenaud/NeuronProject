@@ -30,13 +30,9 @@ private:
 };
 
 template <class T>
-void displayArray(T* data, int length);	//affichage d'un tableau
-bool	readExemple(char* nom_fichier, double entrees[], int taille_entree);
-bool	readExemple(char* nom_fichier, double entrees[], int taille_entree, const char* directory);
-int		countExemples();
-int		countExemples(const char* directory);												//compte les exemples dans directory
-void	getArrayOfFileNames(char** tabloFichier);											// lit le tableau correspondant à une image
-void	getArrayOfFileNames(char** tabloFichier, const char* directory);
-void	getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples);	// récupère tous les tablos d'exemples
-void	getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, const char* directory);
+void displayArray(T* data, int length);																									//affichage d'un tableau
+bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory = DIR_EXEMPLE);
+int		countExemples(string directory = DIR_EXEMPLE);																		//compte les exemples dans directory
+void	getArrayOfFileNames(char** tabloFichier, string directory = DIR_EXEMPLE);											// lit le tableau correspondant à une image
+void	getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory = DIR_EXEMPLE);	// récupère tous les tablos d'exemples
 #endif	//NETWORKARRAY_H_INCLUDED
