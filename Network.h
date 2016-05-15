@@ -9,8 +9,8 @@ using namespace std;
 #define g_dir_svg				"svg_reseau/"
 #define g_nom_svg				"plus_recent_"
 #define g_extension_svg			".svg_reseau"
-#define FIRST_LAYER_SIZE		400	//nombre de neurones de la première couche
-#define LAST_LAYER_SIZE			1	//nombe de neurones de la dernière couche
+#define FIRST_LAYER_SIZE		400		//nombre de neurones de la première couche
+#define LAST_LAYER_SIZE			1		//nombe de neurones de la dernière couche
 #define ALPHA					0.05	//momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE	100
 #define NB_LEARNING				10
@@ -24,7 +24,7 @@ using namespace std;
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network {
 public:
-	Network();	//rien a mettre de-dans
+	Network();									//rien a mettre de-dans
 	Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
 	~Network();									//destructeur
 
