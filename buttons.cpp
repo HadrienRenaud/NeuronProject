@@ -7,10 +7,10 @@ Button::Button(SDL_Renderer *ren, const std::string &text, int size, int alpha, 
 {
 	x	= xB;
 	y	= yB;
-	int				alpha2			= alpha + (255 - alpha) * 0.4;
-	int				alpha3			= alpha + (255 - alpha) * 0.7;
+	int				alpha2	= alpha + (255 - alpha) * 0.4;
+	int				alpha3	= alpha + (255 - alpha) * 0.7;
 
-	SDL_Color		color			= { 255, 255, 255 };
+	SDL_Color		color	= { 255, 255, 255 };
 	SDL_Rect		dest;
 
 	SDL_Surface *	texte			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", size), text.c_str(), color);
@@ -44,10 +44,10 @@ Button::Button(SDL_Renderer *ren, const std::string &text, int size, int alpha, 
 {
 	x	= xB;
 	y	= yB;
-	int				alpha2			= alpha + (255 - alpha) * 0.4;
-	int				alpha3			= alpha + (255 - alpha) * 0.7;
+	int				alpha2	= alpha + (255 - alpha) * 0.4;
+	int				alpha3	= alpha + (255 - alpha) * 0.7;
 
-	SDL_Color		color			= { 255, 255, 255 };
+	SDL_Color		color	= { 255, 255, 255 };
 	SDL_Rect		dest;
 
 	SDL_Surface *	texte			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", size), text.c_str(), color);

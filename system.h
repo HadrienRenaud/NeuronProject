@@ -12,10 +12,10 @@
 #include <dirent.h>
 #include <math.h>
 
-SDL_Renderer* init(SDL_Window *window);
-void quit(SDL_Window *window);
-SDL_Texture* loadTexture(const std::string &fileImg, SDL_Renderer *ren);
-void renderTexture(SDL_Renderer *ren, SDL_Texture *tex, int x, int y);
+SDL_Renderer*	init(SDL_Window *window);
+void			quit(SDL_Window *window);
+SDL_Texture*	loadTexture(const std::string &fileImg, SDL_Renderer *ren);
+void			renderTexture(SDL_Renderer *ren, SDL_Texture *tex, int x, int y);
 
 
 

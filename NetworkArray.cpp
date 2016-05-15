@@ -49,10 +49,10 @@ void NetworkArray::learnAllNetworks()
 	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones." << endl << endl;
 
 	cout << "Initialisation des parametres." << endl;
-	clock_t		t0(clock());//temps de départ du programme
+	clock_t	t0(clock());	//temps de départ du programme
 
 	//nombre d'exemples à traiter
-	int const	nb_exemples(countExemples());
+	int const nb_exemples(countExemples());
 
 	// Initialisation des tableaux contenant les donnees des exemples
 	char**		tabloFichiers	= new char*[nb_exemples];

@@ -11,9 +11,9 @@ Binding(Neuron* neuron, double weight = 1);
 ~Binding();
 
 Neuron* getNeuron() const;	//on ne met surtout pas de méthode setNeuron(), ça n'aurait aucun sens
-void setWeight(double weight = 1);
-double getWeight() const;
-void addWeight(double weight);		//raccourci
+void	setWeight(double weight = 1);
+double	getWeight() const;
+void	addWeight(double weight);	//raccourci
 
 private:
 Neuron* m_neuron;

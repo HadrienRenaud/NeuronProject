@@ -85,7 +85,7 @@ void Network::save()
 	ostringstream	temps;																						//flux pour traitement
 
 	temps << asctime(localtime(&t));																			//on récupère le flux correspondant au temps
-	string			str_nom_fichier(temps.str());																// on crée un string correspondant au flux
+	string str_nom_fichier(temps.str());																		// on crée un string correspondant au flux
 	for (int i(0); i < (int)str_nom_fichier.size(); i++)														// on parcourt le nom du fichier
 		if (!isalnum(str_nom_fichier[i]))																		// et on remplace tout ce qui ne va pas dans un
 			str_nom_fichier[i] = '_';
@@ -292,7 +292,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 	char		buffer [80];
 
 	time(&rawtime);
-	Layer*		temp;
+	Layer* temp;
 
 	//Inscription des premières données
 	base_donnes.open("Compte_rendu_test_toutes.csv", ios::out | ios::app);

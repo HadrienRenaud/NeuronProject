@@ -6,19 +6,19 @@
 #include <cstring>
 using namespace std;
 
-#define g_dir_svg "svg_reseau/"
-#define g_nom_svg "plus_recent_"
-#define g_extension_svg ".svg_reseau"
-#define FIRST_LAYER_SIZE 400	//nombre de neurones de la première couche
-#define LAST_LAYER_SIZE 1		//nombe de neurones de la dernière couche
-#define ALPHA 0.05				//momentum, quantité d'inertie
-#define MAX_LENGTH_NAME_FILE 100
-#define NB_APPRENTISSAGE 10
-#define DISTANCE_MAXIMALE 0.1
-#define MAX_LIMIT_LOOP 100
-#define LENGTH_ALPHABET 52
-#define BORNE_INF_DISTINCTION 0.05
-#define BORNE_MAX_CASSE 1000
+#define g_dir_svg				"svg_reseau/"
+#define g_nom_svg				"plus_recent_"
+#define g_extension_svg			".svg_reseau"
+#define FIRST_LAYER_SIZE		400		//nombre de neurones de la première couche
+#define LAST_LAYER_SIZE			1		//nombe de neurones de la dernière couche
+#define ALPHA					0.05	//momentum, quantité d'inertie
+#define MAX_LENGTH_NAME_FILE	100
+#define NB_APPRENTISSAGE		10
+#define DISTANCE_MAXIMALE		0.1
+#define MAX_LIMIT_LOOP			100
+#define LENGTH_ALPHABET			52
+#define BORNE_INF_DISTINCTION	0.05
+#define BORNE_MAX_CASSE			1000
 
 
 class Layer;//on dit qu'on va utiliser la classe layer
@@ -27,37 +27,37 @@ public:
 Network();		//rien a mettre de-dans
 Network(char lettre_testee);
 Network( string nom_fichier, int lettre_testee, double maximal_distance);
-~Network();								//destructeur
+~Network();									//destructeur
 
-void setFirstLayer(Layer* layer = 0);	//changer la première couche
-Layer* getFirstLayer() const;
-Layer* getLastLayer() const;
-int getFirstLayerSize() const;
-void initNetwork(double* inputs);					//initialiser pour la propagation normale
-void initNetworkGradient(double* expectedOutputs);	//initialiser pour la rétropropagation
-int getTotalBindingsNumber() const;					//nombre de liaisons dans le réseau
-int getTotalLayerNumber();							//nombre de couches dans le réseau
-void increaseTotalBindingsNumber(int n = 1);		//agmenter
-bool isALoop() const;								//tester si le réseau boucle sur lui mm
-void launch(double output[]);						//lancer la propagation, le pointeur length est
-													//destiné à stocké la taille du tableau retourné
-bool launchGradient();								//lancer la rétropropagation du gradient
-bool learn();										//;)
-void save();										//sauver l'etat du réseau
+void	setFirstLayer(Layer* layer = 0);	//changer la première couche
+Layer*	getFirstLayer() const;
+Layer*	getLastLayer() const;
+int		getFirstLayerSize() const;
+void	initNetwork(double* inputs);					//initialiser pour la propagation normale
+void	initNetworkGradient(double* expectedOutputs);	//initialiser pour la rétropropagation
+int		getTotalBindingsNumber() const;					//nombre de liaisons dans le réseau
+int		getTotalLayerNumber();							//nombre de couches dans le réseau
+void	increaseTotalBindingsNumber(int n = 1);			//agmenter
+bool	isALoop() const;								//tester si le réseau boucle sur lui mm
+void launch(double output[]);							//lancer la propagation, le pointeur length est
+														//destiné à stocké la taille du tableau retourné
+bool	launchGradient();								//lancer la rétropropagation du gradient
+bool	learn();										//;)
+void	save();											//sauver l'etat du réseau
 //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet
-double getMomentum();
-void recuperateur();	// fonction appelée pour récupérer à partir d'un fichier
+double	getMomentum();
+void	recuperateur();		// fonction appelée pour récupérer à partir d'un fichier
 
-void getMostRecent();	//actualise le réseau
-void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
-void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
+void	getMostRecent();	//actualise le réseau
+void	writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
+void	learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
 
-char getLettreTestee();
-void setLettreTestee(char lettre_testee);
-double getMaximalDistance();
-void setMaximalDistance(double maximal_distance);
-int getMaxLimitLoop();
-void setMaxLimitLoop(int maxLimitLoop);
+char	getLettreTestee();
+void	setLettreTestee(char lettre_testee);
+double	getMaximalDistance();
+void	setMaximalDistance(double maximal_distance);
+int		getMaxLimitLoop();
+void	setMaxLimitLoop(int maxLimitLoop);
 
 private:
 Layer*	m_firstLayer;			//seule la première couche suffit
@@ -74,9 +74,9 @@ char*	m_nameFile;
 
 
 template <class T>
-void displayArray(T* data, int length);							//affichage d'un tableau
-double distance(double* data1, double* data2, int length);		//calcul d'écart
-double distanceMod(double* data1, double* data2, int length);	//calcul d'écart
+void	displayArray(T* data, int length);						//affichage d'un tableau
+double	distance(double* data1, double* data2, int length);		//calcul d'écart
+double	distanceMod(double* data1, double* data2, int length);	//calcul d'écart
 
 
 #endif
