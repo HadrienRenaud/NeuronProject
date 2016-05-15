@@ -19,4 +19,4 @@ void renderTexture(SDL_Renderer *ren, SDL_Texture *tex, int x, int y);
 
 
 
-#endif // SYSTEM_H_INCLUDED
+#endif	// SYSTEM_H_INCLUDED
