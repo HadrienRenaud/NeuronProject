@@ -61,3 +61,4 @@ images/**
 bin/**
 obj/**
 **.unc-backup**
+**.sh
