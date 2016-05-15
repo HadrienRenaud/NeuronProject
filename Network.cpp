@@ -59,7 +59,7 @@ void Network::recuperateur()
 		{
 			while (getline(ligne_stream, neurone_str, ','))			// pour tout neurone de la couche
 			{
-				j = 0;												// indice de la liaison arrivant au neurone considéré
+				j		= 0;										// indice de la liaison arrivant au neurone considéré
 				istringstream neurone_stream(neurone_str);			// objet créé pour le traitement du string récupéré
 				neurone = layer->getNeuron(i);						// neurone considéré
 				while (getline(neurone_stream, weight_str, ' '))	// pour toute liaison arrivant au neurone
@@ -85,7 +85,7 @@ void Network::save()
 	ostringstream	temps;																						//flux pour traitement
 
 	temps << asctime(localtime(&t));																			//on récupère le flux correspondant au temps
-	string str_nom_fichier(temps.str());																		// on crée un string correspondant au flux
+	string			str_nom_fichier(temps.str());																// on crée un string correspondant au flux
 	for (int i(0); i < (int)str_nom_fichier.size(); i++)														// on parcourt le nom du fichier
 		if (!isalnum(str_nom_fichier[i]))																		// et on remplace tout ce qui ne va pas dans un
 			str_nom_fichier[i] = '_';
@@ -94,11 +94,11 @@ void Network::save()
 	strcpy(m_nameFile, str_nom_fichier.c_str());
 
 	//on écrit dans le fichier
-	ofstream file(m_nameFile);											// flux sortant dans le fichier
+	ofstream	file(m_nameFile);										// flux sortant dans le fichier
 	file << getTotalLayerNumber() << ' ';								// on entre le nombre total de couches
-	Layer *layer(getFirstLayer());										// on initialise la premiere couche
+	Layer *		layer(getFirstLayer());									// on initialise la premiere couche
 	file << layer->getSize() << ' ';									// en donnant sa longueur
-	Neuron *neurone;
+	Neuron *	neurone;
 	while (layer->getNextLayer() != 0)									//pour toute couche
 	{
 		layer = layer->getNextLayer();									// on prend la suivante
@@ -113,9 +113,9 @@ void Network::save()
 	}
 
 	// on sauvegarde le dernier fichier enregistré dans mostRecent.txt :
-	string mostRecent;
+	string		mostRecent;
 	mostRecent = g_dir_svg + string(g_nom_svg) + m_lettre_testee + string(g_extension_svg);
-	ofstream fichier_recent(mostRecent.c_str());
+	ofstream	fichier_recent(mostRecent.c_str());
 	fichier_recent << m_nameFile;
 }
 
@@ -292,7 +292,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 	char		buffer [80];
 
 	time(&rawtime);
-	Layer* temp;
+	Layer*		temp;
 
 	//Inscription des premières données
 	base_donnes.open("Compte_rendu_test_toutes.csv", ios::out | ios::app);
@@ -324,22 +324,22 @@ void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double**
 	cout << "Apprentissage de la lettre " << m_lettre_testee << " ..." << endl;
 
 	// Initialisations
-	int		exemple		= 0;			//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
-	int		successes	= 0;			//le réseau doit enchainer nb_exemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
-	int		count		= 0;			//nombre de passage dans la boucle
-	double	dist		= 0;			//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
-	double	att_output[LAST_LAYER_SIZE];//valeur attendue en sortie du réseau
-	double	exp_output[LAST_LAYER_SIZE];//valeur prototypale en sortie du réseau
+	int		exemple		= 0;				//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
+	int		successes	= 0;				//le réseau doit enchainer nb_exemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
+	int		count		= 0;				//nombre de passage dans la boucle
+	double	dist		= 0;				//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
+	double	att_output[LAST_LAYER_SIZE];	//valeur attendue en sortie du réseau
+	double	exp_output[LAST_LAYER_SIZE];	//valeur prototypale en sortie du réseau
 	double	distance_totale(0);
 
 
 	clock_t t1(clock());
 
 	//APPRENTISSAGE
-	while ((successes < nb_exemples) && (count < m_maxLimitLoop * nb_exemples))		//tant qu'on a pas enchaîner nb_exemples succès
-	{	//incrémentation
+	while ((successes < nb_exemples) && (count < m_maxLimitLoop * nb_exemples))	//tant qu'on a pas enchaîner nb_exemples succès
+	{																			//incrémentation
 		exemple++;
-		exemple %= nb_exemples;	//On ne dépasse pas nb_exemples
+		exemple %= nb_exemples;													//On ne dépasse pas nb_exemples
 		count++;
 
 		//Résultat attendu
@@ -467,7 +467,7 @@ double distance(double* data1, double* data2, int length)			//on fait la moyenne
 
 double distanceMod(double* data1, double* data2, int length)
 {
-	double	res = 0;//initialisation
+	double	res = 0;	//initialisation
 	int		j	= -1;	//initialisation
 
 	for (int i = 0; i < length; i++)

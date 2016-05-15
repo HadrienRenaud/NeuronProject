@@ -21,18 +21,18 @@ Layer* getNextLayer() const;
 bool setNextLayer(Layer* layer);
 Layer* getPreviousLayer() const;
 bool setPreviousLayer(Layer* layer);
-bool isFirst() const;	//s'agit-il de la couche d'entrée ?
-bool isLast() const;	//s'agit-il de la couche d sortie ?
-Neuron* getNeuron(int n) const;		//on récupère le n-ième neurone
-void addNeuron(transfert trsf = 0);	//ajouer un neurone dont on spécifie (ou pas) la fonction de transfert
+bool isFirst() const;						//s'agit-il de la couche d'entrée ?
+bool isLast() const;						//s'agit-il de la couche d sortie ?
+Neuron* getNeuron(int n) const;				//on récupère le n-ième neurone
+void addNeuron(transfert trsf = 0);			//ajouer un neurone dont on spécifie (ou pas) la fonction de transfert
 void addNeurons(int n, transfert trsf = 0);	//ajouter plsr neurones
-void calculate() const;		//demander à chaque neurone d'envoyer la sauce
-void calculateGradient() const;		//demander à chaque neurone d'envoyer le gradient
-int getBindingsNumber() const;	//renvoi le nombre de liaisons partant de cette couche
-Network* getNetwork() const;	//réseau parent
-bool learn();	//dit a chaque neurone de learn()
-void resetNeurons() const;	//préparer les neurones à propager
-void resetNeuronsGradient() const;	//préparer les neurones à rétropropager
+void calculate() const;						//demander à chaque neurone d'envoyer la sauce
+void calculateGradient() const;				//demander à chaque neurone d'envoyer le gradient
+int getBindingsNumber() const;				//renvoi le nombre de liaisons partant de cette couche
+Network* getNetwork() const;				//réseau parent
+bool learn();								//dit a chaque neurone de learn()
+void resetNeurons() const;					//préparer les neurones à propager
+void resetNeuronsGradient() const;			//préparer les neurones à rétropropager
 
 private:
 Network*				m_network;	//le réseau auquel la couche appartient

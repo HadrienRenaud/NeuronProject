@@ -44,10 +44,10 @@ using namespace std;
 //void filtres(const char* repertory); //Fonction à appeler pour filtrer un dossier spécifique
 //void filtres(const char* repertory, const char* repertory_arr); //Fonction à appeler pour filtrer un dossier spécifique
 void filtres(const char* repertory_dep = DOSSIERIMAGES, const char* repertory_arr = DOSSIERTEXTES, bool selectif = false);	//Fonction à appeler pour filtrer un dossier spécifique avec sélection des images non déja filtrées ou non
-void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixelsG, int **pixelsB);//Fonction appellée par filtres pour chaque image, correspond à la quasi totalité de l'ancienne fonction main
+void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixelsG, int **pixelsB);						//Fonction appellée par filtres pour chaque image, correspond à la quasi totalité de l'ancienne fonction main
 
 void pathNames(char* pathPng, char* pathTxt, char* namePng, const char* repertory_dep, const char* repertory_arr);
-Uint32 getPixel(SDL_Surface * surface, int x, int y);	//Renvoie un Uint32 contenant les composantes en rouge, vert, bleu du pixel de coordonnées x, y de l'image chargée sur surface
+Uint32 getPixel(SDL_Surface * surface, int x, int y);																		//Renvoie un Uint32 contenant les composantes en rouge, vert, bleu du pixel de coordonnées x, y de l'image chargée sur surface
 void	margeLigne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);	//Délimite l'espace que l'on peut rogner en haut et en droite
 void	margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);	// Idem, en gauche et à droite
 bool	margeSynthese(int imageWidth, int imageHeight, int marges[]);

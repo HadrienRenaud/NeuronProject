@@ -81,9 +81,9 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 	SDL_Surface *	background	= SDL_CreateRGBSurface(SDL_SWSURFACE, 400, 400, 32, 0, 0, 0, 0);
 	SDL_Rect		dest;
 	SDL_FillRect(background, NULL, SDL_MapRGB(background->format, BACKGROUNDCOLOR));
-	SDL_Color color = { TEXTCOLOR };
+	SDL_Color		color		= { TEXTCOLOR };
 
-	TTF_Font *font = TTF_OpenFont(pathFont, TEXTSIZE);
+	TTF_Font *		font		= TTF_OpenFont(pathFont, TEXTSIZE);
 
 	if (font == NULL)
 	{
@@ -100,7 +100,7 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 			pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i);
 
 			cout << caracteres[i] << " " << flush;
-			texte = TTF_RenderText_Solid(font, caracteres[i], color);
+			texte	= TTF_RenderText_Solid(font, caracteres[i], color);
 
 			dest.x	= background->w / 2 - texte->w / 2;
 			dest.y	= background->h / 2 - texte->h / 2;

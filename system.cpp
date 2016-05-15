@@ -48,10 +48,10 @@ SDL_Texture* loadTexture(const std::string &fileImg, SDL_Renderer *ren)
 
 void renderTexture(SDL_Renderer *ren, SDL_Texture *tex, int x, int y)
 {
-	int w, h;
+	int			w, h;
 
 	SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-	SDL_Rect dst;
+	SDL_Rect	dst;
 	dst.x	= x;
 	dst.y	= y;
 	dst.w	= w;

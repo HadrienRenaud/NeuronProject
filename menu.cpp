@@ -7,21 +7,21 @@ const char g_alphabet[LENGTH_ALPHABET] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h
 
 void menu(SDL_Renderer *ren)
 {
-	bool	quitLoop			= false;
-	bool	testing				= false;
-	bool	keyboardInput[29]	= { false };
-	int		xMouse(0), yMouse(0);
-	int		compteurTest				= 0;
-	int		nombreTests					= 0;
-	int		posRep						= 0;
-	char	testedImageName[150]		= "";
-	char	testedImageNameFull[200]	= "";
-	char	testedImageText[150]		= "";
+	bool			quitLoop					= false;
+	bool			testing						= false;
+	bool			keyboardInput[29]			= { false };
+	int				xMouse(0), yMouse(0);
+	int				compteurTest				= 0;
+	int				nombreTests					= 0;
+	int				posRep						= 0;
+	char			testedImageName[150]		= "";
+	char			testedImageNameFull[200]	= "";
+	char			testedImageText[150]		= "";
 
-	SDL_Color	color			= { 255, 255, 255 };
-	char		testResult[]	= "This is a A";
+	SDL_Color		color						= { 255, 255, 255 };
+	char			testResult[]				= "This is a A";
 
-	DIR *			dp = NULL;
+	DIR *			dp							= NULL;
 	struct dirent * ep;
 
 	clock_t			t0(clock());//temps de départ du programme
@@ -30,43 +30,43 @@ void menu(SDL_Renderer *ren)
 	SDL_Texture *	background			= SDL_CreateTextureFromSurface(ren, backgroundSurface);
 
 
-	SDL_Surface *	loadingText = TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 80), "Loading ...", color);
-	SDL_Texture *	loading		= SDL_CreateTextureFromSurface(ren, loadingText);
+	SDL_Surface *	loadingText			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 80), "Loading ...", color);
+	SDL_Texture *	loading				= SDL_CreateTextureFromSurface(ren, loadingText);
 
-	Button	exitButton(ren, "Exit", 16, 235, 680, 530, 100, 30);
-	Button	databaseButton(ren, "Create images", 16, 235, 20, 440, 200, 30);
-	Button	filterButton(ren, "Filter images", 16, 235, 20, 490, 200, 30);
-	Button	learnButton(ren, "Learn", 16, 235, 20, 530, 200, 30);
-	Button	testButton(ren, "Test", 24, 235, 300, 500, 200, 60);
-	Button	caseDatabase(ren, "resources/option1.png", "resources/option2.png", true, 25, 473);
-	Button	caseLearn(ren, "resources/option1.png", "resources/option2.png", true, 25, 563);
+	Button			exitButton(ren, "Exit", 16, 235, 680, 530, 100, 30);
+	Button			databaseButton(ren, "Create images", 16, 235, 20, 440, 200, 30);
+	Button			filterButton(ren, "Filter images", 16, 235, 20, 490, 200, 30);
+	Button			learnButton(ren, "Learn", 16, 235, 20, 530, 200, 30);
+	Button			testButton(ren, "Test", 24, 235, 300, 500, 200, 60);
+	Button			caseDatabase(ren, "resources/option1.png", "resources/option2.png", true, 25, 473);
+	Button			caseLearn(ren, "resources/option1.png", "resources/option2.png", true, 25, 563);
 
-	const int	buttonsNumber				= 7;
-	Button*		allButtons[buttonsNumber]	= { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn };
+	const int		buttonsNumber				= 7;
+	Button*			allButtons[buttonsNumber]	= { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn };
 
-	SDL_Texture *	textDatabase	= SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Filter without saving images", color));
-	SDL_Texture *	textLearn		= SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Start from last save", color));
+	SDL_Texture *	textDatabase				= SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Filter without saving images", color));
+	SDL_Texture *	textLearn					= SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Start from last save", color));
 
 
 
-	SDL_Rect	testTarget, testingField;
-	SDL_Rect	nameImageTestedPos, resultTestPos;
-	int			heightNameImageTested = 25;
+	SDL_Rect		testTarget, testingField;
+	SDL_Rect		nameImageTestedPos, resultTestPos;
+	int				heightNameImageTested	= 25;
 
-	SDL_Surface *	testedImage		= NULL;
-	SDL_Surface *	resultTest		= NULL;
-	SDL_Surface *	nameImageTested = NULL;
-	SDL_Surface *	resultModel		= emptyButton(4, TESTING_BACKGROUND_DIMENSIONS + 2 * heightNameImageTested, TESTING_BACKGROUND_DIMENSIONS + heightNameImageTested + 40 + 10);
-	SDL_Surface *	result			= emptyButton(4, TESTING_BACKGROUND_DIMENSIONS + 2 * heightNameImageTested, TESTING_BACKGROUND_DIMENSIONS + heightNameImageTested + 40 + 10);
-	SDL_Texture *	resultTex		= NULL;
+	SDL_Surface *	testedImage				= NULL;
+	SDL_Surface *	resultTest				= NULL;
+	SDL_Surface *	nameImageTested			= NULL;
+	SDL_Surface *	resultModel				= emptyButton(4, TESTING_BACKGROUND_DIMENSIONS + 2 * heightNameImageTested, TESTING_BACKGROUND_DIMENSIONS + heightNameImageTested + 40 + 10);
+	SDL_Surface *	result					= emptyButton(4, TESTING_BACKGROUND_DIMENSIONS + 2 * heightNameImageTested, TESTING_BACKGROUND_DIMENSIONS + heightNameImageTested + 40 + 10);
+	SDL_Texture *	resultTex				= NULL;
 
 	SDL_SetTextureBlendMode(resultTex, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureAlphaMod(resultTex, 235);
 
-	testingField.x	= backgroundSurface->w / 2 - resultModel->w / 2;
-	testingField.y	= 30;
+	testingField.x			= backgroundSurface->w / 2 - resultModel->w / 2;
+	testingField.y			= 30;
 
-	resultTestPos.x = resultModel->w / 2 - (TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 30), testResult, color))->w / 2;
+	resultTestPos.x			= resultModel->w / 2 - (TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 30), testResult, color))->w / 2;
 
 	nameImageTestedPos.y	= 5;
 	resultTestPos.y			= heightNameImageTested + TESTING_BACKGROUND_DIMENSIONS + 10;
@@ -157,9 +157,9 @@ void menu(SDL_Renderer *ren)
 
 		if (testing && (nextButton.hasBeenPressed() || keyboardInput[28]))
 		{
-			keyboardInput[28] = false;
+			keyboardInput[28]	= false;
 			nextButton.reset();
-			ep = readdir(dp);
+			ep					= readdir(dp);
 			compteurTest++;
 
 			if (ep != NULL && compteurTest < nombreTests)
@@ -174,10 +174,10 @@ void menu(SDL_Renderer *ren)
 				strcpy(testedImageNameFull, DOSSIERTEST);
 				strcat(testedImageNameFull, ep->d_name);
 				strcpy(testedImageText, ep->d_name);
-				testedImageText[strlen(testedImageText) - 4] = '\0';	//Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
+				testedImageText[strlen(testedImageText) - 4]	= '\0';	//Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
 				strcat(testedImageText, ".txt");						//Puis on lui ajoute ".txt"
 
-				testedImage = IMG_Load(testedImageNameFull);
+				testedImage										= IMG_Load(testedImageNameFull);
 
 				if (testedImage == NULL)
 				{
@@ -212,7 +212,7 @@ void menu(SDL_Renderer *ren)
 						testResult[strlen(testResult) - 1] = '_';
 					cout << "testResult : " << testResult << endl;
 
-					resultTest = TTF_RenderText_Blended(TTF_OpenFont("resources/font_test.ttf", 30), testResult, color);
+					resultTest				= TTF_RenderText_Blended(TTF_OpenFont("resources/font_test.ttf", 30), testResult, color);
 
 					nameImageTested			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 15), ep->d_name, color);
 					nameImageTestedPos.x	= result->w / 2 - nameImageTested->w / 2;
@@ -237,9 +237,9 @@ void menu(SDL_Renderer *ren)
 
 		if (exitButton.hasBeenPressed() || keyboardInput[26])
 		{
-			keyboardInput[26] = false;
+			keyboardInput[26]	= false;
 			exitButton.reset();
-			quitLoop = true;
+			quitLoop			= true;
 		}
 		else if (databaseButton.hasBeenPressed() || keyboardInput[2])
 		{
@@ -279,13 +279,13 @@ void menu(SDL_Renderer *ren)
 			testButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 
-			testing = true;
+			testing			= true;
 			nextButton.setPress(true);
 
 			compteurTest	= -1;
 			nombreTests		= countExemples(DOSSIERTEST);
 
-			dp = opendir(DOSSIERTEST);
+			dp				= opendir(DOSSIERTEST);
 			if (dp == NULL)
 				exit(1);
 

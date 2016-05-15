@@ -103,10 +103,10 @@ bool Neuron::initNeuron(double input)	//on autorise de regler l'input si et seul
 {
 	if (getLayer()->getNetwork()->getFirstLayer() == getLayer() || input == 0)
 	{
-		m_input	= input;
+		m_input		= input;
 		if (input != input)
 			cout << "Neuron : initNeuron : if_fisrtlayer : input : " << input << endl;
-		m_output = m_trsf(m_input);
+		m_output	= m_trsf(m_input);
 		return true;
 	}
 	else	//si echec

@@ -7,11 +7,11 @@ Button::Button(SDL_Renderer *ren, const std::string &text, int size, int alpha, 
 {
 	x	= xB;
 	y	= yB;
-	int alpha2	= alpha + (255 - alpha) * 0.4;
-	int alpha3	= alpha + (255 - alpha) * 0.7;
+	int				alpha2			= alpha + (255 - alpha) * 0.4;
+	int				alpha3			= alpha + (255 - alpha) * 0.7;
 
-	SDL_Color	color = { 255, 255, 255 };
-	SDL_Rect	dest;
+	SDL_Color		color			= { 255, 255, 255 };
+	SDL_Rect		dest;
 
 	SDL_Surface *	texte			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", size), text.c_str(), color);
 	SDL_Surface *	imageS			= emptyButton(1, texte->w + 10, texte->h + 10);
@@ -44,11 +44,11 @@ Button::Button(SDL_Renderer *ren, const std::string &text, int size, int alpha, 
 {
 	x	= xB;
 	y	= yB;
-	int alpha2	= alpha + (255 - alpha) * 0.4;
-	int alpha3	= alpha + (255 - alpha) * 0.7;
+	int				alpha2			= alpha + (255 - alpha) * 0.4;
+	int				alpha3			= alpha + (255 - alpha) * 0.7;
 
-	SDL_Color	color = { 255, 255, 255 };
-	SDL_Rect	dest;
+	SDL_Color		color			= { 255, 255, 255 };
+	SDL_Rect		dest;
 
 	SDL_Surface *	texte			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", size), text.c_str(), color);
 	SDL_Surface *	imageS			= emptyButton(1, width, height);
@@ -81,8 +81,8 @@ Button::Button(SDL_Renderer *ren, const std::string &text, int size, int alpha, 
 
 Button::Button(SDL_Renderer *ren, const std::string &file1, const std::string &file2, bool alreadyPressed, int xB, int yB)
 {
-	x	= xB;
-	y	= yB;
+	x				= xB;
+	y				= yB;
 
 	image			= loadTexture(file1.c_str(), ren);
 	imageLight		= NULL;
@@ -191,8 +191,8 @@ SDL_Surface* emptyButton(int skin, int width, int height)
 	SDL_Rect		dest, src;
 	Uint32			framework, top, bottom;
 
-	int			colors[27];
-	ifstream	file("resources/colors.txt");
+	int				colors[27];
+	ifstream		file("resources/colors.txt");
 
 	for (int i = 0; i < 27; i++)
 		file >> colors[i];
@@ -246,13 +246,13 @@ SDL_Surface* emptyButton(int skin, int width, int height)
 	dest.w	= width;
 	dest.h	= 1;
 	SDL_FillRect(empty, &dest, framework);
-	dest.y = height - 1;
+	dest.y	= height - 1;
 	SDL_FillRect(empty, &dest, framework);
 	dest.y	= 0;
 	dest.w	= 1;
 	dest.h	= height;
 	SDL_FillRect(empty, &dest, framework);
-	dest.x = width - 1;
+	dest.x	= width - 1;
 	SDL_FillRect(empty, &dest, framework);
 
 	dest.w	= 3;

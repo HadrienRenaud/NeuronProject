@@ -22,12 +22,12 @@ NetworkArray::NetworkArray() :
 	cout << "Creation des reseaux ... " << flush;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 	{
-		m_tablo_net[i] = new Network(g_alphabet[i]);						//Le réseau
+		m_tablo_net[i] = new Network(g_alphabet[i]);							//Le réseau
 		//Layer* l = new Layer(adresse du réseau, nombre de neurones dans la couche, adresse de la couche précédente, adresse de la couche suivante, fonction de transfert des neuronres de la couche);
 		Layer*	l1		= new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0);	//première couche
-		Layer*	l2		= new Layer(m_tablo_net[i], 100, l1, 0);			//seconde
-		Layer*	l3		= new Layer(m_tablo_net[i], 10, l2, 0);				//troisieme
-		Layer*	lend	= new Layer(m_tablo_net[i], LAST_LAYER_SIZE, l3, 0);//couche de fin
+		Layer*	l2		= new Layer(m_tablo_net[i], 100, l1, 0);				//seconde
+		Layer*	l3		= new Layer(m_tablo_net[i], 10, l2, 0);					//troisieme
+		Layer*	lend	= new Layer(m_tablo_net[i], LAST_LAYER_SIZE, l3, 0);	//couche de fin
 	}
 	cout << "Reseaux crees !" << endl;
 }
@@ -49,10 +49,10 @@ void NetworkArray::learnAllNetworks()
 	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones" << endl << endl;
 
 	cout << "Initialisation des parametres." << endl;
-	clock_t t0(clock());//temps de départ du programme
+	clock_t		t0(clock());//temps de départ du programme
 
 	//nombre d'exemples à traiter
-	int const nb_exemples(countExemples());
+	int const	nb_exemples(countExemples());
 
 	// Initialisation des tableaux contenant les donnees des exemples
 	char**		tabloFichiers	= new char*[nb_exemples];
@@ -86,7 +86,7 @@ char NetworkArray::testNetworks(double input[])
 	//tests
 	cout << "Results : ";
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)	//pour chaque réseau
-	{	//on récupère la réponse
+	{											//on récupère la réponse
 		m_tablo_net[i]->initNetwork(input);
 		m_tablo_net[i]->launch(exp_output[i]);
 

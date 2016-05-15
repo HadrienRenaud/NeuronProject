@@ -8,14 +8,14 @@
 
 void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif)
 {
-	int nombreimages = 0, compteurimages = 0;
+	int				nombreimages = 0, compteurimages = 0;
 
 	DIR *			dp;
 	struct dirent * ep;
 	SDL_Surface *	lettre;
 
-	char	pathPng[150];	//Le nom du répertoire d'images
-	char	pathTxt[150];	//Le nom du répertoire où seront créés les fichiers textes
+	char			pathPng[150];	//Le nom du répertoire d'images
+	char			pathTxt[150];	//Le nom du répertoire où seront créés les fichiers textes
 
 
 	//Allocation dynamique d'espace et création des trois tableaux 2D qui contiendront les composantes rouges, vertes, bleues, de chaque pixel de l'image
@@ -105,15 +105,15 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
 
 void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixelsG, int **pixelsB)
 {
-	bool notEmpty = true;
+	bool			notEmpty		= true;
 
-	int distancemax[3];			//Le max de la "distance chromatique" séparant les pixels du pixel de référence (voir plus bas)
-	int reference [3]	= { 0 };//La "référence" de couleur, qui sera définie comme la couleur du pixel de coordonnées (0,0)
-	int marges[4]		= { 0 };
+	int				distancemax[3];				//Le max de la "distance chromatique" séparant les pixels du pixel de référence (voir plus bas)
+	int				reference [3]	= { 0 };	//La "référence" de couleur, qui sera définie comme la couleur du pixel de coordonnées (0,0)
+	int				marges[4]		= { 0 };
 
-	FILE* fichier = NULL;	//Un pointeur de fichier
+	FILE*			fichier			= NULL;	//Un pointeur de fichier
 
-	SDL_Surface *resized = SDL_CreateRGBSurface(SDL_SWSURFACE, TAILLE, TAILLE, 32, 0, 0, 0, 255);
+	SDL_Surface *	resized			= SDL_CreateRGBSurface(SDL_SWSURFACE, TAILLE, TAILLE, 32, 0, 0, 0, 255);
 
 	fichier = fopen(pathTxt, "w+");	//On ouvre (ou on créé) un fichier txt
 
@@ -354,7 +354,7 @@ void analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixels
 		for (int x = 0; x < image->w; x++)
 		{
 			//On récupère les infos d'un pixel dans infopixel puis ses composantes dans red, green, blue
-			infopixel = getPixel(image, x, y);
+			infopixel		= getPixel(image, x, y);
 			SDL_GetRGB(infopixel, image->format, &red, &green, &blue);
 			//On place le tout dans les tableaux correspondants
 			pixelsR[y][x]	= (int)red;
