@@ -34,7 +34,7 @@ NetworkArray::NetworkArray() :
 
 NetworkArray::~NetworkArray()
 {
-	cout << "Sauvegarde et destruction des reseaux ..." << flush;
+	cout << "Sauvegarde et destruction des reseaux ... " << flush;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 	{
 		m_tablo_net[i]->save();
@@ -46,7 +46,7 @@ NetworkArray::~NetworkArray()
 
 void NetworkArray::learnAllNetworks()
 {
-	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones" << endl << endl;
+	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones." << endl << endl;
 
 	cout << "Initialisation des parametres." << endl;
 	clock_t		t0(clock());//temps de départ du programme

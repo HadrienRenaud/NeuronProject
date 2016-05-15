@@ -95,30 +95,33 @@ void menu(SDL_Renderer *ren)
 		SDL_RenderClear(ren);
 		SDL_PollEvent(&event);
 
-		switch (event.type) {
+		switch (event.type)
+		{
 		case SDL_QUIT:
 			quitLoop = true;
 			break;
+
 		case SDL_KEYDOWN:
 			if (((float)(clock() - t0) / CLOCKS_PER_SEC) > REFRESH_TIME)
 			{
 				keyboard(event, keyboardInput);
 				t0 = clock();
 			}
+
 		case SDL_MOUSEMOTION:
 			xMouse	= event.motion.x;
 			yMouse	= event.motion.y;
 			break;
-		case SDL_MOUSEBUTTONDOWN:
 
+		case SDL_MOUSEBUTTONDOWN:
 			for (int i = 0; i < buttonsNumber; i++)
 				allButtons[i]->pressDown(xMouse, yMouse);
+
 			nextButton.pressDown(xMouse, yMouse);
 			previousButton.pressDown(xMouse, yMouse);
-
 			break;
-		case SDL_MOUSEBUTTONUP:
 
+		case SDL_MOUSEBUTTONUP:
 			for (int i = 0; i < buttonsNumber; i++)
 				allButtons[i]->pressUp(xMouse, yMouse);
 			nextButton.pressUp(xMouse, yMouse);
@@ -157,9 +160,9 @@ void menu(SDL_Renderer *ren)
 
 		if (testing && (nextButton.hasBeenPressed() || keyboardInput[28]))
 		{
-			keyboardInput[28]	= false;
+			keyboardInput[28] = false;
 			nextButton.reset();
-			ep					= readdir(dp);
+			ep = readdir(dp);
 			compteurTest++;
 
 			if (ep != NULL && compteurTest < nombreTests)

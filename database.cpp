@@ -81,8 +81,8 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 	SDL_Surface *	background	= SDL_CreateRGBSurface(SDL_SWSURFACE, 400, 400, 32, 0, 0, 0, 0);
 	SDL_Rect		dest;
 	SDL_FillRect(background, NULL, SDL_MapRGB(background->format, BACKGROUNDCOLOR));
-	SDL_Color		color		= { TEXTCOLOR };
 
+	SDL_Color		color		= { TEXTCOLOR };
 	TTF_Font *		font		= TTF_OpenFont(pathFont, TEXTSIZE);
 
 	if (font == NULL)
