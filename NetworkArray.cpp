@@ -17,7 +17,9 @@ const char	g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 
 NetworkArray::NetworkArray() :
 	m_tablo_net(new Network*[LENGTH_ALPHABET]),
-	m_maximal_distance(MAXIMAL_DISTANCE), m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING), m_alphabet(g_alphabet)
+	m_maximal_distance(MAXIMAL_DISTANCE),
+	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
+	m_alphabet(g_alphabet)
 {
 	cout << "Creation des reseaux ... " << flush;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)

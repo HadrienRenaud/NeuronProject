@@ -14,21 +14,18 @@ Network::Network()
 {
 	Network('_');
 }
-Network::Network(char lettre_testee) :
-	m_firstLayer(0), m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-	m_maximal_distance(MAXIMAL_DISTANCE), m_maxLimitLoop(NB_LEARNING * MAX_LIMIT_LOOP),
-	m_testedLetter(lettre_testee), m_nameFile(new char[MAX_LENGTH_NAME_FILE])
-{
-	m_momentum = ALPHA;
-}
-Network::Network(string nom_fichier, int lettre_testee, double maximal_distance) :
-	m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-	m_maximal_distance(maximal_distance), m_maxLimitLoop(NB_LEARNING * MAX_LIMIT_LOOP),
-	m_testedLetter(lettre_testee), m_nameFile(new char[MAX_LENGTH_NAME_FILE])
+Network::Network(char lettre_testee, string nom_fichier, double maximal_distance) :
+	m_firstLayer(0),
+	m_totalBindingsNumber(0),
+	m_initialized(false),
+	m_gradientInitialized(false),
+	m_maximal_distance(MAXIMAL_DISTANCE),
+	m_maxLimitLoop(NB_LEARNING * MAX_LIMIT_LOOP),
+	m_testedLetter(lettre_testee),
+	m_nameFile(new char[MAX_LENGTH_NAME_FILE])
 {
 	strcpy(m_nameFile, nom_fichier.c_str());
 	m_momentum = ALPHA;
-	recuperateur();
 }
 
 Network::~Network()
@@ -384,7 +381,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		{
 			cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
 			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
-			cout << "distance moyenne " << (totalDistance/nbExemples) << " - distance maximale " << maxDist << endl;
+			cout << "distance moyenne " << (totalDistance / nbExemples) << " - distance maximale " << maxDist << endl;
 			t1 = clock();
 		}
 	}

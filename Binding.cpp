@@ -2,11 +2,15 @@
 #include <iostream>
 using namespace std;
 
-Binding::Binding() : m_neuron(0), m_weight(0)
+Binding::Binding() :
+	m_neuron(0),
+	m_weight(0)
 {
 	m_previousStep = 0.0;
 }																//constructeur par défaut inutile
-Binding::Binding(Neuron* neuron, double weight) : m_neuron(neuron), m_weight(weight)
+Binding::Binding(Neuron* neuron, double weight) :
+	m_neuron(neuron),
+	m_weight(weight)
 {
 	m_previousStep = 0.0;
 }																										//constructeur vraiment utilisé

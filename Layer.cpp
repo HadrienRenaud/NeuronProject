@@ -5,11 +5,16 @@
 
 using namespace std;
 
-Layer::Layer() : m_previousLayer(0), m_nextLayer(0), m_bindingsNumber(0)
+Layer::Layer() :
+	m_previousLayer(0),
+	m_nextLayer(0),
+	m_bindingsNumber(0)
 {
 }
 
-Layer::Layer(Network* network, int neurons, Layer* previousLayer, Layer* nextLayer, transfert trsf) : m_network(network), m_bindingsNumber(0)
+Layer::Layer(Network* network, int neurons, Layer* previousLayer, Layer* nextLayer, transfert trsf) :
+	m_network(network),
+	m_bindingsNumber(0)
 {
 	/* neurons : nombre de neurones dans la couche */
 	if (network)
