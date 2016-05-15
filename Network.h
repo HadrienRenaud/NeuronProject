@@ -11,14 +11,14 @@ using namespace std;
 #define g_extension_svg			".svg_reseau"
 #define FIRST_LAYER_SIZE		400		//nombre de neurones de la première couche
 #define LAST_LAYER_SIZE			1		//nombe de neurones de la dernière couche
-#define ALPHA					0.05	//momentum, quantité d'inertie
+#define ALPHA					0.1	//momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE	100
-#define NB_APPRENTISSAGE		10
-#define DISTANCE_MAXIMALE		0.1
+#define NB_LEARNING				10
+#define MAXIMAL_DISTANCE		0.1
 #define MAX_LIMIT_LOOP			100
 #define LENGTH_ALPHABET			52
-#define BORNE_INF_DISTINCTION	0.05
-#define BORNE_MAX_CASSE			1000
+#define LOWER_BOUND_DISTINCTION	0.05
+#define MAX_LIMIT_CASE			1000
 
 
 class Layer;//on dit qu'on va utiliser la classe layer
@@ -68,7 +68,7 @@ bool	m_gradientInitialized;	//pareil pour la rétro
 double	m_momentum;				//facteur d'inertie, define -> ALPHA
 double	m_maximal_distance;
 int		m_maxLimitLoop;
-char	m_lettre_testee;
+char	m_testedLetter;
 char*	m_nameFile;
 };
 

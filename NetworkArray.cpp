@@ -17,7 +17,7 @@ const char	g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 
 NetworkArray::NetworkArray() :
 	m_tablo_net(new Network*[LENGTH_ALPHABET]),
-	m_maximal_distance(DISTANCE_MAXIMALE), m_maxLimitLoop(MAX_LIMIT_LOOP * NB_APPRENTISSAGE), m_alphabet(g_alphabet)
+	m_maximal_distance(MAXIMAL_DISTANCE), m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING), m_alphabet(g_alphabet)
 {
 	cout << "Creation des reseaux ... " << flush;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
@@ -80,7 +80,7 @@ char NetworkArray::testNetworks(double input[])
 {
 	//initialisation
 	char	lettre_trouvee('_');
-	double	maxi(BORNE_INF_DISTINCTION);
+	double	maxi(LOWER_BOUND_DISTINCTION);
 	double	exp_output[LENGTH_ALPHABET][LAST_LAYER_SIZE];
 
 	//tests
@@ -91,7 +91,7 @@ char NetworkArray::testNetworks(double input[])
 		m_tablo_net[i]->launch(exp_output[i]);
 
 		//on l'affiche si elle est suffisement grande
-		if (exp_output[i][0] > (BORNE_INF_DISTINCTION / 10))
+		if (exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
 			cout << g_alphabet[i] << " : " << exp_output[i][0] * 100 << "% -- ";
 
 		//on trouve le maximum des réponses aux premiers réseaux
