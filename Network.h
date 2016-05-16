@@ -4,6 +4,13 @@
 #include "Layer.h"
 #include <string>
 #include <cstring>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+#include <algorithm>
 using namespace std;
 
 #define DIR_EXEMPLE				"texts/"//dossier ou sont contenus tous les fichiers d'exemples
@@ -17,11 +24,11 @@ using namespace std;
 #define MAX_LENGTH_NAME_FILE	100
 #define NB_LEARNING				10
 #define MAXIMAL_DISTANCE		0.05
-#define MAX_LIMIT_LOOP			50
+#define MAX_LIMIT_LOOP			500
 #define LENGTH_ALPHABET			52
 #define LOWER_BOUND_DISTINCTION	0.05
-#define MAX_LIMIT_CASE			1000
-
+#define MAX_LIMIT_CASE			10000
+#define NAME_CONFIG_FILE		"NeuronProject.cfg"
 
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network {
@@ -46,6 +53,7 @@ public:
 	bool	learn();										//;)
 	void	save();											//sauver l'etat du réseau
 //ATTENTION, supprime toutes les donnes ! A n'utiliser qu'avec un nouvel objet
+	void	setMomentum(double momentum);
 	double	getMomentum();
 	void	recuperateur();		// fonction appelée pour récupérer à partir d'un fichier
 
