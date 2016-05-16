@@ -15,6 +15,9 @@ public:
 	void	getMostRecent();
 	void	getLettresTestees();
 
+	void	setOptions();
+	double	getMomentum();
+	void	setMomentum(double momentum);
 	char*	getAlphabet();
 	void	setAlphabet(char* alphabet);
 	double	getMaximalDistance();
@@ -27,6 +30,7 @@ private:
 	double		m_maximal_distance;
 	int			m_maxLimitLoop;
 	const char* m_alphabet;
+	double		m_momentum;
 };
 
 template <class T>
