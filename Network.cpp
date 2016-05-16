@@ -14,21 +14,18 @@ Network::Network()
 {
 	Network('_');
 }
-Network::Network(char lettre_testee) :
-	m_firstLayer(0), m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-	m_maximal_distance(DISTANCE_MAXIMALE), m_maxLimitLoop(NB_APPRENTISSAGE * MAX_LIMIT_LOOP),
-	m_lettre_testee(lettre_testee), m_nameFile(new char[MAX_LENGTH_NAME_FILE])
-{
-	m_momentum = ALPHA;
-}
-Network::Network(string nom_fichier, int lettre_testee, double maximal_distance) :
-	m_totalBindingsNumber(0), m_initialized(false), m_gradientInitialized(false),
-	m_maximal_distance(maximal_distance), m_maxLimitLoop(NB_APPRENTISSAGE * MAX_LIMIT_LOOP),
-	m_lettre_testee(lettre_testee), m_nameFile(new char[MAX_LENGTH_NAME_FILE])
+Network::Network(char lettre_testee, string nom_fichier, double maximal_distance) :
+	m_firstLayer(0),
+	m_totalBindingsNumber(0),
+	m_initialized(false),
+	m_gradientInitialized(false),
+	m_maximal_distance(MAXIMAL_DISTANCE),
+	m_maxLimitLoop(NB_LEARNING * MAX_LIMIT_LOOP),
+	m_testedLetter(lettre_testee),
+	m_nameFile(new char[MAX_LENGTH_NAME_FILE])
 {
 	strcpy(m_nameFile, nom_fichier.c_str());
 	m_momentum = ALPHA;
-	recuperateur();
 }
 
 Network::~Network()
@@ -81,16 +78,16 @@ void Network::recuperateur()
 void Network::save()
 {
 	// On trouve le nom du fichier
-	time_t			t = time(0);																				// l'heure
-	ostringstream	temps;																						//flux pour traitement
+	time_t			t = time(0);							// l'heure
+	ostringstream	temps;									//flux pour traitement
 
-	temps << asctime(localtime(&t));																			//on récupère le flux correspondant au temps
-	string			str_nom_fichier(temps.str());																// on crée un string correspondant au flux
-	for (int i(0); i < (int)str_nom_fichier.size(); i++)														// on parcourt le nom du fichier
-		if (!isalnum(str_nom_fichier[i]))																		// et on remplace tout ce qui ne va pas dans un
+	temps << asctime(localtime(&t));						//on récupère le flux correspondant au temps
+	string str_nom_fichier(temps.str());					// on crée un string correspondant au flux
+	for (int i(0); i < (int)str_nom_fichier.size(); i++)	// on parcourt le nom du fichier
+		if (!isalnum(str_nom_fichier[i]))					// et on remplace tout ce qui ne va pas dans un nom de fichier par '_'
 			str_nom_fichier[i] = '_';
-	// nom de fichier par '_'
-	str_nom_fichier = string(g_dir_svg) + str_nom_fichier + "_" + m_lettre_testee + string(g_extension_svg);	// adresse complete
+	str_nom_fichier = string(g_dir_svg) + str_nom_fichier + "_" + m_testedLetter + string(g_extension_svg);
+	// adresse complete
 	strcpy(m_nameFile, str_nom_fichier.c_str());
 
 	//on écrit dans le fichier
@@ -114,7 +111,7 @@ void Network::save()
 
 	// on sauvegarde le dernier fichier enregistré dans mostRecent.txt :
 	string		mostRecent;
-	mostRecent = g_dir_svg + string(g_nom_svg) + m_lettre_testee + string(g_extension_svg);
+	mostRecent = g_dir_svg + string(g_nom_svg) + m_testedLetter + string(g_extension_svg);
 	ofstream	fichier_recent(mostRecent.c_str());
 	fichier_recent << m_nameFile;
 }
@@ -181,8 +178,7 @@ void Network::initNetworkGradient(double* expectedOutputs)
 	//on initialise la dernière couche
 	for (int i = 0; i < getLastLayer()->getSize(); i++)
 		getLastLayer()->getNeuron(i)->initNeuronGradient(expectedOutputs[i]);
-	//dans cette boucle, on parcourt toutes les layer (sauf la dernière), et on
-	//mets les gradient à zéro
+	//dans cette boucle, on parcourt toutes les layer (sauf la dernière), et on met les gradient à zéro
 
 	Layer*	last	= getLastLayer();
 	Layer*	temp	= last;
@@ -274,12 +270,12 @@ void Network::getMostRecent()
 	string	nom_db;
 
 	//on reconstitue le nom du fichier :
-	nom_db = string(g_dir_svg) + g_nom_svg + m_lettre_testee + string(g_extension_svg);
+	nom_db = string(g_dir_svg) + g_nom_svg + m_testedLetter + string(g_extension_svg);
 
 	ifstream file(nom_db.c_str());	//on ouvre le fichier getMostRecent.txt
 	file >> str_nom_fichier;		//on lit son contenu
 	strcpy(m_nameFile, str_nom_fichier.c_str());
-	cout << "Reseau " << m_lettre_testee << " - recuperation de : " << str_nom_fichier << endl;
+	cout << "Reseau " << m_testedLetter << " - recuperation de : " << str_nom_fichier << endl;
 	recuperateur();	// On récupère le réseau stocké dans le fichier de svg le plus récent
 }
 
@@ -292,7 +288,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 	char		buffer [80];
 
 	time(&rawtime);
-	Layer*		temp;
+	Layer* temp;
 
 	//Inscription des premières données
 	base_donnes.open("Compte_rendu_test_toutes.csv", ios::out | ios::app);
@@ -300,7 +296,7 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 	strftime(buffer, 80, "%d/%m/%y", timeinfo);
 	base_donnes << buffer << ',';
 	strftime(buffer, 80, "%H:%M:%S", timeinfo);
-	base_donnes << buffer << "," << m_lettre_testee << "," << getTotalLayerNumber() + 1 << ',';
+	base_donnes << buffer << "," << m_testedLetter << "," << getTotalLayerNumber() + 1 << ',';
 
 	//inscription des couches
 	temp = m_firstLayer;
@@ -317,112 +313,129 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 	base_donnes << resultat << ',' << temps_mis << ',' << commentaires << ',' << m_nameFile << endl;
 }
 
-void Network::learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs)
+void Network::learnNetwork(const int nbExemples, char** fileArray, double** inputs)
 {
 	clock_t t0(clock());//temps de départ du programme
 
-	cout << "Apprentissage de la lettre " << m_lettre_testee << " ..." << endl;
+	cout << "Apprentissage de la lettre " << m_testedLetter << " ..." << endl;
 
 	// Initialisations
-	int		exemple		= 0;				//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
-	int		successes	= 0;				//le réseau doit enchainer nb_exemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
-	int		count		= 0;				//nombre de passage dans la boucle
-	double	dist		= 0;				//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
-	double	att_output[LAST_LAYER_SIZE];	//valeur attendue en sortie du réseau
-	double	exp_output[LAST_LAYER_SIZE];	//valeur prototypale en sortie du réseau
-	double	distance_totale(0);
+	int		exemple			= 0;					//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
+	int		successes		= 0;					//le réseau doit enchainer nbExemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
+	int		successesInLoop = 0;
+	int		count			= 0;					//nombre de passage dans la boucle
+	double	dist			= 0;					//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
+	double	totalDistance	= 0;
+	double	maxDist			= 0;
+	double	outputExpected[LAST_LAYER_SIZE];		//valeur attendue en sortie du réseau
+	double	outputExperimental[LAST_LAYER_SIZE];	//valeur prototypale en sortie du réseau
 
 
 	clock_t t1(clock());
 
 	//APPRENTISSAGE
-	while ((successes < nb_exemples) && (count < m_maxLimitLoop * nb_exemples))	//tant qu'on a pas enchaîner nb_exemples succès
+	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples))	//tant qu'on a pas enchaîner nbExemples succès
 	{																			//incrémentation
 		exemple++;
-		exemple %= nb_exemples;													//On ne dépasse pas nb_exemples
+		exemple %= nbExemples;													//On ne dépasse pas nbExemples
 		count++;
 
+		// Affichages de temps en temps ...
+		if (count % (NB_LEARNING * nbExemples) == nbExemples - 1 )	//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
+		{
+			cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
+			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
+			cout << "distance moyenne " << (totalDistance / nbExemples) << " - distance maximale " << maxDist << endl;
+			t1 = clock();
+		}
+
+		//Remise à zéro des paramètres de boucles
+		if (count % nbExemples == 0)
+		{
+			successesInLoop = 0;
+			totalDistance	= 0;
+			maxDist			= 0;
+		}
+
 		//Résultat attendu
-		if (tabloFichiers[exemple][0] == m_lettre_testee)
-			att_output[0] = 1;
+		if (fileArray[exemple][0] == m_testedLetter)
+			outputExpected[0] = 1;
 		else
-			att_output[0] = 0;
+			outputExpected[0] = 0;
 
 		//Calcul de la réponse du réseau
 		initNetwork(inputs[exemple]);	//on initialise avec les valeurs inputs
-		launch(exp_output);				//on lance et on récupère les outputs
+		launch(outputExperimental);		//on lance et on récupère les outputs
 
 		//Calcul de l'écart
-		if (count < nb_exemples * NB_APPRENTISSAGE * BORNE_MAX_CASSE && false)
-			dist = distance(exp_output, att_output, LAST_LAYER_SIZE );		//on calcule l'écart
+		if (count < nbExemples * NB_LEARNING * MAX_LIMIT_CASE && false)
+			dist = distance(outputExperimental, outputExpected, LAST_LAYER_SIZE );		//on calcule l'écart
 		else
-			dist = distanceMod(exp_output, att_output, LAST_LAYER_SIZE );	//on calcule l'écart
+			dist = distanceMod(outputExperimental, outputExpected, LAST_LAYER_SIZE );	//on calcule l'écart
+
+		//changement de maxDist et de totalDistance
+		if (dist > maxDist)
+			maxDist = dist;
+		totalDistance += dist;
 
 		//On apprend, ou pas en fonction du résultat
 		if (dist < m_maximal_distance)	//si c'est assez petit, c'est un succès
 			successes++;
 		else							//sinon c'est un echec et le réseau recalcule les poids des liaisons
 		{
-			initNetworkGradient(att_output);
+			initNetworkGradient(outputExpected);
 			learn();
 			successes = 0;	//on réinitialise aussi les nombre de succès enchaînés
 		}
 
-		// Affichages de temps en temps ...
-		if (count % (NB_APPRENTISSAGE * nb_exemples) == 0)	//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
-		{
-			cout << "count = " << count << " soit " << count / nb_exemples << " boucles d'apprentissage";
-			cout << " ( " << NB_APPRENTISSAGE << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
-			t1 = clock();
-		}
 	}
 
 	//On sauvegarde le réseau
 	save();
 
 	//Affichages ...
-	if (count >= m_maxLimitLoop * nb_exemples)
+	if (count >= m_maxLimitLoop * nbExemples)
 		cout << "apprentissage INFRUCTUEUX sur count = " << count;
 	else
-		cout << "apprentissage productif : count = " << count << " sur " << m_maxLimitLoop * nb_exemples;
+		cout << "apprentissage productif : count = " << count << " sur " << m_maxLimitLoop * nbExemples;
 
 	cout << " avec " << successes << " succes, effectue en " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes" << endl;
 
 	//Calcul de la distance moyenne
-	for (exemple = 0; exemple < nb_exemples; exemple++)
+	for (exemple = 0; exemple < nbExemples; exemple++)
 	{
 		//Réponse attendue
-		if (tabloFichiers[exemple][0] == m_lettre_testee)
-			att_output[0] = 1;
+		if (fileArray[exemple][0] == m_testedLetter)
+			outputExpected[0] = 1;
 		else
-			att_output[0] = 0;
+			outputExpected[0] = 0;
 		//Réponse du réseau
 		initNetwork(inputs[exemple]);
-		launch(exp_output);
+		launch(outputExperimental);
 
 		//Calcul de la distance
-		distance_totale += distance(exp_output, att_output, LAST_LAYER_SIZE );
+		totalDistance += distance(outputExperimental, outputExpected, LAST_LAYER_SIZE );
 	}
-	cout << "distance moyenne sur les exemples : " << distance_totale / nb_exemples << endl;
+	cout << "distance moyenne sur les exemples : " << totalDistance / nbExemples << endl;
 
 	//Calcul du temps mis
 	double temps_mis(((float)(clock() - t0) / CLOCKS_PER_SEC));
 	cout << "Apprentissage effectue en " << temps_mis << " secondes" << endl;
 
 	// On met à jour les données dans le fichier
-	writeReport((count < m_maxLimitLoop * nb_exemples), count / nb_exemples,
-				distance_totale / nb_exemples, temps_mis, " ");
+	writeReport((count < m_maxLimitLoop * nbExemples), count / nbExemples,
+				totalDistance / nbExemples, temps_mis, " ");
 }
 
 char Network::getLettreTestee()
 {
-	return m_lettre_testee;							//récupère la lettre testee.
+	return m_testedLetter;							//récupère la lettre testee.
 }
 void Network::setLettreTestee(char lettre_testee)	//change la lettre
 {
-	cout << "Network " << m_lettre_testee << " change de lettre et devient ";
-	m_lettre_testee = lettre_testee;
-	cout << m_lettre_testee << endl;
+	cout << "Network " << m_testedLetter << " change de lettre et devient ";
+	m_testedLetter = lettre_testee;
+	cout << m_testedLetter << endl;
 }
 
 double Network::getMaximalDistance()
@@ -431,7 +444,7 @@ double Network::getMaximalDistance()
 }
 void Network::setMaximalDistance(double maximal_distance)
 {
-	cout << "Network " << m_lettre_testee << " change pour la distance ";
+	cout << "Network " << m_testedLetter << " change pour la distance ";
 	m_maximal_distance = maximal_distance;
 	cout << m_maximal_distance << endl;
 }

@@ -8,16 +8,15 @@
 #include <time.h>
 using namespace std;
 
-
-const char* g_dir_exemples("texts/"  );	//dossier ou sont contenus tous les fichiers d'exemples
-const char* g_dir_test("test/");
-const char	g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+const char g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
 
 
 NetworkArray::NetworkArray() :
 	m_tablo_net(new Network*[LENGTH_ALPHABET]),
-	m_maximal_distance(DISTANCE_MAXIMALE), m_maxLimitLoop(MAX_LIMIT_LOOP * NB_APPRENTISSAGE), m_alphabet(g_alphabet)
+	m_maximal_distance(MAXIMAL_DISTANCE),
+	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
+	m_alphabet(g_alphabet)
 {
 	cout << "Creation des reseaux ... " << flush;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
@@ -49,10 +48,10 @@ void NetworkArray::learnAllNetworks()
 	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones." << endl << endl;
 
 	cout << "Initialisation des parametres." << endl;
-	clock_t		t0(clock());//temps de départ du programme
+	clock_t	t0(clock());	//temps de départ du programme
 
 	//nombre d'exemples à traiter
-	int const	nb_exemples(countExemples());
+	int const nb_exemples(countExemples());
 
 	// Initialisation des tableaux contenant les donnees des exemples
 	char**		tabloFichiers	= new char*[nb_exemples];
@@ -80,7 +79,7 @@ char NetworkArray::testNetworks(double input[])
 {
 	//initialisation
 	char	lettre_trouvee('_');
-	double	maxi(BORNE_INF_DISTINCTION);
+	double	maxi(LOWER_BOUND_DISTINCTION);
 	double	exp_output[LENGTH_ALPHABET][LAST_LAYER_SIZE];
 
 	//tests
@@ -91,7 +90,7 @@ char NetworkArray::testNetworks(double input[])
 		m_tablo_net[i]->launch(exp_output[i]);
 
 		//on l'affiche si elle est suffisement grande
-		if (exp_output[i][0] > (BORNE_INF_DISTINCTION / 10))
+		if (exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
 			cout << g_alphabet[i] << " : " << exp_output[i][0] * 100 << "% -- ";
 
 		//on trouve le maximum des réponses aux premiers réseaux
@@ -155,13 +154,9 @@ void displayArray(T* data, int length)										//afficher un tableau de valeur
 	cout << (data[length - 1] >= 0 ? "+" : "") << data[length - 1] << "]";	//fin de l'affichage
 }
 
-bool readExemple(char* nom_fichier, double entrees[], int taille_entree)		//surcharge, appelle readExemple
+bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory)
 {
-	return readExemple(nom_fichier, entrees, taille_entree, g_dir_exemples);	//par défaut on lit les exemples dans g_dir_exemples
-}
-bool readExemple(char* nom_fichier, double entrees[], int taille_entree, const char* directory)
-{
-	ifstream file((string(directory) + string(nom_fichier)).c_str());	//ouverture du fichier
+	ifstream file((directory + string(nom_fichier)).c_str());	//ouverture du fichier
 
 	if (!file)
 	{
@@ -180,17 +175,13 @@ bool readExemple(char* nom_fichier, double entrees[], int taille_entree, const c
 	}
 }
 
-int countExemples()							//surcharge
-{
-	return countExemples(g_dir_exemples);	//par défaut ...
-}
-int countExemples(const char* directory)
+int countExemples(string directory)
 {
 	int				nombre_fichiers(0);	//Initialisation
 	DIR*			dp;
 	struct dirent*	ep;
 
-	dp = opendir(directory);				//On ouvre le répertoire contenant les images avant de le parcourir
+	dp = opendir(directory.c_str());		//On ouvre le répertoire contenant les images avant de le parcourir
 	if (dp != NULL)							//Si l'ouverture du répertoire a fonctionné
 	{
 		while ((ep = readdir(dp)))			//On parcourt le répertoire
@@ -201,17 +192,13 @@ int countExemples(const char* directory)
 	return nombre_fichiers;
 }
 
-void getArrayOfFileNames(char** tabloFichiers)			//surcharge
-{
-	getArrayOfFileNames(tabloFichiers, g_dir_exemples);	//par déa
-}
-void getArrayOfFileNames(char** tabloFichiers, const char* directory)
+void getArrayOfFileNames(char** tabloFichiers, string directory)
 {
 	int				compteur(0);
 	DIR*			dp;
 	struct dirent*	ep;
 
-	dp = opendir(directory);									//On ouvre le répertoire contenant les images avant de le parcourir
+	dp = opendir(directory.c_str());							//On ouvre le répertoire contenant les images avant de le parcourir
 	if (dp != NULL)												//Si l'ouverture du répertoire a fonctionné
 	{
 		while ((ep = readdir(dp)))								//On parcourt le répertoire
@@ -226,11 +213,7 @@ void getArrayOfFileNames(char** tabloFichiers, const char* directory)
 	}
 }
 
-void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples)	//Surcharge
-{
-	getArrayOfExemples(tabloFichiers, tabloExemple, nb_exemples, g_dir_exemples);		// Par défaut, directory = g_dir_exemples
-}
-void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, const char* directory)
+void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory)
 {
 	cout << "Lecture des exemples ... " << flush;
 	for (int i(0); i < nb_exemples; i++)

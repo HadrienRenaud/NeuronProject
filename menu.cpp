@@ -30,8 +30,8 @@ void menu(SDL_Renderer *ren)
 	SDL_Texture *	background			= SDL_CreateTextureFromSurface(ren, backgroundSurface);
 
 
-	SDL_Surface *	loadingText			= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 80), "Loading ...", color);
-	SDL_Texture *	loading				= SDL_CreateTextureFromSurface(ren, loadingText);
+	SDL_Surface *	loadingText	= TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 80), "Loading ...", color);
+	SDL_Texture *	loading		= SDL_CreateTextureFromSurface(ren, loadingText);
 
 	Button			exitButton(ren, "Exit", 16, 235, 680, 530, 100, 30);
 	Button			databaseButton(ren, "Create images", 16, 235, 20, 440, 200, 30);
@@ -95,8 +95,7 @@ void menu(SDL_Renderer *ren)
 		SDL_RenderClear(ren);
 		SDL_PollEvent(&event);
 
-		switch (event.type)
-		{
+		switch (event.type)	{
 		case SDL_QUIT:
 			quitLoop = true;
 			break;
@@ -160,9 +159,9 @@ void menu(SDL_Renderer *ren)
 
 		if (testing && (nextButton.hasBeenPressed() || keyboardInput[28]))
 		{
-			keyboardInput[28] = false;
+			keyboardInput[28]	= false;
 			nextButton.reset();
-			ep = readdir(dp);
+			ep					= readdir(dp);
 			compteurTest++;
 
 			if (ep != NULL && compteurTest < nombreTests)
@@ -177,10 +176,10 @@ void menu(SDL_Renderer *ren)
 				strcpy(testedImageNameFull, DOSSIERTEST);
 				strcat(testedImageNameFull, ep->d_name);
 				strcpy(testedImageText, ep->d_name);
-				testedImageText[strlen(testedImageText) - 4]	= '\0';	//Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
+				testedImageText[strlen(testedImageText) - 4] = '\0';	//Celui correspondant au fichier texte est coupé 4 caractères avant la fin (on tronque le .png)
 				strcat(testedImageText, ".txt");						//Puis on lui ajoute ".txt"
 
-				testedImage										= IMG_Load(testedImageNameFull);
+				testedImage	= IMG_Load(testedImageNameFull);
 
 				if (testedImage == NULL)
 				{
@@ -282,7 +281,7 @@ void menu(SDL_Renderer *ren)
 			testButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 
-			testing			= true;
+			testing	= true;
 			nextButton.setPress(true);
 
 			compteurTest	= -1;

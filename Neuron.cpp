@@ -2,7 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Neuron::Neuron() :   m_input(0),
+Neuron::Neuron() :
+	m_input(0),
 	m_output(0),
 	m_trsf(0),
 	m_layer(0),
@@ -10,7 +11,8 @@ Neuron::Neuron() :   m_input(0),
 	m_gradient(0)
 {
 }									//constructeur par défaut inutile
-Neuron::Neuron(const Neuron& neuron) :   m_input(0),
+Neuron::Neuron(const Neuron& neuron) :
+	m_input(0),
 	m_output(0),
 	m_trsf(neuron.m_trsf),
 	m_layer(neuron.m_layer),
@@ -19,7 +21,8 @@ Neuron::Neuron(const Neuron& neuron) :   m_input(0),
 	m_gradient(0)
 {
 }														//jamais utilisé
-Neuron::Neuron(Layer* layer, transfert trsf) : m_input(0),
+Neuron::Neuron(Layer* layer, transfert trsf) :
+	m_input(0),
 	m_output(0),
 	m_trsf(trsf),
 	m_layer(layer),
@@ -103,10 +106,10 @@ bool Neuron::initNeuron(double input)	//on autorise de regler l'input si et seul
 {
 	if (getLayer()->getNetwork()->getFirstLayer() == getLayer() || input == 0)
 	{
-		m_input		= input;
+		m_input	= input;
 		if (input != input)
 			cout << "Neuron : initNeuron : if_fisrtlayer : input : " << input << endl;
-		m_output	= m_trsf(m_input);
+		m_output = m_trsf(m_input);
 		return true;
 	}
 	else	//si echec
