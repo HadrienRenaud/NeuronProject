@@ -65,3 +65,4 @@ obj/**
 **.ttf
 **.ttc
 **.o
+bin/Release/NeuronProject.exe
