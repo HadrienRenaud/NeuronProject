@@ -312,7 +312,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 {
 	clock_t t0(clock());//temps de départ du programme
 
-	cout << "Apprentissage de la lettre " << m_testedLetter << " ..." << endl;
+	cout << endl << "Apprentissage de la lettre " << m_testedLetter << " ..." << endl << endl;
 
 	// Initialisations
 	int		exemple			= 0;					//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
@@ -340,7 +340,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		{
 			//cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
 			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
-			cout << count / nbExemples << " boucles - Progression " << min(int(100 * m_maximal_distance / maxDist), 100) << " %." << endl;
+			cout << "Progression " << min(int(100 * m_maximal_distance / maxDist), 100) << "% - " << count / nbExemples << " boucles."<< endl;
 			cout << "Distance moyenne : " << (totalDistance / nbExemples) << " - distance maximale : " << maxDist << endl;
 			t1 = clock();
 		}
@@ -390,6 +390,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 	save();
 
 	//Affichages ...
+	cout << endl;
 	if (count >= m_maxLimitLoop * nbExemples)
 		cout << "Apprentissage INFRUCTUEUX sur " << count << " exemples lus.";
 	else
