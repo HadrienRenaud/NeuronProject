@@ -67,3 +67,5 @@ obj/**
 **.o
 bin/Release/NeuronProject.exe
 obj/Release/*
+**.cfg
+NeuronProject
