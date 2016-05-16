@@ -329,10 +329,10 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 	clock_t t1(clock());
 
 	//APPRENTISSAGE
-	while ((successes < nbExemples) && (count < m_maxLimitLoop))	//tant qu'on a pas enchaîner nbExemples succès
-	{																//incrémentation
+	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples))	//tant qu'on a pas enchaîner nbExemples succès
+	{																			//incrémentation
 		exemple++;
-		exemple %= nbExemples;										//On ne dépasse pas nbExemples
+		exemple %= nbExemples;													//On ne dépasse pas nbExemples
 		count++;
 
 		// Affichages de temps en temps ...
