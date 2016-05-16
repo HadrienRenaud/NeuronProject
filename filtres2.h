@@ -33,10 +33,11 @@
 #include <dirent.h>
 #include <math.h>
 
-#define TAILLE			20			//La taille du fichier .txt créé pour chaque image : actuellement, 20 x 20 = 400 nombres entre 0 et 1
-#define DOSSIERIMAGES	"images/"	//Le sous-dossier où il faudra placer les images
-#define DOSSIERTEXTES	"texts/"	//Le sous-dossier où seront créés les textes
-#define TAILLEMAX		10000
+#define TAILLE 20				//La taille du fichier .txt créé pour chaque image : actuellement, 20 x 20 = 400 nombres entre 0 et 1
+#define MANUAL_RESIZE_MULTIPLIER 4
+#define DOSSIERIMAGES "images/"	//Le sous-dossier où il faudra placer les images
+#define DOSSIERTEXTES "texts/"	//Le sous-dossier où seront créés les textes
+#define TAILLEMAX 10000
 
 using namespace std;
 
@@ -46,16 +47,24 @@ using namespace std;
 void	filtres(const char* repertory_dep = DOSSIERIMAGES, const char* repertory_arr = DOSSIERTEXTES, bool selectif = false);	//Fonction à appeler pour filtrer un dossier spécifique avec sélection des images non déja filtrées ou non
 void	filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixelsG, int **pixelsB);							//Fonction appellée par filtres pour chaque image, correspond à la quasi totalité de l'ancienne fonction main
 
-void	pathNames(char* pathPng, char* pathTxt, char* namePng, const char* repertory_dep, const char* repertory_arr);
-Uint32	getPixel(SDL_Surface * surface, int x, int y);																		//Renvoie un Uint32 contenant les composantes en rouge, vert, bleu du pixel de coordonnées x, y de l'image chargée sur surface
+void    pathNames(char* pathPng, char* pathTxt, char* namePng, const char* repertory_dep, const char* repertory_arr);
+
+Uint32  getPixel(SDL_Surface * surface, int x, int y);																		//Renvoie un Uint32 contenant les composantes en rouge, vert, bleu du pixel de coordonnées x, y de l'image chargée sur surface
+void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+
 void	margeLigne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);	//Délimite l'espace que l'on peut rogner en haut et en droite
 void	margeColonne(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int marges[]);	// Idem, en gauche et à droite
 bool	margeSynthese(int imageWidth, int imageHeight, int marges[]);
-bool	dejaFiltree(const char* repertory_arr, const char* imageName);
-void	analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixelsB);	// Réalise une analyse pixel par pixel de image et stocke les composantes dans les 3 tableaux donnés
+
+bool    dejaFiltree(const char* repertory_arr, const char* imageName);
+
+void    analysePixel(SDL_Surface *image, int **pixelsR, int **pixelsG, int **pixelsB);	// Réalise une analyse pixel par pixel de image et stocke les composantes dans les 3 tableaux donnés
+
 void	distanceChro(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int hauteur, int reference[], int distancemax[]);
 void	resize(SDL_Surface * lettre, SDL_Surface * resized, int reference[], int marges[]);
-void	ecritureTxt(FILE * fichier, SDL_Surface * resized, int reference[], int marges[], int distancemax[], bool notEmpty);
+void    manualResizePrinting(FILE * fichier, SDL_Surface * image, int reference[], int marges[], int distancemax[], bool notEmpty);
+
+void	printingTxt(FILE * fichier, SDL_Surface * resized, int reference[], int marges[], int distancemax[], bool notEmpty);
 
 //void pixelsfinal(int **pixelsR, int pixelsRfinal[20][20], int Largeur, int Hauteur, int marges[]);  //Transforme le tableau correspondant à l'image rognée au maximum (en conservant une forme carrée) en un tableau 20x20 (moyenne pondérée)
 
