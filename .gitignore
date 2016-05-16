@@ -46,7 +46,7 @@ Thumbs.db
 *plus_recent_*
 .NeuronProject
 **.dll
-**.depend
+/**.depend
 **.cbp
 **.layout
 **.o
@@ -66,3 +66,4 @@ obj/**
 **.ttc
 **.o
 bin/Release/NeuronProject.exe
+obj/Release/*
