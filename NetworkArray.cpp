@@ -1,11 +1,5 @@
 #include "NetworkArray.h"
-#include <iostream>
-#include <cstdlib>
-#include <fstream>
-#include <string>
-#include <dirent.h>		//Pour la gestion du répertoire d'images
-#include <cstring>
-#include <time.h>
+
 using namespace std;
 
 const char g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -46,6 +40,7 @@ NetworkArray::~NetworkArray()
 
 void NetworkArray::learnAllNetworks()
 {
+
 	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones." << endl << endl;
 
 	cout << "Initialisation des parametres." << endl;
@@ -62,6 +57,8 @@ void NetworkArray::learnAllNetworks()
 		tabloFichiers[i]	= new char[MAX_LENGTH_NAME_FILE];
 		inputs[i]			= new double[FIRST_LAYER_SIZE];
 	}
+
+	setOptions();
 
 	//Récupération des données des fichiers
 	getArrayOfFileNames(tabloFichiers);						//on récupère les noms des ficheirs d'exemples

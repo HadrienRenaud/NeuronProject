@@ -11,7 +11,7 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 	m_initialized(false),
 	m_gradientInitialized(false),
 	m_maximal_distance(MAXIMAL_DISTANCE),
-	m_maxLimitLoop(NB_LEARNING * MAX_LIMIT_LOOP),
+	m_maxLimitLoop(MAX_LIMIT_LOOP),
 	m_testedLetter(lettre_testee),
 	m_nameFile(new char[MAX_LENGTH_NAME_FILE])
 {

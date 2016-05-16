@@ -86,8 +86,6 @@ void menu(SDL_Renderer *ren)
 	tablo_net->getMostRecent();
 	cout << "Reseaux recuperes." << endl;
 
-	tablo_net->setOptions();
-
 	double input[FIRST_LAYER_SIZE];
 
 	while (!quitLoop)

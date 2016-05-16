@@ -2,6 +2,8 @@
 #define NETWORKARRAY_H_INCLUDED
 
 #include "Network.h"
+#include <dirent.h>		//Pour la gestion du répertoire d'images
+#include <time.h>
 
 class Network;
 
