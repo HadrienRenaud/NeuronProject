@@ -30,7 +30,7 @@ private:
 };
 
 template <class T>
-void displayArray(T* data, int length);																									//affichage d'un tableau
+void displayArray(T* data, int length);																						//affichage d'un tableau
 bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory = DIR_EXEMPLE);
 int		countExemples(string directory = DIR_EXEMPLE);																		//compte les exemples dans directory
 void	getArrayOfFileNames(char** tabloFichier, string directory = DIR_EXEMPLE);											// lit le tableau correspondant à une image

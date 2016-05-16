@@ -181,7 +181,7 @@ int countExemples(string directory)
 	DIR*			dp;
 	struct dirent*	ep;
 
-	dp = opendir(directory.c_str());				//On ouvre le répertoire contenant les images avant de le parcourir
+	dp = opendir(directory.c_str());		//On ouvre le répertoire contenant les images avant de le parcourir
 	if (dp != NULL)							//Si l'ouverture du répertoire a fonctionné
 	{
 		while ((ep = readdir(dp)))			//On parcourt le répertoire
@@ -198,7 +198,7 @@ void getArrayOfFileNames(char** tabloFichiers, string directory)
 	DIR*			dp;
 	struct dirent*	ep;
 
-	dp = opendir(directory.c_str());									//On ouvre le répertoire contenant les images avant de le parcourir
+	dp = opendir(directory.c_str());							//On ouvre le répertoire contenant les images avant de le parcourir
 	if (dp != NULL)												//Si l'ouverture du répertoire a fonctionné
 	{
 		while ((ep = readdir(dp)))								//On parcourt le répertoire

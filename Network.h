@@ -6,7 +6,7 @@
 #include <cstring>
 using namespace std;
 
-#define DIR_EXEMPLE				"texts/" //dossier ou sont contenus tous les fichiers d'exemples
+#define DIR_EXEMPLE				"texts/"//dossier ou sont contenus tous les fichiers d'exemples
 #define g_dir_test				"test/"
 #define g_dir_svg				"svg_reseau/"
 #define g_nom_svg				"plus_recent_"
@@ -16,8 +16,8 @@ using namespace std;
 #define ALPHA					0.05	//momentum, quantité d'inertie
 #define MAX_LENGTH_NAME_FILE	100
 #define NB_LEARNING				10
-#define MAXIMAL_DISTANCE		0.1
-#define MAX_LIMIT_LOOP			100
+#define MAXIMAL_DISTANCE		0.05
+#define MAX_LIMIT_LOOP			50
 #define LENGTH_ALPHABET			52
 #define LOWER_BOUND_DISTINCTION	0.05
 #define MAX_LIMIT_CASE			1000

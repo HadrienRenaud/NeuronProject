@@ -21,17 +21,17 @@ class Neuron {
 public:
 //constructeur par défaut, contructeur de copie et constructeur que l'on utilise vraiment dans le programme
 	Neuron();
-	Neuron(const Neuron& neuron);								//pour le constructeur de copie, on associe à la copie : la mm fonction de transfert, la mm couche et les memes liaisons vers les meme neurones,
-	Neuron(Layer* layer, transfert trsf = 0);					//si aucune fonction de transfert n'est donné en paramètre, on prend une sigmoide
-	~Neuron();													//destructeur
+	Neuron(const Neuron& neuron);				//pour le constructeur de copie, on associe à la copie : la mm fonction de transfert, la mm couche et les memes liaisons vers les meme neurones,
+	Neuron(Layer* layer, transfert trsf = 0);	//si aucune fonction de transfert n'est donné en paramètre, on prend une sigmoide
+	~Neuron();									//destructeur
 //METHODES
-	void setTransfert(double (*)(double));						//changer la fonction de transfert
-	transfert	getTransfert() const;							//fonction de transfert
+	void setTransfert(double (*)(double));		//changer la fonction de transfert
+	transfert	getTransfert() const;			//fonction de transfert
 	Layer*		getLayer() const;
-	int			getBindingsNumber() const;						//donne le nombre de liaisons avec les neurones des couches PRECEDENTES
-	void		receive();										//le neurone récupère la somme pondérée des outputs des neurones des couches d'avant auxquels il est connecté
-	void		sendGradient();									//le neurone envoie son propre gradient aux neurones précedents, pondérée par le poids de chaque liaison
-	void		addBinding(Binding* binding);//nouvelle liaison
+	int			getBindingsNumber() const;		//donne le nombre de liaisons avec les neurones des couches PRECEDENTES
+	void		receive();						//le neurone récupère la somme pondérée des outputs des neurones des couches d'avant auxquels il est connecté
+	void		sendGradient();					//le neurone envoie son propre gradient aux neurones précedents, pondérée par le poids de chaque liaison
+	void		addBinding(Binding* binding);	//nouvelle liaison
 	void		addBinding(Neuron* neuron, double weight = 1);
 	double		getInput() const;
 	double		getOutput() const;

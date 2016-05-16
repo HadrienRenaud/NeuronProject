@@ -339,12 +339,24 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		exemple++;
 		exemple %= nbExemples;													//On ne dépasse pas nbExemples
 		count++;
+
+		// Affichages de temps en temps ...
+		if (count % (NB_LEARNING * nbExemples) == nbExemples - 1 )	//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
+		{
+			cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
+			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
+			cout << "distance moyenne " << (totalDistance / nbExemples) << " - distance maximale " << maxDist << endl;
+			t1 = clock();
+		}
+
+		//Remise à zéro des paramètres de boucles
 		if (count % nbExemples == 0)
 		{
 			successesInLoop = 0;
 			totalDistance	= 0;
 			maxDist			= 0;
 		}
+
 		//Résultat attendu
 		if (fileArray[exemple][0] == m_testedLetter)
 			outputExpected[0] = 1;
@@ -376,14 +388,6 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 			successes = 0;	//on réinitialise aussi les nombre de succès enchaînés
 		}
 
-		// Affichages de temps en temps ...
-		if (count % (NB_LEARNING * nbExemples) == nbExemples - 1 )	//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
-		{
-			cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
-			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
-			cout << "distance moyenne " << (totalDistance / nbExemples) << " - distance maximale " << maxDist << endl;
-			t1 = clock();
-		}
 	}
 
 	//On sauvegarde le réseau
