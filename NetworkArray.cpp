@@ -1,11 +1,5 @@
 #include "NetworkArray.h"
-#include <iostream>
-#include <cstdlib>
-#include <fstream>
-#include <string>
-#include <dirent.h>		//Pour la gestion du répertoire d'images
-#include <cstring>
-#include <time.h>
+
 using namespace std;
 
 const char g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -16,7 +10,8 @@ NetworkArray::NetworkArray() :
 	m_tablo_net(new Network*[LENGTH_ALPHABET]),
 	m_maximal_distance(MAXIMAL_DISTANCE),
 	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
-	m_alphabet(g_alphabet)
+	m_alphabet(g_alphabet),
+	m_momentum(ALPHA)
 {
 	cout << "Creation des reseaux ... " << flush;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
@@ -45,6 +40,7 @@ NetworkArray::~NetworkArray()
 
 void NetworkArray::learnAllNetworks()
 {
+
 	cout << "Bienvenue dans le gestionnaire d'apprentissage du reseau de neurones." << endl << endl;
 
 	cout << "Initialisation des parametres." << endl;
@@ -61,6 +57,8 @@ void NetworkArray::learnAllNetworks()
 		tabloFichiers[i]	= new char[MAX_LENGTH_NAME_FILE];
 		inputs[i]			= new double[FIRST_LAYER_SIZE];
 	}
+
+	setOptions();
 
 	//Récupération des données des fichiers
 	getArrayOfFileNames(tabloFichiers);						//on récupère les noms des ficheirs d'exemples
@@ -124,6 +122,7 @@ double NetworkArray::getMaximalDistance()
 }
 void NetworkArray::setMaximalDistance(double maximal_distance)
 {
+	cout << "Les réseaux changent pour une distance maximale après apprentissage de " << maximal_distance << endl;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 		m_tablo_net[i]->setMaximalDistance(maximal_distance);
 	m_maximal_distance = maximal_distance;
@@ -135,10 +134,80 @@ int NetworkArray::getMaxLimitLoop()
 }
 void NetworkArray::setMaxLimitLoop(int maxLimitLoop)
 {
+	cout << "Les réseaux changent pour une limite de boucles d'apprentissage de " << maxLimitLoop << endl;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 		m_tablo_net[i]->setMaxLimitLoop(maxLimitLoop);
 	m_maxLimitLoop = maxLimitLoop;
 }
+
+double NetworkArray::getMomentum()
+{
+	return m_momentum;
+}
+void NetworkArray::setMomentum(double momentum)
+{
+	cout << "Les réseaux changent pour un moment d'inertie de " << momentum << endl;
+	m_momentum = momentum;
+	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+		m_tablo_net[i]->setMomentum(momentum);
+}
+
+void NetworkArray::setOptions()
+{
+	ifstream	optionsFile(NAME_CONFIG_FILE);
+	string		line;
+	string		cmdName;
+	string		bin;
+	string		cmdValueStr;
+
+	while (getline(optionsFile, line))
+	{
+		if (!(line.length() == 0 || line[0] == '#'))
+		{
+			istringstream line_stream(line);
+
+			try
+			{
+				line_stream >> cmdName;
+				line_stream >> bin;
+				line_stream >> cmdValueStr;
+
+				if (cmdName == "momentum" || cmdName == "Momentum")
+				{
+					double cmdValue;
+					cmdValue = stod(cmdValueStr);
+					setMomentum(cmdValue);
+				}
+				else if (cmdName == "maximal_distance")
+				{
+					double cmdValue;
+					cmdValue = stod(cmdValueStr);
+					if (cmdValue > 0)
+						setMaximalDistance(cmdValue);
+					else
+						throw string("Valeur invalide : le réseau impose que maximal_distance > 0");
+				}
+				else if (cmdName == "max_limit_loop")
+				{
+					int cmdValue;
+					cmdValue = stoi(cmdValueStr);
+					setMaxLimitLoop(cmdValue);
+				}
+				else
+					throw string("Option non reconnue");
+			}
+			catch (string const erreur)
+			{
+				cout << erreur << endl;
+			}
+			catch (const invalid_argument& ia)
+			{
+				cout << "Valeur invalide : " << ia.what() << endl;
+			}
+		}
+	}
+}
+
 
 // ######################### Hors de NetworkArray ##############################
 

@@ -1,13 +1,4 @@
 #include "Network.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <cstring>
-#include <cstdlib>
-#include <ctime>
-#include <iomanip>
-#include <algorithm>
 using namespace std;
 
 Network::Network()
@@ -20,7 +11,7 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 	m_initialized(false),
 	m_gradientInitialized(false),
 	m_maximal_distance(MAXIMAL_DISTANCE),
-	m_maxLimitLoop(NB_LEARNING * MAX_LIMIT_LOOP),
+	m_maxLimitLoop(MAX_LIMIT_LOOP),
 	m_testedLetter(lettre_testee),
 	m_nameFile(new char[MAX_LENGTH_NAME_FILE])
 {
@@ -262,6 +253,10 @@ double Network::getMomentum()
 {
 	return m_momentum;
 }
+void Network::setMomentum(double momentum)
+{
+	m_momentum = momentum;
+}
 
 void Network::getMostRecent()
 {
@@ -334,10 +329,10 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 	clock_t t1(clock());
 
 	//APPRENTISSAGE
-	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples))	//tant qu'on a pas enchaîner nbExemples succès
-	{																			//incrémentation
+	while ((successes < nbExemples) && (count < m_maxLimitLoop))	//tant qu'on a pas enchaîner nbExemples succès
+	{																//incrémentation
 		exemple++;
-		exemple %= nbExemples;													//On ne dépasse pas nbExemples
+		exemple %= nbExemples;										//On ne dépasse pas nbExemples
 		count++;
 
 		// Affichages de temps en temps ...
@@ -368,7 +363,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		launch(outputExperimental);		//on lance et on récupère les outputs
 
 		//Calcul de l'écart
-		if (count < nbExemples * NB_LEARNING * MAX_LIMIT_CASE && false)
+		if (count < nbExemples * MAX_LIMIT_CASE && false)
 			dist = distance(outputExperimental, outputExpected, LAST_LAYER_SIZE );		//on calcule l'écart
 		else
 			dist = distanceMod(outputExperimental, outputExpected, LAST_LAYER_SIZE );	//on calcule l'écart
@@ -444,9 +439,7 @@ double Network::getMaximalDistance()
 }
 void Network::setMaximalDistance(double maximal_distance)
 {
-	cout << "Network " << m_testedLetter << " change pour la distance ";
 	m_maximal_distance = maximal_distance;
-	cout << m_maximal_distance << endl;
 }
 
 int Network::getMaxLimitLoop()
