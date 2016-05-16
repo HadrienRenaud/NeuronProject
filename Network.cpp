@@ -329,7 +329,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 	clock_t t1(clock());
 
 	//APPRENTISSAGE
-	while ((successes < nbExemples) && (count < m_maxLimitLoop))	//tant qu'on a pas enchaîner nbExemples succès
+	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples))	//tant qu'on a pas enchaîné nbExemples succès
 	{																//incrémentation
 		exemple++;
 		exemple %= nbExemples;										//On ne dépasse pas nbExemples
@@ -338,9 +338,10 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		// Affichages de temps en temps ...
 		if (count % (NB_LEARNING * nbExemples) == nbExemples - 1 )	//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
 		{
-			cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
+			//cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
 			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
-			cout << "distance moyenne " << (totalDistance / nbExemples) << " - distance maximale " << maxDist << endl;
+			cout << count / nbExemples << " boucles - Progression " << min(int(100 * m_maximal_distance / maxDist), 100) << " %." << endl;
+			cout << "Distance moyenne : " << (totalDistance / nbExemples) << " - distance maximale : " << maxDist << endl;
 			t1 = clock();
 		}
 
@@ -390,11 +391,11 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 
 	//Affichages ...
 	if (count >= m_maxLimitLoop * nbExemples)
-		cout << "apprentissage INFRUCTUEUX sur count = " << count;
+		cout << "Apprentissage INFRUCTUEUX sur " << count << " exemples lus.";
 	else
-		cout << "apprentissage productif : count = " << count << " sur " << m_maxLimitLoop * nbExemples;
+		cout << "Apprentissage productif : " << count << " exemples lus sur " << m_maxLimitLoop * nbExemples;
 
-	cout << " avec " << successes << " succes, effectue en " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes" << endl;
+	cout << " avec " << successes << " succes, effectue en " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes." << endl;
 
 	//Calcul de la distance moyenne
 	for (exemple = 0; exemple < nbExemples; exemple++)
@@ -411,11 +412,11 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		//Calcul de la distance
 		totalDistance += distance(outputExperimental, outputExpected, LAST_LAYER_SIZE );
 	}
-	cout << "distance moyenne sur les exemples : " << totalDistance / nbExemples << endl;
+	cout << "Distance moyenne sur les exemples : " << totalDistance / nbExemples << endl;
 
 	//Calcul du temps mis
 	double temps_mis(((float)(clock() - t0) / CLOCKS_PER_SEC));
-	cout << "Apprentissage effectue en " << temps_mis << " secondes" << endl;
+	cout << "Apprentissage effectue en " << temps_mis << " secondes." << endl;
 
 	// On met à jour les données dans le fichier
 	writeReport((count < m_maxLimitLoop * nbExemples), count / nbExemples,

@@ -63,3 +63,5 @@ obj/**
 **.unc-backup**
 **.sh
 **.ttf
+**.ttc
+**.o

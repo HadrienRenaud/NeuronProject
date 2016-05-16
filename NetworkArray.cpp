@@ -81,7 +81,7 @@ char NetworkArray::testNetworks(double input[])
 	double	exp_output[LENGTH_ALPHABET][LAST_LAYER_SIZE];
 
 	//tests
-	cout << "Results : ";
+	cout << "Resultats : ";
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)	//pour chaque réseau
 	{											//on récupère la réponse
 		m_tablo_net[i]->initNetwork(input);
@@ -122,7 +122,7 @@ double NetworkArray::getMaximalDistance()
 }
 void NetworkArray::setMaximalDistance(double maximal_distance)
 {
-	cout << "Les réseaux changent pour une distance maximale après apprentissage de " << maximal_distance << endl;
+	cout << "Les reseaux changent pour une distance maximale apres apprentissage de " << maximal_distance << endl;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 		m_tablo_net[i]->setMaximalDistance(maximal_distance);
 	m_maximal_distance = maximal_distance;
@@ -134,7 +134,7 @@ int NetworkArray::getMaxLimitLoop()
 }
 void NetworkArray::setMaxLimitLoop(int maxLimitLoop)
 {
-	cout << "Les réseaux changent pour une limite de boucles d'apprentissage de " << maxLimitLoop << endl;
+	cout << "Les reseaux changent pour une limite de boucles d'apprentissage de " << maxLimitLoop << endl;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 		m_tablo_net[i]->setMaxLimitLoop(maxLimitLoop);
 	m_maxLimitLoop = maxLimitLoop;
@@ -146,7 +146,7 @@ double NetworkArray::getMomentum()
 }
 void NetworkArray::setMomentum(double momentum)
 {
-	cout << "Les réseaux changent pour un moment d'inertie de " << momentum << endl;
+	cout << "Les reseaux changent pour un moment d'inertie de " << momentum << endl;
 	m_momentum = momentum;
 	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 		m_tablo_net[i]->setMomentum(momentum);
@@ -175,22 +175,22 @@ void NetworkArray::setOptions()
 				if (cmdName == "momentum" || cmdName == "Momentum")
 				{
 					double cmdValue;
-					cmdValue = stod(cmdValueStr);
+					cmdValue = atof(cmdValueStr.c_str());
 					setMomentum(cmdValue);
 				}
 				else if (cmdName == "maximal_distance")
 				{
 					double cmdValue;
-					cmdValue = stod(cmdValueStr);
+					cmdValue = atof(cmdValueStr.c_str());
 					if (cmdValue > 0)
 						setMaximalDistance(cmdValue);
 					else
-						throw string("Valeur invalide : le réseau impose que maximal_distance > 0");
+						throw string("Valeur invalide : le reseau impose que maximal_distance > 0");
 				}
 				else if (cmdName == "max_limit_loop")
 				{
 					int cmdValue;
-					cmdValue = stoi(cmdValueStr);
+					cmdValue = atoi(cmdValueStr.c_str());
 					setMaxLimitLoop(cmdValue);
 				}
 				else
@@ -200,7 +200,7 @@ void NetworkArray::setOptions()
 			{
 				cout << erreur << endl;
 			}
-			catch (const invalid_argument& ia)
+			catch (const invalid_argument &ia)
 			{
 				cout << "Valeur invalide : " << ia.what() << endl;
 			}
@@ -287,5 +287,5 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
 	cout << "Lecture des exemples ... " << flush;
 	for (int i(0); i < nb_exemples; i++)
 		readExemple(tabloFichiers[i], tabloExemple[i], FIRST_LAYER_SIZE, directory);	//on lit chacun des exemples
-	cout << "Lecture terminee." << endl;
+	cout << "Lecture terminee, " << countExemples(DOSSIERTEXTES) << " exemples lus." << endl;
 }

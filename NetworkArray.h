@@ -2,8 +2,12 @@
 #define NETWORKARRAY_H_INCLUDED
 
 #include "Network.h"
+#include <stdexcept>
+#include <string>
 #include <dirent.h>		//Pour la gestion du répertoire d'images
 #include <time.h>
+
+#define DOSSIERTEXTES "texts/"	//Le sous-dossier où seront créés les textes
 
 class Network;
 
