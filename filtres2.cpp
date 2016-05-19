@@ -105,8 +105,8 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
 
 void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixelsG, int **pixelsB)
 {
-	bool			notEmpty		= true;
-	bool            needsManualResize;
+	bool			notEmpty = true;
+	bool			needsManualResize;
 
 	int				distancemax[3];				//Le max de la "distance chromatique" séparant les pixels du pixel de référence (voir plus bas)
 	int				reference [3]	= { 0 };	//La "référence" de couleur, qui sera définie comme la couleur du pixel de coordonnées (0,0)
@@ -133,24 +133,24 @@ void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixe
 		//On calcule les marges : on rogne le plus possible de lignes/colonnes contenant uniquement des pixels de la couleur de référence
 		margeLigne(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, marges);
 		margeColonne(pixelsR, pixelsG, pixelsB, lettre->w, lettre->h, reference, marges);
-		notEmpty = margeSynthese(lettre->w, lettre->h, marges);	//on rend l'image carrée en diminuant alternativement les marges gauche/droite ou haut/bas selon si la hauteur est plus grande que la largeur ou non
+		notEmpty			= margeSynthese(lettre->w, lettre->h, marges);	//on rend l'image carrée en diminuant alternativement les marges gauche/droite ou haut/bas selon si la hauteur est plus grande que la largeur ou non
 
-        needsManualResize = (lettre->w - marges[2] - marges[3] >= MANUAL_RESIZE_MULTIPLIER * TAILLE);
+		needsManualResize	= (lettre->w - marges[2] - marges[3] >= MANUAL_RESIZE_MULTIPLIER * TAILLE);
 
-        if (!needsManualResize)
-        {
-            resized = SDL_CreateRGBSurface(SDL_SWSURFACE, TAILLE, TAILLE, 32, 0, 0, 0, 255);
-            resize(lettre, resized, reference, marges);
+		if (!needsManualResize)
+		{
+			resized = SDL_CreateRGBSurface(SDL_SWSURFACE, TAILLE, TAILLE, 32, 0, 0, 0, 255);
+			resize(lettre, resized, reference, marges);
 
-            printingTxt(fichier, resized, reference, marges, distancemax, notEmpty);
-        }
-        else
-        {
-            resized = SDL_CreateRGBSurface(SDL_SWSURFACE, MANUAL_RESIZE_MULTIPLIER * TAILLE, MANUAL_RESIZE_MULTIPLIER * TAILLE, 32, 0, 0, 0, 255);
-            resize(lettre, resized, reference, marges);
+			printingTxt(fichier, resized, reference, marges, distancemax, notEmpty);
+		}
+		else
+		{
+			resized = SDL_CreateRGBSurface(SDL_SWSURFACE, MANUAL_RESIZE_MULTIPLIER * TAILLE, MANUAL_RESIZE_MULTIPLIER * TAILLE, 32, 0, 0, 0, 255);
+			resize(lettre, resized, reference, marges);
 
-            manualResizePrinting(fichier, resized, reference, marges, distancemax, notEmpty);
-        }
+			manualResizePrinting(fichier, resized, reference, marges, distancemax, notEmpty);
+		}
 
 		fclose(fichier);
 	}
@@ -202,45 +202,44 @@ Uint32 getPixel(SDL_Surface * surface, int x, int y)
 
 void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
-    /*nbOctetsParPixel représente le nombre d'octets utilisés pour stocker un pixel.
-    En multipliant ce nombre d'octets par 8 (un octet = 8 bits), on obtient la profondeur de couleur
-    de l'image : 8, 16, 24 ou 32 bits.*/
-    int nbOctetsParPixel = surface->format->BytesPerPixel;
-    /*Ici p est l'adresse du pixel que l'on veut modifier*/
-    /*surface->pixels contient l'adresse du premier pixel de l'image*/
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+	/*nbOctetsParPixel représente le nombre d'octets utilisés pour stocker un pixel.
+	   En multipliant ce nombre d'octets par 8 (un octet = 8 bits), on obtient la profondeur de couleur
+	   de l'image : 8, 16, 24 ou 32 bits.*/
+	int nbOctetsParPixel = surface->format->BytesPerPixel;
+	/*Ici p est l'adresse du pixel que l'on veut modifier*/
+	/*surface->pixels contient l'adresse du premier pixel de l'image*/
+	Uint8 *p = (Uint8*)surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
 
-    /*Gestion différente suivant le nombre d'octets par pixel de l'image*/
-    switch(nbOctetsParPixel)
-    {
-        case 1:
-            *p = pixel;
-            break;
+	/*Gestion différente suivant le nombre d'octets par pixel de l'image*/
+	switch (nbOctetsParPixel) {
+	case 1:
+		*p = pixel;
+		break;
 
-        case 2:
-            *(Uint16 *)p = pixel;
-            break;
+	case 2:
+		*(Uint16*)p = pixel;
+		break;
 
-        case 3:
-            /*Suivant l'architecture de la machine*/
-            if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            {
-                p[0] = (pixel >> 16) & 0xff;
-                p[1] = (pixel >> 8) & 0xff;
-                p[2] = pixel & 0xff;
-            }
-            else
-            {
-                p[0] = pixel & 0xff;
-                p[1] = (pixel >> 8) & 0xff;
-                p[2] = (pixel >> 16) & 0xff;
-            }
-            break;
+	case 3:
+		/*Suivant l'architecture de la machine*/
+		if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+		{
+			p[0]	= (pixel >> 16) & 0xff;
+			p[1]	= (pixel >> 8) & 0xff;
+			p[2]	= pixel & 0xff;
+		}
+		else
+		{
+			p[0]	= pixel & 0xff;
+			p[1]	= (pixel >> 8) & 0xff;
+			p[2]	= (pixel >> 16) & 0xff;
+		}
+		break;
 
-        case 4:
-            *(Uint32 *)p = pixel;
-            break;
-    }
+	case 4:
+		*(Uint32*)p = pixel;
+		break;
+	}
 }
 
 
@@ -476,21 +475,22 @@ bool dejaFiltree(const char* repertory_arr, const char* imageName)
 void resize(SDL_Surface *lettre, SDL_Surface *resized, int reference[], int marges[])
 {
 	SDL_Rect dest;
+
 	dest.x	= marges[2];
 	dest.y	= marges[0];
 	dest.w	= lettre->w - marges[3] - marges[2];
 	dest.h	= lettre->h - marges[1] - marges[0];
 
-    SDL_FillRect(resized, NULL, SDL_MapRGB(resized->format, reference[0], reference[1], reference[2]));
-    SDL_BlitScaled(lettre, &dest, resized, NULL);
+	SDL_FillRect(resized, NULL, SDL_MapRGB(resized->format, reference[0], reference[1], reference[2]));
+	SDL_BlitScaled(lettre, &dest, resized, NULL);
 
 }
 
 void manualResizePrinting(FILE * fichier, SDL_Surface * image, int reference[], int marges[], int distancemax[], bool notEmpty)
 {
-    Uint8 color[3];
-    int colorAverage[3];
-    double moyenne = 0;
+	Uint8	color[3];
+	int		colorAverage[3];
+	double	moyenne = 0;
 
 	if (!notEmpty)
 	{
@@ -505,26 +505,26 @@ void manualResizePrinting(FILE * fichier, SDL_Surface * image, int reference[], 
 
 	else
 	{
-        SDL_LockSurface(image);
-        for (int y = 0; y < TAILLE; y++)
-        {
-            for (int x = 0; x < TAILLE; x++)
-            {
-                for (int k = 0; k < 3; k++)
-                    colorAverage[k] = 0;
+		SDL_LockSurface(image);
+		for (int y = 0; y < TAILLE; y++)
+		{
+			for (int x = 0; x < TAILLE; x++)
+			{
+				for (int k = 0; k < 3; k++)
+					colorAverage[k] = 0;
 
-                for (int j = 0; j < MANUAL_RESIZE_MULTIPLIER; j++)
-                {
-                    for (int i = 0; i < MANUAL_RESIZE_MULTIPLIER; i++)
-                    {
-                        SDL_GetRGB(getPixel(image, x * MANUAL_RESIZE_MULTIPLIER + i, y * MANUAL_RESIZE_MULTIPLIER + j), image->format, &color[0], &color[1], &color[2]);
-                        for (int k = 0; k < 3; k++)
-                            colorAverage[k] += (int)color[k];
-                    }
-                }
+				for (int j = 0; j < MANUAL_RESIZE_MULTIPLIER; j++)
+				{
+					for (int i = 0; i < MANUAL_RESIZE_MULTIPLIER; i++)
+					{
+						SDL_GetRGB(getPixel(image, x * MANUAL_RESIZE_MULTIPLIER + i, y * MANUAL_RESIZE_MULTIPLIER + j), image->format, &color[0], &color[1], &color[2]);
+						for (int k = 0; k < 3; k++)
+							colorAverage[k] += (int)color[k];
+					}
+				}
 
-                for (int k = 0; k < 3; k++)
-                    colorAverage[k] /= (MANUAL_RESIZE_MULTIPLIER * MANUAL_RESIZE_MULTIPLIER);
+				for (int k = 0; k < 3; k++)
+					colorAverage[k] /= (MANUAL_RESIZE_MULTIPLIER * MANUAL_RESIZE_MULTIPLIER);
 
 				//On calcule le rapport de (la distance chromatique à la référence du pixel) et de (distancemax), la distance chromatique maximale
 				moyenne = abs(colorAverage[0] - reference[0]) + abs(colorAverage[1] - reference[1]) + abs(colorAverage[2] - reference[2]);
@@ -532,11 +532,11 @@ void manualResizePrinting(FILE * fichier, SDL_Surface * image, int reference[], 
 
 				fprintf(fichier, "%.2f ", moyenne);	//On écrit le résultat avec 2 décimales
 
-            }
+			}
 			fprintf(fichier, "\n ");
-        }
+		}
 
-        SDL_UnlockSurface(image);
+		SDL_UnlockSurface(image);
 	}
 }
 

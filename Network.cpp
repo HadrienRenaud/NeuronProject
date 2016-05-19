@@ -77,7 +77,7 @@ void Network::save()
 	for (int i(0); i < (int)str_nom_fichier.size(); i++)	// on parcourt le nom du fichier
 		if (!isalnum(str_nom_fichier[i]))					// et on remplace tout ce qui ne va pas dans un nom de fichier par '_'
 			str_nom_fichier[i] = '_';
-	str_nom_fichier = string(g_dir_svg) + str_nom_fichier + "_" + m_testedLetter + string(g_extension_svg);
+	str_nom_fichier = string(DOSSIER_SVG) + str_nom_fichier + "_" + m_testedLetter + string(EXTENSION_SVG);
 	// adresse complete
 	strcpy(m_nameFile, str_nom_fichier.c_str());
 
@@ -102,7 +102,7 @@ void Network::save()
 
 	// on sauvegarde le dernier fichier enregistré dans mostRecent.txt :
 	string		mostRecent;
-	mostRecent = g_dir_svg + string(g_nom_svg) + m_testedLetter + string(g_extension_svg);
+	mostRecent = DOSSIER_SVG + string(NOM_SVG) + m_testedLetter + string(EXTENSION_SVG);
 	ofstream	fichier_recent(mostRecent.c_str());
 	fichier_recent << m_nameFile;
 }
@@ -265,7 +265,7 @@ void Network::getMostRecent()
 	string	nom_db;
 
 	//on reconstitue le nom du fichier :
-	nom_db = string(g_dir_svg) + g_nom_svg + m_testedLetter + string(g_extension_svg);
+	nom_db = string(DOSSIER_SVG) + NOM_SVG + m_testedLetter + string(EXTENSION_SVG);
 
 	ifstream file(nom_db.c_str());	//on ouvre le fichier getMostRecent.txt
 	file >> str_nom_fichier;		//on lit son contenu
@@ -330,9 +330,9 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 
 	//APPRENTISSAGE
 	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples))	//tant qu'on a pas enchaîné nbExemples succès
-	{																//incrémentation
+	{																			//incrémentation
 		exemple++;
-		exemple %= nbExemples;										//On ne dépasse pas nbExemples
+		exemple %= nbExemples;													//On ne dépasse pas nbExemples
 		count++;
 
 		// Affichages de temps en temps ...
@@ -340,7 +340,7 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		{
 			//cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
 			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
-			cout << "Progression " << min(int(100 * m_maximal_distance / maxDist), 100) << "% - " << count / nbExemples << " boucles."<< endl;
+			cout << "Progression " << min(int(100 * m_maximal_distance / maxDist), 100) << "% - " << count / nbExemples << " boucles." << endl;
 			cout << "Distance moyenne : " << (totalDistance / nbExemples) << " - distance maximale : " << maxDist << endl;
 			t1 = clock();
 		}

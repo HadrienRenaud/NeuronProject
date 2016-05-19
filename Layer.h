@@ -1,9 +1,7 @@
 #ifndef LAYERJK_H
 #define LAYERJK_H
 
-#include <vector>
-#include "Neuron.h"
-#include "Network.h"
+#include "config.h"
 
 typedef double (*transfert)(double);
 

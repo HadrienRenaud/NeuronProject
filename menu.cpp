@@ -3,8 +3,6 @@
 
 using namespace std;
 
-const char g_alphabet[LENGTH_ALPHABET] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-
 void menu(SDL_Renderer *ren)
 {
 	bool			quitLoop					= false;
@@ -14,6 +12,7 @@ void menu(SDL_Renderer *ren)
 	int				compteurTest				= 0;
 	int				nombreTests					= 0;
 	int				posRep						= 0;
+	int length_alphabet = LENGTH_ALPHABET ;
 	char			testedImageName[150]		= "";
 	char			testedImageNameFull[200]	= "";
 	char			testedImageText[150]		= "";
@@ -80,8 +79,10 @@ void menu(SDL_Renderer *ren)
 	renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 	SDL_RenderPresent(ren);
 
+	length_alphabet = getLenghtAlphabet();
+
 	cout << "Recuperation des reseaux ... " << flush;
-	NetworkArray* tablo_net = new NetworkArray;
+	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
 
 	tablo_net->getMostRecent();
 	cout << "Reseaux recuperes." << endl;
@@ -247,7 +248,7 @@ void menu(SDL_Renderer *ren)
 			databaseButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
-			database(!caseDatabase.hasBeenPressed(), true);
+			database(!caseDatabase.hasBeenPressed(), true, length_alphabet);
 		}
 		else if (filterButton.hasBeenPressed() || keyboardInput[5])
 		{
@@ -340,4 +341,29 @@ void keyboard(SDL_Event event, bool* keyboardInput)
 		break;
 
 	}
+}
+
+int getLenghtAlphabet()
+{
+	ifstream	optionsFile(NAME_CONFIG_FILE);
+	string		line;
+	string		cmdName;
+	string		bin;
+	string		cmdValueStr;
+	int cmdValue = LENGTH_ALPHABET;
+
+	while (getline(optionsFile, line))
+	{
+		if (!(line.length() == 0 || line[0] == '#'))
+		{
+			istringstream line_stream(line);
+			line_stream >> cmdName;
+			line_stream >> bin;
+			line_stream >> cmdValueStr;
+
+			if (cmdName == "length_alphabet")
+				cmdValue = atoi(cmdValueStr.c_str());
+		}
+	}
+	return cmdValue;
 }

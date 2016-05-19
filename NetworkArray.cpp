@@ -2,21 +2,17 @@
 
 using namespace std;
 
-const char g_alphabet[LENGTH_ALPHABET] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-
-
-
-NetworkArray::NetworkArray() :
-	m_tablo_net(new Network*[LENGTH_ALPHABET]),
+NetworkArray::NetworkArray(int length_alphabet) :
+	m_length_alphabet(length_alphabet),
+	m_tablo_net(new Network*[length_alphabet]),
 	m_maximal_distance(MAXIMAL_DISTANCE),
 	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
-	m_alphabet(g_alphabet),
 	m_momentum(ALPHA)
-{
-	cout << "Creation des reseaux ... " << flush;
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
 	{
-		m_tablo_net[i] = new Network(g_alphabet[i]);							//Le réseau
+	cout << "Creation des reseaux ... " << flush;
+	for (int i = 0; i < m_length_alphabet; ++i)
+	{
+		m_tablo_net[i]	= new Network(CHARS[i]);							//Le réseau
 		//Layer* l = new Layer(adresse du réseau, nombre de neurones dans la couche, adresse de la couche précédente, adresse de la couche suivante, fonction de transfert des neuronres de la couche);
 		Layer*	l1		= new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0);	//première couche
 		Layer*	l2		= new Layer(m_tablo_net[i], 100, l1, 0);				//seconde
@@ -29,7 +25,7 @@ NetworkArray::NetworkArray() :
 NetworkArray::~NetworkArray()
 {
 	cout << "Sauvegarde et destruction des reseaux ... " << flush;
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+	for (int i = 0; i < m_length_alphabet; ++i)
 	{
 		m_tablo_net[i]->save();
 		delete m_tablo_net[i];
@@ -66,7 +62,7 @@ void NetworkArray::learnAllNetworks()
 	cout << "Initialisation effectuee en " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." << endl << endl;
 
 	//Apprentissage
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+	for (int i = 0; i < m_length_alphabet; ++i)
 	{
 		m_tablo_net[i]->learnNetwork(nb_exemples, tabloFichiers, inputs);
 		cout << endl << endl;
@@ -78,24 +74,23 @@ char NetworkArray::testNetworks(double input[])
 	//initialisation
 	char	lettre_trouvee('_');
 	double	maxi(LOWER_BOUND_DISTINCTION);
-	double	exp_output[LENGTH_ALPHABET][LAST_LAYER_SIZE];
+	double	exp_output[m_length_alphabet][LAST_LAYER_SIZE];
 
 	//tests
 	cout << "Resultats : ";
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)	//pour chaque réseau
+	for (int i = 0; i < m_length_alphabet; ++i)	//pour chaque réseau
 	{											//on récupère la réponse
 		m_tablo_net[i]->initNetwork(input);
 		m_tablo_net[i]->launch(exp_output[i]);
-
 		//on l'affiche si elle est suffisement grande
 		if (exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
-			cout << g_alphabet[i] << " : " << exp_output[i][0] * 100 << "% -- ";
+			cout << CHARS[i] << " : " << exp_output[i][0] * 100 << "% -- ";
 
 		//on trouve le maximum des réponses aux premiers réseaux
 		if (maxi < exp_output[i][0])	//On modifie maxi si elle est supérieure
 		{
 			maxi			= exp_output[i][0];
-			lettre_trouvee	= g_alphabet[i];
+			lettre_trouvee	= CHARS[i];
 		}
 	}
 	cout << endl;
@@ -104,14 +99,14 @@ char NetworkArray::testNetworks(double input[])
 
 void NetworkArray::getMostRecent()
 {
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->getMostRecent();
 }
 
 void NetworkArray::getLettresTestees()
 {
 	cout << "NetworkArray : " << this << " tablo_net : " << m_tablo_net << endl;
-	for (int j = 0; j < LENGTH_ALPHABET; ++j)
+	for (int j = 0; j < m_length_alphabet; ++j)
 		m_tablo_net[j]->getLettreTestee();
 	cout << endl;
 }
@@ -123,7 +118,7 @@ double NetworkArray::getMaximalDistance()
 void NetworkArray::setMaximalDistance(double maximal_distance)
 {
 	cout << "Les reseaux changent pour une distance maximale apres apprentissage de " << maximal_distance << endl;
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->setMaximalDistance(maximal_distance);
 	m_maximal_distance = maximal_distance;
 }
@@ -135,7 +130,7 @@ int NetworkArray::getMaxLimitLoop()
 void NetworkArray::setMaxLimitLoop(int maxLimitLoop)
 {
 	cout << "Les reseaux changent pour une limite de boucles d'apprentissage de " << maxLimitLoop << endl;
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->setMaxLimitLoop(maxLimitLoop);
 	m_maxLimitLoop = maxLimitLoop;
 }
@@ -148,7 +143,7 @@ void NetworkArray::setMomentum(double momentum)
 {
 	cout << "Les reseaux changent pour un moment d'inertie de " << momentum << endl;
 	m_momentum = momentum;
-	for (int i = 0; i < LENGTH_ALPHABET; ++i)
+	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->setMomentum(momentum);
 }
 
@@ -193,8 +188,6 @@ void NetworkArray::setOptions()
 					cmdValue = atoi(cmdValueStr.c_str());
 					setMaxLimitLoop(cmdValue);
 				}
-				else
-					throw string("Option non reconnue");
 			}
 			catch (string const erreur)
 			{

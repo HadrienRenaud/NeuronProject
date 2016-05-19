@@ -1,16 +1,9 @@
 #ifndef BUTTONS_H_INCLUDED
 #define BUTTONS_H_INCLUDED
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <fstream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <string.h>
-#include <dirent.h>
-#include <math.h>
+#include "config.h"
+
+using namespace std;
 
 SDL_Surface* emptyButton(int skin, int width, int height);
 

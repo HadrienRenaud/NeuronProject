@@ -1,8 +1,7 @@
 #include "database.h"
 #include "filtres2.h"
 
-
-void database(bool sauvegarde, bool filtre)
+void database(bool sauvegarde, bool filtre, int length_alphabet)
 {
 	int **	pixelsR = NULL;
 	int **	pixelsG = NULL;
@@ -42,7 +41,7 @@ void database(bool sauvegarde, bool filtre)
 			{
 				cout << endl << "Chargement : " << 100 * compteurPolices / nombrePolices << "% - ";
 				cout << ep->d_name << " : traitement ... " << flush;
-				filterPngs(ep->d_name, sauvegarde, filtre, pixelsR, pixelsG, pixelsB);
+				filterPngs(ep->d_name, sauvegarde, filtre, pixelsR, pixelsG, pixelsB, length_alphabet);
 				compteurPolices++;
 				cout << endl << "Traitee." << endl;
 			}
@@ -65,10 +64,10 @@ void database(bool sauvegarde, bool filtre)
 
 }
 
-void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB)
+void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB, int length_alphabet)
 {
-	int		i							= 0;
-	char	caracteres[CHARNUMBER][2]	= CHARS;
+	int		i								= 0;
+	char	caracteres[LENGTH_ALPHABET][2]	= CHARSBIS;
 
 	char	pathFont[150];
 	char	pathPng[150];
@@ -95,7 +94,7 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 	{
 		cout << "Police chargee !" << endl;
 		cout << "Creation des images : ";
-		for (i = 0; i < CHARNUMBER; i++)
+		for (i = 0; i < length_alphabet; i++)
 		{
 			pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i);
 
@@ -137,9 +136,8 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 
 void pathNames(char* pathPng, char* pathTxt, char* nameFont, const char* repertoryPng, const char* repertoryTxt, int i)
 {
-	char	caracteres[CHARNUMBER][2] = CHARS;
+	char	caracteres[LENGTH_ALPHABET][2] = CHARSBIS;
 	char	namePng[150];
-
 
 	strcpy(namePng, caracteres[i]);
 	if (i < 26)

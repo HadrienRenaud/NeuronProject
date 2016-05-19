@@ -1,34 +1,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include "Layer.h"
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cstdlib>
-#include <ctime>
-#include <iomanip>
-#include <algorithm>
-using namespace std;
-
-#define DIR_EXEMPLE				"texts/"//dossier ou sont contenus tous les fichiers d'exemples
-#define g_dir_test				"test/"
-#define g_dir_svg				"svg_reseau/"
-#define g_nom_svg				"plus_recent_"
-#define g_extension_svg			".svg_reseau"
-#define FIRST_LAYER_SIZE		400		//nombre de neurones de la première couche
-#define LAST_LAYER_SIZE			1		//nombe de neurones de la dernière couche
-#define ALPHA					0.05	//momentum, quantité d'inertie
-#define MAX_LENGTH_NAME_FILE	100
-#define NB_LEARNING				10
-#define MAXIMAL_DISTANCE		0.05
-#define MAX_LIMIT_LOOP			500
-#define LENGTH_ALPHABET			52
-#define LOWER_BOUND_DISTINCTION	0.05
-#define MAX_LIMIT_CASE			10000
-#define NAME_CONFIG_FILE		"NeuronProject.cfg"
+#include "config.h"
 
 class Layer;//on dit qu'on va utiliser la classe layer
 class Network {

@@ -1,16 +1,7 @@
 #ifndef SYSTEM_H_INCLUDED
 #define SYSTEM_H_INCLUDED
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <fstream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <string.h>
-#include <dirent.h>
-#include <math.h>
+#include "config.h"
 
 SDL_Renderer*	init(SDL_Window *window);
 void			quit(SDL_Window *window);

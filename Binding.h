@@ -1,7 +1,9 @@
 #ifndef BLINDING_H
 #define BLINDING_H
 
-#include "Neuron.h"
+#include "config.h"
+
+using namespace std;
 
 class Neuron;	//on dit qu'on va utiliser la classe Neuron
 class Binding {	//la classe liaison est composé du neurone source et d'un poids, un neurone a autant de Bindings que de neurones prédecesseurs.

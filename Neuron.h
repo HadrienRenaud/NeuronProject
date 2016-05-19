@@ -1,15 +1,7 @@
 #ifndef NEURONJK_H
 #define NEURONJK_H
 
-#define THRESHOLD 0
-
-#include <vector>
-#include <cmath>
-#include "Layer.h"
-#include "Binding.h"
-
-#define PENTE	1						//demi-pente de la sigmoide à l'origine
-#define MU		0.9						//taux d'apprentissage 0<MU<1
+#include "config.h"
 
 typedef double (*transfert)(double);	//on défini un format de pointeur de fonction, on l'invoquera avec le mot transfert
 										//ce format est destiné à contenir les fonctions de transfert des neurones

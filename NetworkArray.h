@@ -1,19 +1,15 @@
 #ifndef NETWORKARRAY_H_INCLUDED
 #define NETWORKARRAY_H_INCLUDED
 
-#include "Network.h"
-#include <stdexcept>
-#include <string>
-#include <dirent.h>		//Pour la gestion du répertoire d'images
-#include <time.h>
+#include "config.h"
 
-#define DOSSIERTEXTES "texts/"	//Le sous-dossier où seront créés les textes
+using namespace std;
 
 class Network;
 
 class NetworkArray {
 public:
-	NetworkArray();		//constructeur
+	NetworkArray(int length_alphabet = LENGTH_ALPHABET);		//constructeur
 	~NetworkArray();	//destructeur
 	//METHODES
 	char testNetworks(double input[]);
@@ -36,13 +32,14 @@ private:
 	double		m_maximal_distance;
 	int			m_maxLimitLoop;
 	const char* m_alphabet;
+	int m_length_alphabet;
 	double		m_momentum;
 };
 
 template <class T>
 void displayArray(T* data, int length);																						//affichage d'un tableau
-bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory = DIR_EXEMPLE);
-int		countExemples(string directory = DIR_EXEMPLE);																		//compte les exemples dans directory
-void	getArrayOfFileNames(char** tabloFichier, string directory = DIR_EXEMPLE);											// lit le tableau correspondant à une image
-void	getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory = DIR_EXEMPLE);	// récupère tous les tablos d'exemples
+bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory = DOSSIERTEXTES);
+int		countExemples(string directory = DOSSIERTEXTES);																	//compte les exemples dans directory
+void	getArrayOfFileNames(char** tabloFichier, string directory = DOSSIERTEXTES);											// lit le tableau correspondant à une image
+void	getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory = DOSSIERTEXTES);	// récupère tous les tablos d'exemples
 #endif	//NETWORKARRAY_H_INCLUDED
