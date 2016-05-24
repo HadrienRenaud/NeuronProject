@@ -12,7 +12,7 @@ void menu(SDL_Renderer *ren)
 	int				compteurTest				= 0;
 	int				nombreTests					= 0;
 	int				posRep						= 0;
-	int length_alphabet = LENGTH_ALPHABET ;
+	int				length_alphabet				= LENGTH_ALPHABET;
 	char			testedImageName[150]		= "";
 	char			testedImageNameFull[200]	= "";
 	char			testedImageText[150]		= "";
@@ -350,7 +350,7 @@ int getLenghtAlphabet()
 	string		cmdName;
 	string		bin;
 	string		cmdValueStr;
-	int cmdValue = LENGTH_ALPHABET;
+	int			cmdValue = LENGTH_ALPHABET;
 
 	while (getline(optionsFile, line))
 	{

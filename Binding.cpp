@@ -2,21 +2,22 @@
 #include <iostream>
 using namespace std;
 
+/* constructeur par défaut inutile */
 Binding::Binding() :
 	m_neuron(0),
 	m_weight(0)
 {
 	m_previousStep = 0.0;
-}																//constructeur par défaut inutile
+}
+/* constructeur vraiment utilisé */
 Binding::Binding(Neuron* neuron, double weight) :
 	m_neuron(neuron),
 	m_weight(weight)
 {
 	m_previousStep = 0.0;
-}																										//constructeur vraiment utilisé
+}
 Binding::~Binding()
 {
-	//coucou
 }
 
 Neuron* Binding::getNeuron() const

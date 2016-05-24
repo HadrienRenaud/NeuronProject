@@ -1,5 +1,4 @@
 #include "buttons.h"
-#include "system.h"
 
 using namespace std;
 
@@ -286,8 +285,3 @@ SDL_Surface* emptyButton(int skin, int width, int height)
 	return empty;
 
 }
-
-
-
-
-
