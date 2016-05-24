@@ -1,56 +1,121 @@
 #ifndef NEURONJK_H
 #define NEURONJK_H
+//! fichier contenant la classe neurone et les fonctions de transfert utiles
+
 
 #include "config.h"
 
-typedef double (*transfert)(double);	//on défini un format de pointeur de fonction, on l'invoquera avec le mot transfert
-										//ce format est destiné à contenir les fonctions de transfert des neurones
+//! pointeur de fonction
+/*! On défini un format de pointeur de fonction, on l'invoquera avec le mot transfert
+    Ce format est destiné à contenir les fonctions de transfert des neurones */
+typedef double (*transfert)(double);
 
-class Binding;							//on indique que l'on va se servir de la class Binding
-class Layer;							//idem
+class Binding;	//on indique que l'on va se servir de la class Binding
+class Layer;	//idem
+
+//! Classe represantant un neurone
 class Neuron {
 
 public:
-//constructeur par défaut, contructeur de copie et constructeur que l'on utilise vraiment dans le programme
+	//!constructeur par défaut, contructeur de copie et constructeur que l'on utilise vraiment dans le programme
 	Neuron();
-	Neuron(const Neuron& neuron);				//pour le constructeur de copie, on associe à la copie : la mm fonction de transfert, la mm couche et les memes liaisons vers les meme neurones,
-	Neuron(Layer* layer, transfert trsf = 0);	//si aucune fonction de transfert n'est donné en paramètre, on prend une sigmoide
-	~Neuron();									//destructeur
-//METHODES
-	void setTransfert(double (*)(double));		//changer la fonction de transfert
-	transfert	getTransfert() const;			//fonction de transfert
-	Layer*		getLayer() const;
-	int			getBindingsNumber() const;		//donne le nombre de liaisons avec les neurones des couches PRECEDENTES
-	void		receive();						//le neurone récupère la somme pondérée des outputs des neurones des couches d'avant auxquels il est connecté
-	void		sendGradient();					//le neurone envoie son propre gradient aux neurones précedents, pondérée par le poids de chaque liaison
-	void		addBinding(Binding* binding);	//nouvelle liaison
-	void		addBinding(Neuron* neuron, double weight = 1);
-	double		getInput() const;
-	double		getOutput() const;
-	double		getGradient() const;
-	bool		initNeuron(double input);					//remet à 0 l'input. Si le neuron est dans la première couche du réseau, input est pris en compte.
-	bool		initNeuronGradient(double expectedOutput);	//mm chose qu'au dessus, Si le réseau est dans la dernière couche, assignation de expectedOutput est autorisée
-	Binding*	getBinding(int n);							//récupérer la liaison d'indice n
-	int			getIndexInLayer() const;					//connaître la position du neuron dans sa couche
-	void		learn();									//algo d'apprentissage. cette méthode est invoqué par learn() de la class couche, qui est elle-mêe invpquée par learn() de la class réseau. cette dernière est appelée dans le main
 
+	//! Le constructeur de copie, associe à la copie : la meme fonction de transfert, la meme couche et les memes liaisons vers les memes neurones,
+	Neuron(const Neuron& neuron);
+
+	//! Si aucune fonction de transfert n'est donné en paramètre, on prend une sigmoide
+	Neuron(Layer* layer, transfert trsf = 0);
+
+	//! Destructeur
+	~Neuron();
+
+//METHODES
+
+	//! Changer la fonction de transfert
+	void setTransfert(double (*)(double));
+
+	//! Retourne la fonction de transfert
+	transfert	getTransfert() const;
+
+	//! Retourne la couche parente du neurone
+	Layer*		getLayer() const;
+
+	//! Donne le nombre de liaisons avec les neurones des couches PRECEDENTES
+	int			getBindingsNumber() const;
+
+	//! Le neurone récupère la somme pondérée des outputs des neurones des couches d'avant auxquels il est connecte
+	void		receive();
+
+	//! Le neurone envoie son propre gradient aux neurones précedents, pondérée par le poids de chaque liaison
+	void		sendGradient();
+	//! nouvelle liaison
+	/*!
+	    \param binding ajoute binding à [m_bindings](@m_bindings)
+	 */
+	void		addBinding(Binding* binding);
+	//! nouvelle liaison
+	/*!
+	    \param binding ajoute binding à [m_bindings](@m_bindings)
+	 */
+	void		addBinding(Neuron* neuron, double weight = 1);
+
+	//! Retourne l'entree du neurone
+	double		getInput() const;
+
+	//! Retourne la sortie du neurone
+	double		getOutput() const;
+
+	//! Retourne le gradient du neurone
+	double		getGradient() const;
+	//! Remet à 0 l'input.
+	/*!
+	   Si le neuron est dans la première couche du réseau, input est pris en compte.
+	 */
+	bool		initNeuron(double input);
+	//! Remet à zero l'output.
+	/*!
+	    Si le réseau est dans la dernière couche, assignation de expectedOutput est autorisée
+	 */
+	bool		initNeuronGradient(double expectedOutput);
+
+	//! Récupérer la liaison d'indice n
+	Binding*	getBinding(int n);
+
+	//! Connaître la position du neuron dans sa couche
+	int			getIndexInLayer() const;
+
+	//! Algorithme d'apprentissage
+	void		learn();
 
 private:
-	double					m_input;		//somme pondérée des entrées
-	double					m_output;		//transfert(m_input)
-	transfert				m_trsf;			//fonction de transfert du neuron
-	Layer*					m_layer;		//couche à laquelle il appartient
-	std::vector<Binding*>	m_bindings;		//l'ensemble des liaisons (neurones sources, et non successeurs)
-	int						m_indexInLayer;	//position du neuron dans sa couche
-	double					m_gradient;		//gradient du neurone
 
+	//! Somme pondérée des entrées
+	double m_input;
+
+	//! Sortie = transfert(m_input)
+	double m_output;
+
+	//! Fonction de transfert du neuron
+	transfert m_trsf;
+
+	//! Couche à laquelle il appartient
+	Layer* m_layer;
+
+	//! L'ensemble des liaisons (neurones sources, et non successeurs)
+	std::vector<Binding*> m_bindings;
+
+	//! Position du neuron dans sa couche
+	int	m_indexInLayer;
+
+	//! Gradient du neurone
+	double m_gradient;
 };
 
 //2 couples (fonction,dérivée)
-double	threshold(double input);
-double	threshold1(double input);
+double	threshold(double input);	//! fonction de transfert 1
+double	threshold1(double input);	//! fonction de transfert 2
 
-double	sigmo(double input);
-double	sigmo1(double input);
+double	sigmo(double input);		//! Derivee de la fonction de transfert 1
+double	sigmo1(double input);		//! Derivee de la fonction de transfert 1
 
 #endif
