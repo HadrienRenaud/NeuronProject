@@ -123,10 +123,10 @@ double NetworkArray::testAll(string directory)
 
 	//On compte le nombre de succes
 	for (int i = 0; i < nb_exemples; ++i)
-		if (testNetworks(inputs[i]) == tabloFichiers[i][0], false )
+		if (testNetworks(inputs[i], false ) == tabloFichiers[i][0])
 			succes++;
 
-	return succes / nb_exemples;
+	return (double)succes / (double)nb_exemples;
 
 }
 

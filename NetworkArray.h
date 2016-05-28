@@ -29,10 +29,10 @@ public:
 
 	//! Teste toutes les entrees du repertoire de teste
 	/*! Fait passer toutes les entrees dans les reseaux
-	    \param directory string (optionnal : default = DOSSIERTEST ) dossier de test
+	    \param directory string (optionnal : default = DOSSIERTESTTEXT ) dossier de test
 	    \return stat double ratio of succes
 	 */
-	double testAll(string directory = DOSSIERTEST);
+	double testAll(string directory = DOSSIERTESTTEXT);
 
 	//! Lance l'apprentissage des reseaux.
 	/*!	Chaque reseau apprend l'un après l'autre sur les exemples donnes dans DOSSIERTEXTES,
