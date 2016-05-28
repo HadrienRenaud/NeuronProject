@@ -69,7 +69,7 @@ void NetworkArray::learnAllNetworks()
 	}
 }
 
-char NetworkArray::testNetworks(double input[])
+char NetworkArray::testNetworks(double input[], bool verbose)
 {
 	//initialisation
 	char	lettre_trouvee('_');
@@ -77,13 +77,14 @@ char NetworkArray::testNetworks(double input[])
 	double	exp_output[m_length_alphabet][LAST_LAYER_SIZE];
 
 	//tests
-	cout << "Resultats : ";
+	if (verbose)
+		cout << "Resultats : ";
 	for (int i = 0; i < m_length_alphabet; ++i)	//pour chaque réseau
 	{											//on récupère la réponse
 		m_tablo_net[i]->initNetwork(input);
 		m_tablo_net[i]->launch(exp_output[i]);
 		//on l'affiche si elle est suffisement grande
-		if (exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
+		if (verbose && exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
 			cout << CHARS[i] << " : " << exp_output[i][0] * 100 << "% -- ";
 
 		//on trouve le maximum des réponses aux premiers réseaux
@@ -93,9 +94,42 @@ char NetworkArray::testNetworks(double input[])
 			lettre_trouvee	= CHARS[i];
 		}
 	}
-	cout << endl;
+	if (verbose)
+		cout << endl;
 	return lettre_trouvee;
 }
+
+double NetworkArray::testAll(string directory)
+{
+	//nombre d'exemples à traiter
+	int const nb_exemples(countExemples(directory));
+
+	//compteur de succes
+	int succes = 0;
+
+	// Initialisation des tableaux contenant les donnees des exemples
+	char**		tabloFichiers	= new char*[nb_exemples];
+	double**	inputs			= new double*[nb_exemples];
+
+	for (int i = 0; i < nb_exemples; ++i)
+	{
+		tabloFichiers[i]	= new char[MAX_LENGTH_NAME_FILE];
+		inputs[i]			= new double[FIRST_LAYER_SIZE];
+	}
+
+	//Récupération des données des fichiers
+	getArrayOfFileNames(tabloFichiers, directory);						//on récupère les noms des ficheirs d'exemples
+	getArrayOfExemples(tabloFichiers, inputs, nb_exemples, directory);	//on récupère les donnees des exemples
+
+	//On compte le nombre de succes
+	for (int i = 0; i < nb_exemples; ++i)
+		if (testNetworks(inputs[i]) == tabloFichiers[i][0], false )
+			succes++;
+
+	return succes / nb_exemples;
+
+}
+
 
 void NetworkArray::getMostRecent()
 {

@@ -22,9 +22,17 @@ public:
 	//! Teste l'entree sur les reseaux.
 	/*!	Fait passer l'entree dans les reseaux et retourne la lettre du reseau maximal.
 	    \param input entree du reseau
+	    \param verbose bool (optionnal : default = true ) si true : affiche les infos de sortie
 	    \return la sortie la plus probable, ou '_' si aucun reseau n'a plus de LOWER_BOUND_DISTINCTION
 	 */
-	char testNetworks(double input[]);
+	char testNetworks(double input[], bool verbose = true);
+
+	//! Teste toutes les entrees du repertoire de teste
+	/*! Fait passer toutes les entrees dans les reseaux
+	    \param directory string (optionnal : default = DOSSIERTEST ) dossier de test
+	    \return stat double ratio of succes
+	 */
+	double testAll(string directory = DOSSIERTEST);
 
 	//! Lance l'apprentissage des reseaux.
 	/*!	Chaque reseau apprend l'un après l'autre sur les exemples donnes dans DOSSIERTEXTES,
@@ -101,7 +109,7 @@ int		countExemples(string directory = DOSSIERTEXTES);
 //! Recupere les noms des fichiers dans un dossier, les met dans le `tabloFichiers` passe en argument
 void	getArrayOfFileNames(char** tabloFichier, string directory = DOSSIERTEXTES);
 
-//! Récupère tous les tablos d'exemples
+//! Récupère tous les tableaux d'exemples
 void	getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory = DOSSIERTEXTES);
 
 #endif		//NETWORKARRAY_H_INCLUDED
