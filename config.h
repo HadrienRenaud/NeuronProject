@@ -50,7 +50,7 @@
 #define TESTING_BACKGROUND_DIMENSIONS	300
 #define REFRESH_TIME					0.2
 //! La taille du fichier .txt créé pour chaque image : actuellement, 20 x 20 = nombres entre 0 et 1
-#define TAILLE						400
+#define TAILLE						20
 #define MANUAL_RESIZE_MULTIPLIER	4
 #define TAILLEMAX					10000
 #define BACKGROUNDCOLOR				255, 255, 255

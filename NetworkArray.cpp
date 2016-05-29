@@ -108,24 +108,43 @@ double NetworkArray::testAll(string directory)
 	int succes = 0;
 
 	// Initialisation des tableaux contenant les donnees des exemples
-	char**		tabloFichiers	= new char*[nb_exemples];
-	double**	inputs			= new double*[nb_exemples];
+	char** tabloFichiers = new char*[nb_exemples];
 
 	for (int i = 0; i < nb_exemples; ++i)
-	{
-		tabloFichiers[i]	= new char[MAX_LENGTH_NAME_FILE];
-		inputs[i]			= new double[FIRST_LAYER_SIZE];
-	}
+		tabloFichiers[i] = new char[MAX_LENGTH_NAME_FILE];
+
+	// contenu du fichier d'exemple
+	double input[FIRST_LAYER_SIZE];
 
 	//Récupération des données des fichiers
-	getArrayOfFileNames(tabloFichiers, directory);						//on récupère les noms des ficheirs d'exemples
-	getArrayOfExemples(tabloFichiers, inputs, nb_exemples, directory);	//on récupère les donnees des exemples
+	getArrayOfFileNames(tabloFichiers, directory);
 
 	//On compte le nombre de succes
+	cout << "Test en cours de " << nb_exemples << " fichiers ..." << endl;
 	for (int i = 0; i < nb_exemples; ++i)
-		if (testNetworks(inputs[i], false ) == tabloFichiers[i][0])
-			succes++;
+	{
+		readExemple(tabloFichiers[i], input, FIRST_LAYER_SIZE, directory);	//on lit l'exemple
+		if (testNetworks(input, false ) == tabloFichiers[i][0])				// on le teste
+			succes++;														//on incrémente succes, si c'est un succes
+		if (i % ( nb_exemples / 100 ) == 0 )
+		{
+			cout << "Progress : [";
+			for (int j = 0; j < 51; ++j)
+			{
+				if (j <= i / (nb_exemples / 50))
+					cout << '=';
+				else if ( j == i / (nb_exemples / 50) + 1)
+					cout << '>';
+				else
+					cout << ' ';
+			}
+			cout << "] : " << i / ( nb_exemples / 100 ) << "% \r" << flush;
+		}
+	}
+	cout << endl;
+	cout << "Test effectué !" << endl;
 
+	// On retourne la proportion de succes
 	return (double)succes / (double)nb_exemples;
 
 }
