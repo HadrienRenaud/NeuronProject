@@ -92,6 +92,7 @@
 #include "buttons.h"
 #include "Network.h"
 #include "Binding.h"
+#include "script.h"
 
 using namespace std;
 
