@@ -24,10 +24,9 @@ NetworkArray::NetworkArray(int length_alphabet) :
 
 NetworkArray::~NetworkArray()
 {
-	cout << "Sauvegarde et destruction des reseaux ... " << flush;
+	cout << "Destruction des reseaux ... " << flush;
 	for (int i = 0; i < m_length_alphabet; ++i)
 	{
-		m_tablo_net[i]->save();
 		delete m_tablo_net[i];
 	}
 	delete[] m_tablo_net;
@@ -244,6 +243,14 @@ void NetworkArray::setOptions()
 			}
 		}
 	}
+}
+
+void NetworkArray::save()
+{
+	cout<< "Sauvegarde des réseaux ... " << flush;
+	for (int i = 0; i < m_length_alphabet; ++i)
+		m_tablo_net[i]->save();
+	cout << "Réseaux sauvegardés !" << endl;
 }
 
 

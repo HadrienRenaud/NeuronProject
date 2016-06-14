@@ -79,6 +79,8 @@ public:
 //! Fixe le nombre maximal de boucles d'apprentissage a effectuer a chaque apprentissage
 	void	setMaxLimitLoop(int maxLimitLoop);
 
+	void save();
+
 private:
 	//! Le tableau des networks
 	Network**	m_tablo_net;
