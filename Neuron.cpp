@@ -1,4 +1,4 @@
-#include "Neuron.h"
+#include "config.h"
 #include <iostream>
 using namespace std;
 
@@ -121,7 +121,7 @@ bool Neuron::initNeuronGradient(double expectedOutput)
 	//on initialise le gradient du neurone à une valeur différente de 0, seulement si le neurone est dans la dernière couche.
 	if (getLayer()->getNetwork()->getLastLayer() == getLayer())
 	{
-		m_gradient = /*2*/ sigmo1(m_input) * (expectedOutput - m_output);	//le x2 est dans la poly mais pas sur wiki
+		m_gradient = /* 2 * */ sigmo1(m_input) * (expectedOutput - m_output);	//le x2 est dans la poly mais pas sur wiki
 		return true;
 	}
 	//on peut initialiser le gradient de n'impote quel neurone à 0.

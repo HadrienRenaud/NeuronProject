@@ -1,5 +1,4 @@
 #include "database.h"
-#include "filtres2.h"
 
 void database(bool sauvegarde, bool filtre, int length_alphabet)
 {

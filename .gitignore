@@ -69,3 +69,4 @@ bin/Release/NeuronProject.exe
 obj/Release/*
 **.cfg
 NeuronProject
+*.gcc-flags.json

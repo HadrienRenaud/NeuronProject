@@ -12,7 +12,7 @@ void menu(SDL_Renderer *ren)
 	int				compteurTest				= 0;
 	int				nombreTests					= 0;
 	int				posRep						= 0;
-	int length_alphabet = LENGTH_ALPHABET ;
+	int				length_alphabet				= LENGTH_ALPHABET;
 	char			testedImageName[150]		= "";
 	char			testedImageNameFull[200]	= "";
 	char			testedImageText[150]		= "";
@@ -300,6 +300,13 @@ void menu(SDL_Renderer *ren)
 			previousButton.renderButton(ren, xMouse, yMouse);
 			SDL_RenderPresent(ren);
 		}
+		else if (keyboardInput[0])
+		{
+			keyboardInput[0] = false;
+			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
+			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << tablo_net->testAll() << endl << endl;
+
+		}
 		else
 			SDL_RenderPresent(ren);
 	}
@@ -312,6 +319,10 @@ void menu(SDL_Renderer *ren)
 void keyboard(SDL_Event event, bool* keyboardInput)
 {
 	switch (event.key.keysym.sym) {
+	case SDLK_a:
+		keyboardInput[0] = true;
+		break;
+
 	case SDLK_c:
 		keyboardInput[2] = true;
 		break;
@@ -350,7 +361,7 @@ int getLenghtAlphabet()
 	string		cmdName;
 	string		bin;
 	string		cmdValueStr;
-	int cmdValue = LENGTH_ALPHABET;
+	int			cmdValue = LENGTH_ALPHABET;
 
 	while (getline(optionsFile, line))
 	{

@@ -8,11 +8,11 @@ NetworkArray::NetworkArray(int length_alphabet) :
 	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
 	m_length_alphabet(length_alphabet),
 	m_momentum(ALPHA)
-	{
+{
 	cout << "Creation des reseaux ... " << flush;
 	for (int i = 0; i < m_length_alphabet; ++i)
 	{
-		m_tablo_net[i]	= new Network(CHARS[i]);							//Le réseau
+		m_tablo_net[i] = new Network(CHARS[i]);									//Le réseau
 		//Layer* l = new Layer(adresse du réseau, nombre de neurones dans la couche, adresse de la couche précédente, adresse de la couche suivante, fonction de transfert des neuronres de la couche);
 		Layer*	l1		= new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0);	//première couche
 		Layer*	l2		= new Layer(m_tablo_net[i], 100, l1, 0);				//seconde
@@ -30,7 +30,7 @@ NetworkArray::~NetworkArray()
 		m_tablo_net[i]->save();
 		delete m_tablo_net[i];
 	}
-	delete m_tablo_net;
+	delete[] m_tablo_net;
 	cout << "Reseaux detruits !" << endl;
 }
 
@@ -69,7 +69,7 @@ void NetworkArray::learnAllNetworks()
 	}
 }
 
-char NetworkArray::testNetworks(double input[])
+char NetworkArray::testNetworks(double input[], bool verbose)
 {
 	//initialisation
 	char	lettre_trouvee('_');
@@ -77,13 +77,14 @@ char NetworkArray::testNetworks(double input[])
 	double	exp_output[m_length_alphabet][LAST_LAYER_SIZE];
 
 	//tests
-	cout << "Resultats : ";
+	if (verbose)
+		cout << "Resultats : ";
 	for (int i = 0; i < m_length_alphabet; ++i)	//pour chaque réseau
 	{											//on récupère la réponse
 		m_tablo_net[i]->initNetwork(input);
 		m_tablo_net[i]->launch(exp_output[i]);
 		//on l'affiche si elle est suffisement grande
-		if (exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
+		if (verbose && exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
 			cout << CHARS[i] << " : " << exp_output[i][0] * 100 << "% -- ";
 
 		//on trouve le maximum des réponses aux premiers réseaux
@@ -93,22 +94,66 @@ char NetworkArray::testNetworks(double input[])
 			lettre_trouvee	= CHARS[i];
 		}
 	}
-	cout << endl;
+	if (verbose)
+		cout << endl;
 	return lettre_trouvee;
 }
+
+double NetworkArray::testAll(string directory)
+{
+	//nombre d'exemples à traiter
+	int const nb_exemples(countExemples(directory));
+
+	//compteur de succes
+	int succes = 0;
+
+	// Initialisation des tableaux contenant les donnees des exemples
+	char** tabloFichiers = new char*[nb_exemples];
+
+	for (int i = 0; i < nb_exemples; ++i)
+		tabloFichiers[i] = new char[MAX_LENGTH_NAME_FILE];
+
+	// contenu du fichier d'exemple
+	double input[FIRST_LAYER_SIZE];
+
+	//Récupération des données des fichiers
+	getArrayOfFileNames(tabloFichiers, directory);
+
+	//On compte le nombre de succes
+	cout << "Test en cours de " << nb_exemples << " fichiers ..." << endl;
+	for (int i = 0; i < nb_exemples; ++i)
+	{
+		readExemple(tabloFichiers[i], input, FIRST_LAYER_SIZE, directory);	//on lit l'exemple
+		if (testNetworks(input, false ) == tabloFichiers[i][0])				// on le teste
+			succes++;														//on incrémente succes, si c'est un succes
+		if (i % ( nb_exemples / 100 ) == 0 )
+		{
+			cout << "Progress : [";
+			for (int j = 0; j < 51; ++j)
+			{
+				if (j <= i / (nb_exemples / 50))
+					cout << '=';
+				else if ( j == i / (nb_exemples / 50) + 1)
+					cout << '>';
+				else
+					cout << ' ';
+			}
+			cout << "] : " << i / ( nb_exemples / 100 ) << "% \r" << flush;
+		}
+	}
+	cout << endl;
+	cout << "Test effectué !" << endl;
+
+	// On retourne la proportion de succes
+	return (double)succes / (double)nb_exemples;
+
+}
+
 
 void NetworkArray::getMostRecent()
 {
 	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->getMostRecent();
-}
-
-void NetworkArray::getLettresTestees()
-{
-	cout << "NetworkArray : " << this << " tablo_net : " << m_tablo_net << endl;
-	for (int j = 0; j < m_length_alphabet; ++j)
-		m_tablo_net[j]->getLettreTestee();
-	cout << endl;
 }
 
 double NetworkArray::getMaximalDistance()

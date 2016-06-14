@@ -21,7 +21,7 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 
 Network::~Network()
 {
-	delete m_nameFile;		//allocation dynamique
+	delete[] m_nameFile;	//allocation dynamique
 	delete m_firstLayer;	//supprime TOUTES les couches
 }
 
