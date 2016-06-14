@@ -3,10 +3,10 @@
 using namespace std;
 
 NetworkArray::NetworkArray(int length_alphabet) :
-	m_length_alphabet(length_alphabet),
 	m_tablo_net(new Network*[length_alphabet]),
 	m_maximal_distance(MAXIMAL_DISTANCE),
 	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
+	m_length_alphabet(length_alphabet),
 	m_momentum(ALPHA)
 	{
 	cout << "Creation des reseaux ... " << flush;

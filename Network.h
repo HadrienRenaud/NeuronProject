@@ -20,7 +20,7 @@ public:
 	int		getTotalLayerNumber();							//nombre de couches dans le réseau
 	void	increaseTotalBindingsNumber(int n = 1);			//agmenter
 	bool	isALoop() const;								//tester si le réseau boucle sur lui mm
-	void launch(double output[]);							//lancer la propagation, le pointeur length est
+	void    launch(double output[]);							//lancer la propagation, le pointeur length est
 															//destiné à stocké la taille du tableau retourné
 	bool	launchGradient();								//lancer la rétropropagation du gradient
 	bool	learn();										//;)

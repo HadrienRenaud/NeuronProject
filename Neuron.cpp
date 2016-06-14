@@ -72,7 +72,7 @@ void Neuron::sendGradient()	//rétrop propager le gradient aux neurones des couc
 {
 	for (int i = 0; i < (int)m_bindings.size(); i++)
 		m_bindings[i]->getNeuron()->m_gradient += (m_gradient * (m_bindings[i]->getWeight()) /*trsf[1]*/ * sigmo1(m_bindings[i]->getNeuron()->m_input));
-	// gradien_du_neurone_précédent+=(gradient_actuel*pods_de_la_liaison*dérivée_de_sigmo_en(m_input));
+	// gradien_du_neurone_précédent+=(gradient_actuel*poids_de_la_liaison*dérivée_de_sigmo_en(m_input));
 }
 
 void Neuron::addBinding(Binding* binding)
@@ -108,7 +108,7 @@ bool Neuron::initNeuron(double input)	//on autorise de regler l'input si et seul
 	{
 		m_input	= input;
 		if (input != input)
-			cout << "Neuron : initNeuron : if_fisrtlayer : input : " << input << endl;
+			cout << "Neuron : initNeuron : if_firstlayer : input : " << input << endl;
 		m_output = m_trsf(m_input);
 		return true;
 	}
