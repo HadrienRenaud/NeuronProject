@@ -3,10 +3,10 @@
 using namespace std;
 
 NetworkArray::NetworkArray(int length_alphabet) :
-	m_length_alphabet(length_alphabet),
 	m_tablo_net(new Network*[length_alphabet]),
 	m_maximal_distance(MAXIMAL_DISTANCE),
 	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
+	m_length_alphabet(length_alphabet),
 	m_momentum(ALPHA)
 {
 	cout << "Creation des reseaux ... " << flush;
@@ -24,10 +24,9 @@ NetworkArray::NetworkArray(int length_alphabet) :
 
 NetworkArray::~NetworkArray()
 {
-	cout << "Sauvegarde et destruction des reseaux ... " << flush;
+	cout << "Destruction des reseaux ... " << flush;
 	for (int i = 0; i < m_length_alphabet; ++i)
 	{
-		m_tablo_net[i]->save();
 		delete m_tablo_net[i];
 	}
 	delete[] m_tablo_net;
@@ -244,6 +243,14 @@ void NetworkArray::setOptions()
 			}
 		}
 	}
+}
+
+void NetworkArray::save()
+{
+	cout<< "Sauvegarde des réseaux ... " << flush;
+	for (int i = 0; i < m_length_alphabet; ++i)
+		m_tablo_net[i]->save();
+	cout << "Réseaux sauvegardés !" << endl;
 }
 
 

@@ -81,10 +81,10 @@ void menu(SDL_Renderer *ren)
 
 	length_alphabet = getLenghtAlphabet();
 
-	cout << "Recuperation des reseaux ... " << flush;
+	cout << "Recuperation des " << length_alphabet <<" reseaux ... " << flush;
 	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
 
-	tablo_net->getMostRecent();
+	// tablo_net->getMostRecent();
 	cout << "Reseaux recuperes." << endl;
 
 	double input[FIRST_LAYER_SIZE];
@@ -163,7 +163,7 @@ void menu(SDL_Renderer *ren)
 			ep					= readdir(dp);
 			compteurTest++;
 
-			if (ep != NULL && compteurTest < nombreTests)
+			if (ep != NULL && compteurTest - 2 < nombreTests)
 			{
 				while (strlen(ep->d_name) < 4)
 				{
@@ -206,12 +206,12 @@ void menu(SDL_Renderer *ren)
 					testedImageName[strlen(testedImageName) - 4] = '\0';	//On enlève le .png
 					strcat(testedImageName, ".txt");						// On ajoutee le .txt
 
-					cout << "testedImageName : " << testedImageName << endl;
+					cout << "Image testee : " << testedImageName << endl;
 					if (readExemple(testedImageText, input, FIRST_LAYER_SIZE, DOSSIERTESTTEXT))
 						testResult[strlen(testResult) - 1] = tablo_net->testNetworks(input);
 					else
 						testResult[strlen(testResult) - 1] = '_';
-					cout << "testResult : " << testResult << endl;
+					cout << "Resultat du test : " << testResult << endl;
 
 					resultTest				= TTF_RenderText_Blended(TTF_OpenFont("resources/font_test.ttf", 30), testResult, color);
 
@@ -268,7 +268,7 @@ void menu(SDL_Renderer *ren)
 			if (!caseLearn.hasBeenPressed())
 			{
 				delete tablo_net;
-				NetworkArray* tablo_net = new NetworkArray;
+				NetworkArray* tablo_net = new NetworkArray(length_alphabet);
 				tablo_net->learnAllNetworks();
 			}
 			else
@@ -310,6 +310,7 @@ void menu(SDL_Renderer *ren)
 		else
 			SDL_RenderPresent(ren);
 	}
+	tablo_net->save();
 	delete tablo_net;
 }
 
@@ -352,29 +353,4 @@ void keyboard(SDL_Event event, bool* keyboardInput)
 		break;
 
 	}
-}
-
-int getLenghtAlphabet()
-{
-	ifstream	optionsFile(NAME_CONFIG_FILE);
-	string		line;
-	string		cmdName;
-	string		bin;
-	string		cmdValueStr;
-	int			cmdValue = LENGTH_ALPHABET;
-
-	while (getline(optionsFile, line))
-	{
-		if (!(line.length() == 0 || line[0] == '#'))
-		{
-			istringstream line_stream(line);
-			line_stream >> cmdName;
-			line_stream >> bin;
-			line_stream >> cmdValueStr;
-
-			if (cmdName == "length_alphabet")
-				cmdValue = atoi(cmdValueStr.c_str());
-		}
-	}
-	return cmdValue;
 }

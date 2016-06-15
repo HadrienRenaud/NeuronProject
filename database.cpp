@@ -91,7 +91,7 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 	}
 	else
 	{
-		cout << "Police chargee !" << endl;
+		cout << "Police chargee : " << pathFont << endl;
 		cout << "Creation des images : ";
 		for (i = 0; i < length_alphabet; i++)
 		{
