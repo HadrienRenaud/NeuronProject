@@ -56,6 +56,9 @@
 #define BACKGROUNDCOLOR       255, 255, 255
 #define TEXTCOLOR         0, 0, 0
 #define TEXTSIZE          280
+//! Length of inputs in topology module
+//* The image is of format TOPOLOGY_INPUT_SIZE*TOPOLOGY_INPUT_SIZE
+#define TOPOLOGY_INPUT_SIZE 200
 
 //! dossier contenant les polices
 #define DOSSIERPOLICES "fonts/"
