@@ -96,6 +96,7 @@
 #include "Network.h"
 #include "Binding.h"
 #include "script.h"
+#include "topology.h"
 
 using namespace std;
 

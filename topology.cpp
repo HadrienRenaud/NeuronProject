@@ -2,63 +2,74 @@
 
 using namespace std;
 
-int nbConnectedComponent(double *image, int n) {
+ToMatrix::ToMatrix(const int nbRow, const int nbCol)
+    : m_nbRow(nbRow), m_nbCol(nbCol) {}
+int ToMatrix::operator()(int row, int col) { return m_nbCol * row + col; }
+const int ToMatrix::getRow() const { return m_nbRow; }
+const int ToMatrix::getCol() const { return m_nbCol; }
+bool ToMatrix::isValid(int row, int col) {
+  return row > -1 && row < getRow() && col > -1 && col < getCol();
+}
+
+void print_matrix(int *matrix, ToMatrix t) {
+  std::cout << "Matrix : " << t.getRow() << " - " << t.getCol() << std::endl;
+  for (size_t i = 0; i < t.getRow(); i++) {
+    for (size_t j = 0; j < t.getCol(); j++) {
+      std::cout << matrix[t(i, j)] << " " << flush;
+    }
+    std::cout << std::endl;
+  }
+}
+
+void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t) {
+  if (t.isValid(row + 1, col) && matAux[t(row + 1, col)] == 0 &&
+      matrix[t(row + 1, col)] == 1) {
+    matAux[t(row + 1, col)] = matAux[t(row, col)];
+    changeConnected(row + 1, col, matrix, matAux, t);
+  }
+  if (t.isValid(row - 1, col) && matAux[t(row - 1, col)] == 0 &&
+      matrix[t(row - 1, col)] == 1) {
+    matAux[t(row - 1, col)] = matAux[t(row, col)];
+    changeConnected(row - 1, col, matrix, matAux, t);
+  }
+  if (t.isValid(row, col + 1) && matAux[t(row, col + 1)] == 0 &&
+      matrix[t(row, col + 1)] == 1) {
+    matAux[t(row, col + 1)] = matAux[t(row, col)];
+    changeConnected(row, col + 1, matrix, matAux, t);
+  }
+  if (t.isValid(row, col - 1) && matAux[t(row, col - 1)] == 0 &&
+      matrix[t(row, col - 1)] == 1) {
+    matAux[t(row, col - 1)] = matAux[t(row, col)];
+    changeConnected(row, col - 1, matrix, matAux, t);
+  }
+}
+
+int nbConnectedComponent(double *image, const int taille) {
   int compteur = 0;
-  int matrix[n][n];
-  int matAux[n][n];
+  int matrix[taille * taille];
+  int matAux[taille * taille] = {};
+  ToMatrix t;
 
-  // table to matrix
-  for (size_t i = 0; i < n; i++) {
-    for (size_t j = 0; j < n; j++) {
-      matrix[i][j] = (int)floor(table[i * n + j] * 2);
+  for (size_t i = 0; i < taille * taille; i++) {
+    if (image[i] * 2 >= 1) {
+      matrix[i] = 1;
+    } else {
+      matrix[i] = 0;
     }
   }
-
-  // Initialisation of matAux
-  matAux[0][0] = 0;
-  // 1st line
-  for (size_t j = 1; j < n; j++) {
-    if (matrix[0][j] == 1) {
-      if (matrix[0][j - 1] > 0) {
-        matrix[0][j] = matrix[0][j - 1];
-      } else {
+  // print_matrix(matrix, t);
+  // print_matrix(matAux, t);
+  for (size_t i = 1; i < taille; i++) {
+    for (size_t j = 1; j < taille; j++) {
+      if (matrix[t(i, j)] == 1 and matAux[t(i, j)] == 0) {
         compteur++;
-        matrix[0][j] = compteur;
+        matAux[t(i, j)] = compteur;
+        changeConnected(i, j, matrix, matAux, t);
       }
     }
   }
-  // 1st column
-  for (size_t i = 1; i < n; i++) {
-    if (matrix[i][0] == 1) {
-      if (matrix[i - 1][0] > 0) {
-        matrix[i][0] = matrix[i - 1][0];
-      } else {
-        compteur++;
-        matrix[i][0] = compteur;
-      }
-    }
 
-    // Go
-    for (size_t i = 1; i < n; i++) {
-      for (size_t j = 1; j < n; j++) {
-        if (matrix[i][j] == 1) {
-          matAux[i][j] = max(max(matrix[i - 1][j - 1], matrix[i - 1][j]),
-                             matrix[i][j - 1]);
-          if (matAux[i][j] == 0) {
-            compteur++;
-            matAux[i][j] = compteur;
-          }
-        }
-      }
-    }
+  // print_matrix(matAux, t);
 
-    // Return
-    for (size_t i = n - 1; i > -1; i--) {
-      for (size_t j = n - 1; j > -1; j--) {
-        if (matrix[i][j] == 1) {
-        }
-      }
-    }
-
-    return compteur;
-  }
+  return compteur;
+}
