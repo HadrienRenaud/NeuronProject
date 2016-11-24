@@ -38,6 +38,7 @@ Thumbs.db
 
 # Specifics to NeuronProject #
 ##############################
+# Files
 *.svg_reseau
 *.png
 *.csv
@@ -52,14 +53,6 @@ Thumbs.db
 **.o
 **.exe
 .~lock.**
-svg_reseau/**
-fonts/**
-texts/**
-test/**
-test_texts/**
-images/**
-bin/**
-obj/**
 **.unc-backup**
 **.sh
 **.ttf
@@ -70,3 +63,15 @@ obj/Release/*
 **.cfg
 NeuronProject
 *.gcc-flags.json
+
+# Directories
+svg_reseau/**
+fonts/**
+texts/**
+test/**
+test_texts/**
+text_texts/**
+fonts/**
+images/**
+bin/**
+obj/**

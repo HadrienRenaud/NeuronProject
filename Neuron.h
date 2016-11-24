@@ -50,12 +50,12 @@ void  receive();
 void  sendGradient();
 //! nouvelle liaison
 /*!
-    \param binding ajoute binding à [m_bindings](@m_bindings)
+    \param binding ajoute binding à [bindings_](@bindings_)
  */
 void  addBinding(Binding* binding);
 //! nouvelle liaison
 /*!
-    \param binding ajoute binding à [m_bindings](@m_bindings)
+    \param binding ajoute binding à [bindings_](@bindings_)
  */
 void  addBinding(Neuron* neuron, double weight = 1);
 
@@ -90,25 +90,25 @@ void  learn();
 private:
 
 //! Somme pondérée des entrées
-double m_input;
+double input_;
 
-//! Sortie = transfert(m_input)
-double m_output;
+//! Sortie = transfert(input_)
+double output_;
 
 //! Fonction de transfert du neuron
-transfert m_trsf;
+transfert trsf_;
 
 //! Couche à laquelle il appartient
-Layer* m_layer;
+Layer* layer_;
 
 //! L'ensemble des liaisons (neurones sources, et non successeurs)
-std::vector<Binding*> m_bindings;
+std::vector<Binding*> bindings_;
 
 //! Position du neuron dans sa couche
-int m_indexInLayer;
+int indexInLayer_;
 
 //! Gradient du neurone
-double m_gradient;
+double gradient_;
 };
 
 //2 couples (fonction,dérivée)

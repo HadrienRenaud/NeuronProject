@@ -9,77 +9,77 @@ class Layer; //on dit qu'on va utiliser la classe layer
 class Network {
 public:
 //! Constructeur par defaut (vide)
-Network();
+	Network();
 //! Constructeur utilise
 /*!
    initialise tous les attributs :
    \param lettre_testee lettre dont s'occupera le reseau
    \param nom_fichier string qui servira a stocke le nom du fichier pendant les recuperations, sauvegardes
-   \param maximal_distance initialisation de l'attribut [m_maximal_distance](@maximal_distance)
+   \param maximal_distance initialisation de l'attribut [maximal_distance_](@maximal_distance)
  */
-Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
+	Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
 
 //! Destructeur
-~Network();
+	~Network();
 
 
 //! Changer la première couche
-void setFirstLayer(Layer* layer = 0);
+	void setFirstLayer(Layer* layer = 0);
 
 //! Retourne la premiere couche du reseau
-Layer* getFirstLayer() const;
+	Layer* getFirstLayer() const;
 
 //! Retourne la derniere couche du reseau
-Layer* getLastLayer() const;
+	Layer* getLastLayer() const;
 
 //! Retourne la taille de la premiere couche = taille de l'entree a fournir
-int  getFirstLayerSize() const;
+	int  getFirstLayerSize() const;
 
 //! Initialiser pour la propagation normale
-void initNetwork(double* inputs);
+	void initNetwork(double* inputs);
 
 //! Initialiser pour la rétropropagation
-void initNetworkGradient(double* expectedOutputs);
+	void initNetworkGradient(double* expectedOutputs);
 
 //! Nombre de liaisons dans le réseau
-int  getTotalBindingsNumber() const;
+	int  getTotalBindingsNumber() const;
 
 //! Nombre de couches dans le réseau
-int  getTotalLayerNumber();
+	int  getTotalLayerNumber();
 
 //! Augmenter le nombre de bindings de n (par defaut de 1)
-void increaseTotalBindingsNumber(int n = 1);
+	void increaseTotalBindingsNumber(int n = 1);
 
 //! Tester si le réseau boucle sur lui mm
-bool isALoop() const;
+	bool isALoop() const;
 
 //! Lancer la propagation
-void launch(double output[]);
+	void launch(double output[]);
 
 //! Lancer la rétropropagation du gradient
-bool launchGradient();
+	bool launchGradient();
 
 //! Algorithme d'apprentissage (tout initialise)
-bool learn();
+	bool learn();
 
 //! Sauver l'etat du réseau
-void save();
+	void save();
 
 //! Fixe le moment d'inertie à momentum
-void setMomentum(double momentum);
+	void setMomentum(double momentum);
 
 //! Retourne le moment d'inertie du reseau
-double getMomentum();
+	double getMomentum();
 
 //! Fonction appelée pour récupérer à partir d'un fichier
-void recuperateur();
+	void recuperateur();
 
 
 //! Actualise le réseau
-void getMostRecent();
+	void getMostRecent();
 
 //! Ecrit le resultat de l'apprentissage dans un fichier
-void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
+	void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
 
 //! Apprentissage sur la base de donnee
 /*!
@@ -88,56 +88,56 @@ void writeReport(bool resultat, int count, double distance_moyenne, double temps
    \param tabloFichiers tableau de nb_exemples noms de fichiers sur lesquels apprendre, la sortie attendue pour chaque fichier etant la premiere lettre du nom
    \param inputs entree a donner au reseau
  */
-void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
+	void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
 
 
 //! Retourne la lettre testee par le reseau
-char getLettreTestee();
+	char getLettreTestee();
 
 //! Fixe la lettre testee par le reseau
-void setLettreTestee(char lettre_testee);
+	void setLettreTestee(char lettre_testee);
 
 //! Retourne la distance maximale en fin d'apprentissage productif
-double getMaximalDistance();
+	double getMaximalDistance();
 
 //! Fixe la distance maximale en fin d'apprentissage productif
-void setMaximalDistance(double maximal_distance);
+	void setMaximalDistance(double maximal_distance);
 
 //! Retourne le nombre maximal de boucles d'apprentissage a effectuer par le reseau
-int  getMaxLimitLoop();
+	int  getMaxLimitLoop();
 
 //! Fixe le nombre maximal de boucles d'apprentissage a effectuer par le reseau
-void setMaxLimitLoop(int maxLimitLoop);
+	void setMaxLimitLoop(int maxLimitLoop);
 
 private:
 
 //! Pointeur vers la premiere couche
 /*! Seule la premiere couche suffit, le reseau fonctionne comme une liste chainee */
-Layer* m_firstLayer;
+	Layer* firstLayer_;
 
 //! Nombre total de liaison dans le reseau
-int m_totalBindingsNumber;
+	int totalBindingsNumber_;
 
-//! On procede à la propagation seulement si m_initialized est vrai
-bool m_initialized;
+//! On procede à la propagation seulement si initialized_ est vrai
+	bool initialized_;
 
-//! On procede à la retropropagation seulement si m_gradientInitialized est vrai
-bool m_gradientInitialized;
+//! On procede à la retropropagation seulement si gradientInitialized_ est vrai
+	bool gradientInitialized_;
 
 //! Facteur d'inertie, par defaut define -> ALPHA
-double m_momentum;
+	double momentum_;
 
 //! Distance maximale en fin d'apprentissage productif
-double m_maximal_distance;
+	double maximal_distance_;
 
 //! Nombre maximal de boucles d'apprentissage a effectuer
-int m_maxLimitLoop;
+	int maxLimitLoop_;
 
 //! Lettre testee par le neurone
-char m_testedLetter;
+	char testedLetter_;
 
 //! Nom du fichier dans lequel le reseau est sauvegarde/ recupere
-char* m_nameFile;
+	char* nameFile_;
 };
 
 template <class T>
