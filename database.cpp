@@ -2,23 +2,23 @@
 
 void database(bool sauvegarde, bool filtre, int length_alphabet)
 {
-	int **	pixelsR = NULL;
-	int **	pixelsG = NULL;
-	int **	pixelsB = NULL;
+	int ** pixelsR = NULL;
+	int ** pixelsG = NULL;
+	int ** pixelsB = NULL;
 
 	pixelsR = (int**)malloc(TAILLEMAX * sizeof(int*));
 	pixelsG = (int**)malloc(TAILLEMAX * sizeof(int*));
 	pixelsB = (int**)malloc(TAILLEMAX * sizeof(int*));
 	for (int i = 0; i < TAILLEMAX; i++)
 	{
-		pixelsR[i]	= (int*)malloc(sizeof(int) * TAILLEMAX);
-		pixelsG[i]	= (int*)malloc(sizeof(int) * TAILLEMAX);
-		pixelsB[i]	= (int*)malloc(sizeof(int) * TAILLEMAX);
+		pixelsR[i] = (int*)malloc(sizeof(int) * TAILLEMAX);
+		pixelsG[i] = (int*)malloc(sizeof(int) * TAILLEMAX);
+		pixelsB[i] = (int*)malloc(sizeof(int) * TAILLEMAX);
 	}
 
 
-	int				nombrePolices = 0, compteurPolices = 0;
-	DIR *			dp;
+	int nombrePolices = 0, compteurPolices = 0;
+	DIR *   dp;
 	struct dirent * ep;
 
 	dp = opendir(DOSSIERPOLICES);
@@ -65,23 +65,23 @@ void database(bool sauvegarde, bool filtre, int length_alphabet)
 
 void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB, int length_alphabet)
 {
-	int		i								= 0;
-	char	caracteres[LENGTH_ALPHABET][2]	= CHARSBIS;
+	int i        = 0;
+	char caracteres[LENGTH_ALPHABET][2] = CHARSBIS;
 
-	char	pathFont[150];
-	char	pathPng[150];
-	char	pathTxt[150];
+	char pathFont[150];
+	char pathPng[150];
+	char pathTxt[150];
 
 	strcpy(pathFont, DOSSIERPOLICES);
 	strcat(pathFont, nameFont);
 
-	SDL_Surface *	texte		= NULL;
-	SDL_Surface *	background	= SDL_CreateRGBSurface(SDL_SWSURFACE, 400, 400, 32, 0, 0, 0, 0);
-	SDL_Rect		dest;
+	SDL_Surface * texte  = NULL;
+	SDL_Surface * background = SDL_CreateRGBSurface(SDL_SWSURFACE, 400, 400, 32, 0, 0, 0, 0);
+	SDL_Rect dest;
 	SDL_FillRect(background, NULL, SDL_MapRGB(background->format, BACKGROUNDCOLOR));
 
-	SDL_Color	color	= { TEXTCOLOR };
-	TTF_Font *	font	= TTF_OpenFont(pathFont, TEXTSIZE);
+	SDL_Color color = { TEXTCOLOR };
+	TTF_Font * font = TTF_OpenFont(pathFont, TEXTSIZE);
 
 	if (font == NULL)
 	{
@@ -98,12 +98,12 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 			pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i);
 
 			cout << caracteres[i] << " " << flush;
-			texte	= TTF_RenderText_Solid(font, caracteres[i], color);
+			texte = TTF_RenderText_Solid(font, caracteres[i], color);
 
-			dest.x	= background->w / 2 - texte->w / 2;
-			dest.y	= background->h / 2 - texte->h / 2;
-			dest.w	= texte->w;
-			dest.h	= texte->h;
+			dest.x = background->w / 2 - texte->w / 2;
+			dest.y = background->h / 2 - texte->h / 2;
+			dest.w = texte->w;
+			dest.h = texte->h;
 			SDL_BlitSurface(texte, NULL, background, &dest);
 
 
@@ -135,8 +135,8 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 
 void pathNames(char* pathPng, char* pathTxt, char* nameFont, const char* repertoryPng, const char* repertoryTxt, int i)
 {
-	char	caracteres[LENGTH_ALPHABET][2] = CHARSBIS;
-	char	namePng[150];
+	char caracteres[LENGTH_ALPHABET][2] = CHARSBIS;
+	char namePng[150];
 
 	strcpy(namePng, caracteres[i]);
 	if (i < 26)

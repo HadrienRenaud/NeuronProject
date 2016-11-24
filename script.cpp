@@ -6,6 +6,7 @@ void scriptFile(ifstream &input)
 {
     std::vector<string> cmdsVect;
 	string cmdName;
+	int compteur(0);
 
     while(input >> cmdName)
     {
@@ -13,7 +14,7 @@ void scriptFile(ifstream &input)
     }
 
     string cmds[cmdsVect.size()];
-    for (int i = 0; i < (int)cmdsVect.size(); ++i)
+    for (unsigned int i = 0; i < (int)cmdsVect.size(); ++i)
         cmds[i]=cmdsVect[i];
 
     std::cout << cmdsVect.size() << "\n";
@@ -37,7 +38,7 @@ void commands(int nbCmds, string cmds[])
         {
             if (tablo_net)
                 delete tablo_net;
-            tablo_net = new NetworkArray(length_alphabet);
+            NetworkArray* tablo_net = new NetworkArray(length_alphabet);
         }
 
         else if (cmds[i] == "save")
@@ -77,7 +78,7 @@ int getLenghtAlphabet()
 	string		cmdName;
 	string		bin;
 	string		cmdValueStr;
-	int			cmdValue = LENGTH_ALPHABET;
+	int		cmdValue = LENGTH_ALPHABET;
 
 	while (getline(optionsFile, line))
 	{

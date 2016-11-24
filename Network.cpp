@@ -21,41 +21,54 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 
 Network::~Network()
 {
-	delete[] m_nameFile;	//allocation dynamique
-	delete m_firstLayer;	//supprime TOUTES les couches
+	delete[] m_nameFile;  //allocation dynamique
+	delete m_firstLayer;  //supprime TOUTES les couches
 }
 
 void Network::recuperateur()
 {
-	ifstream	file(m_nameFile);	// On ouvre le fichier
-	int			nbTotalLayer, lengthLayer, i, j;
-	double		weight;
-	char*		pEnd(0);
-	Neuron*		neurone;
-	string		ligne, weight_str, neurone_str;
-	Layer *		layer(getFirstLayer());
+	// On ouvre le fichier
+	ifstream file(m_nameFile);
 
-	file >> nbTotalLayer;											// On lit le nombre total de couches
-	file >> lengthLayer;											// On lit le nombre de neurones de la premiere couche, dont on a pas besoin de récupérer les liasons
+	// Declarations
+	int nbTotalLayer, lengthLayer, i, j;
+	double weight;
+	char*  pEnd(0);
+	Neuron*  neurone;
+	string ligne, weight_str, neurone_str;
+	Layer *  layer(getFirstLayer());
 
-	while (getline(file, ligne))									// pour chaque couche
+	// On lit le nombre total de couches
+	file >> nbTotalLayer;
+	// On lit le nombre de neurones de la premiere couche, dont on a pas besoin de récupérer les liasons
+	file >> lengthLayer;
+
+	// pour chaque couche
+	while (getline(file, ligne))
 	{
-		istringstream ligne_stream(ligne);							//objet crée pour le traitement de la ligne récupérée
-		i = 0;														// initialisation de l'indice du neurone recevant la liaison sur le couche layer
-		if ( layer->getPreviousLayer() != 0 )						// si on est pas sur la première couche
+		//objet crée pour le traitement de la ligne récupérée
+		istringstream ligne_stream(ligne);
 
+		// initialisation de l'indice du neurone recevant la liaison sur le couche layer
+		i = 0;
+
+		// si on est pas sur la première couche
+		if ( layer->getPreviousLayer() != 0 )
 		{
-			while (getline(ligne_stream, neurone_str, ','))			// pour tout neurone de la couche
+			// pour tout neurone de la couche
+			while (getline(ligne_stream, neurone_str, ','))
 			{
-				j		= 0;										// indice de la liaison arrivant au neurone considéré
-				istringstream neurone_stream(neurone_str);			// objet créé pour le traitement du string récupéré
-				neurone = layer->getNeuron(i);						// neurone considéré
-				while (getline(neurone_stream, weight_str, ' '))	// pour toute liaison arrivant au neurone
+				// indice de la liaison arrivant au neurone considéré
+				j  = 0;
+
+				istringstream neurone_stream(neurone_str);   // objet créé pour le traitement du string récupéré
+				neurone = layer->getNeuron(i);   // neurone considéré
+				while (getline(neurone_stream, weight_str, ' '))   // pour toute liaison arrivant au neurone
 				{
-					if (weight_str.size())							// si ce n'est pas un faux poids vide
+					if (weight_str.size())    // si ce n'est pas un faux poids vide
 					{
-						weight = strtod(weight_str.c_str(), &pEnd);	//on récupère le poids de la liaison
-						neurone->getBinding(j)->setWeight(weight);	//on change le poids de la liaison
+						weight = strtod(weight_str.c_str(), &pEnd);    //on récupère le poids de la liaison
+						neurone->getBinding(j)->setWeight(weight);    //on change le poids de la liaison
 						j++;
 					}
 				}
@@ -63,56 +76,56 @@ void Network::recuperateur()
 			}
 		}
 		layer = layer->getNextLayer();
-		file >> lengthLayer;// on lit la longueur de la prochaine couche
+		file >> lengthLayer;  // on lit la longueur de la prochaine couche
 	}
 }
 void Network::save()
 {
 	// On trouve le nom du fichier
-	time_t			t = time(0);							// l'heure
-	ostringstream	temps;									//flux pour traitement
+	time_t t = time(0);   // l'heure
+	ostringstream temps;   //flux pour traitement
 
-	temps << asctime(localtime(&t));						//on récupère le flux correspondant au temps
-	string str_nom_fichier(temps.str());					// on crée un string correspondant au flux
-	for (int i(0); i < (int)str_nom_fichier.size(); i++)	// on parcourt le nom du fichier
-		if (!isalnum(str_nom_fichier[i]))					// et on remplace tout ce qui ne va pas dans un nom de fichier par '_'
+	temps << asctime(localtime(&t));  //on récupère le flux correspondant au temps
+	string str_nom_fichier(temps.str());  // on crée un string correspondant au flux
+	for (int i(0); i < (int)str_nom_fichier.size(); i++)  // on parcourt le nom du fichier
+		if (!isalnum(str_nom_fichier[i]))  // et on remplace tout ce qui ne va pas dans un nom de fichier par '_'
 			str_nom_fichier[i] = '_';
 	str_nom_fichier = string(DOSSIER_SVG) + str_nom_fichier + "_" + m_testedLetter + string(EXTENSION_SVG);
 	// adresse complete
 	strcpy(m_nameFile, str_nom_fichier.c_str());
 
 	//on écrit dans le fichier
-	ofstream	file(m_nameFile);										// flux sortant dans le fichier
-	file << getTotalLayerNumber() << ' ';								// on entre le nombre total de couches
-	Layer *		layer(getFirstLayer());									// on initialise la premiere couche
-	file << layer->getSize() << ' ';									// en donnant sa longueur
-	Neuron *	neurone;
-	while (layer->getNextLayer() != 0)									//pour toute couche
+	ofstream file(m_nameFile);    // flux sortant dans le fichier
+	file << getTotalLayerNumber() << ' ';  // on entre le nombre total de couches
+	Layer *  layer(getFirstLayer());   // on initialise la premiere couche
+	file << layer->getSize() << ' ';   // en donnant sa longueur
+	Neuron * neurone;
+	while (layer->getNextLayer() != 0)   //pour toute couche
 	{
-		layer = layer->getNextLayer();									// on prend la suivante
-		file << endl << layer->getSize() << ' ';						// on donne sa taille
-		for (int i(0); i < layer->getSize(); i++)						// pour tout neurone de la couche
+		layer = layer->getNextLayer();  // on prend la suivante
+		file << endl << layer->getSize() << ' '; // on donne sa taille
+		for (int i(0); i < layer->getSize(); i++) // pour tout neurone de la couche
 		{
-			neurone = layer->getNeuron(i);								// on récupère le neurone
-			for (int j(0); j < neurone->getBindingsNumber(); j++)		// pour toute liaison de la couche précédente vers ce neurone
-				file << neurone->getBinding(j)->getWeight() << ' ';		// on ajoute au fichier le poids de la liaison
-			file << ',';												//séparateur
+			neurone = layer->getNeuron(i);  // on récupère le neurone
+			for (int j(0); j < neurone->getBindingsNumber(); j++) // pour toute liaison de la couche précédente vers ce neurone
+				file << neurone->getBinding(j)->getWeight() << ' ';    // on ajoute au fichier le poids de la liaison
+			file << ',';  //séparateur
 		}
 	}
 
 	// on sauvegarde le dernier fichier enregistré dans mostRecent.txt :
-	string		mostRecent;
+	string mostRecent;
 	mostRecent = DOSSIER_SVG + string(NOM_SVG) + m_testedLetter + string(EXTENSION_SVG);
-	ofstream	fichier_recent(mostRecent.c_str());
+	ofstream fichier_recent(mostRecent.c_str());
 	fichier_recent << m_nameFile;
 }
 
 void Network::setFirstLayer(Layer* layer)
 {
-	if (layer)								//Si ce n'est pas un pointeur vide
+	if (layer) //Si ce n'est pas un pointeur vide
 		m_firstLayer = layer;
-	else									//si c'est un pointeur vide
-		m_firstLayer = new Layer(this);		// on crée une nouvelle couche
+	else  //si c'est un pointeur vide
+		m_firstLayer = new Layer(this);   // on crée une nouvelle couche
 }
 
 Layer* Network::getFirstLayer() const
@@ -122,25 +135,25 @@ Layer* Network::getFirstLayer() const
 
 Layer* Network::getLastLayer() const
 {
-	Layer* temp = m_firstLayer;	//initialisation à la première couche
+	Layer* temp = m_firstLayer; //initialisation à la première couche
 
 	do
-		temp = temp->getNextLayer();											//on parcourt les couches
-	while (temp->getNextLayer() != m_firstLayer && temp->getNextLayer() != 0);	//jusqu'à ce qu'il n'y en ai plus après
-	return temp;																//on retourne la dernière
+		temp = temp->getNextLayer();   //on parcourt les couches
+	while (temp->getNextLayer() != m_firstLayer && temp->getNextLayer() != 0); //jusqu'à ce qu'il n'y en ai plus après
+	return temp;         //on retourne la dernière
 }
 
 int Network::getTotalLayerNumber()
 {
-	Layer*	temp	= m_firstLayer;	//initialisation à la première couche
-	int		i		= 0;
+	Layer* temp = m_firstLayer; //initialisation à la première couche
+	int i  = 0;
 
 	do
 	{
-		temp = temp->getNextLayer();												//on parcourt les couches
-		i++;																		//en incrémentant le compteur
-	} while (temp->getNextLayer() != m_firstLayer && temp->getNextLayer() != 0);	//jusqu'à ce qu'il n'y en ai plus
-	return i;																		// on retourne le compteur
+		temp = temp->getNextLayer();  //on parcourt les couches
+		i++;     //en incrémentant le compteur
+	} while (temp->getNextLayer() != m_firstLayer && temp->getNextLayer() != 0); //jusqu'à ce qu'il n'y en ai plus
+	return i;           // on retourne le compteur
 }
 
 int Network::getFirstLayerSize() const
@@ -171,8 +184,8 @@ void Network::initNetworkGradient(double* expectedOutputs)
 		getLastLayer()->getNeuron(i)->initNeuronGradient(expectedOutputs[i]);
 	//dans cette boucle, on parcourt toutes les layer (sauf la dernière), et on met les gradient à zéro
 
-	Layer*	last	= getLastLayer();
-	Layer*	temp	= last;
+	Layer* last = getLastLayer();
+	Layer* temp = last;
 	do
 	{
 		temp = temp->getPreviousLayer();
@@ -181,14 +194,14 @@ void Network::initNetworkGradient(double* expectedOutputs)
 	m_gradientInitialized = true;
 }
 
-bool Network::isALoop() const	//on regarde si le réseau se mord la queue
+bool Network::isALoop() const //on regarde si le réseau se mord la queue
 {
 	Layer* temp = m_firstLayer;
 
 	do
 		temp = temp->getNextLayer();
 	while (temp != m_firstLayer && temp != 0);
-	if (temp)	//si la dernière couche est la premiere ...
+	if (temp) //si la dernière couche est la premiere ...
 		return true;
 	else
 		return false;
@@ -196,50 +209,50 @@ bool Network::isALoop() const	//on regarde si le réseau se mord la queue
 
 void Network::launch(double outputs[])
 {
-	if (m_initialized && !isALoop())	//si on est dans le cas normal : le réseau n'est pas une boucle
+	if (m_initialized && !isALoop()) //si on est dans le cas normal : le réseau n'est pas une boucle
 	{
 		Layer* temp = m_firstLayer;
 		while (temp->getNextLayer() != 0)
 		{
 			temp = temp->getNextLayer();
 			temp->calculate();
-		}	//lorsque sort, la dernière couche a été stimulée : c'est bon.
+		}  //lorsque sort, la dernière couche a été stimulée : c'est bon.
 
 		//maintenant on récupère la sortie dans un tableau
 		for (int i = 0; i < temp->getSize(); i++)
 			outputs[i] = temp->getNeuron(i)->getOutput();
 
-		m_initialized = false;	//le réseau n'est plus utilisable pour l'instant
+		m_initialized = false;  //le réseau n'est plus utilisable pour l'instant
 	}
 }
 
 
 bool Network::launchGradient()
 {
-	if (!m_gradientInitialized)	//on vérifie que le réseau a bien été intialisé
-		return 0;				//pour les gradient
-	if (!isALoop())				//si on est dans le cas normal : le réseau n'est pas une boucle
+	if (!m_gradientInitialized) //on vérifie que le réseau a bien été intialisé
+		return 0;   //pour les gradient
+	if (!isALoop()) //si on est dans le cas normal : le réseau n'est pas une boucle
 	{
 		Layer* temp = getLastLayer();
 		do
 		{
-			temp->calculateGradient();	//on calcule le gradient de la couche d'avant
+			temp->calculateGradient();  //on calcule le gradient de la couche d'avant
 			temp = temp->getPreviousLayer();
-		} while (temp != m_firstLayer);	//jusqu'à la première
-		m_gradientInitialized = false;	//le réseau n'est plus utilisable
-										//pour le moment
+		} while (temp != m_firstLayer);  //jusqu'à la première
+		m_gradientInitialized = false;  //le réseau n'est plus utilisable
+		//pour le moment
 		return true;
-	}									//pas de else, flemme de faire le cas de la boucle
+	}  //pas de else, flemme de faire le cas de la boucle
 	return 0;
 }
 
 bool Network::learn()
 {
 	launchGradient();
-	if (!isALoop())			//si on est dans le cas normal : le réseau n'est pas une boucle
+	if (!isALoop()) //si on est dans le cas normal : le réseau n'est pas une boucle
 	{
 		Layer* temp = m_firstLayer;
-		while (temp != 0)	//on parcourt une par une les couches, on dit à chacune de learn()
+		while (temp != 0)  //on parcourt une par une les couches, on dit à chacune de learn()
 		{
 			temp->learn();
 			temp = temp->getNextLayer();
@@ -261,26 +274,26 @@ void Network::setMomentum(double momentum)
 void Network::getMostRecent()
 {
 	//initialisations
-	string	str_nom_fichier;
-	string	nom_db;
+	string str_nom_fichier;
+	string nom_db;
 
 	//on reconstitue le nom du fichier :
 	nom_db = string(DOSSIER_SVG) + NOM_SVG + m_testedLetter + string(EXTENSION_SVG);
 
-	ifstream file(nom_db.c_str());	//on ouvre le fichier getMostRecent.txt
-	file >> str_nom_fichier;		//on lit son contenu
+	ifstream file(nom_db.c_str()); //on ouvre le fichier getMostRecent.txt
+	file >> str_nom_fichier; //on lit son contenu
 	strcpy(m_nameFile, str_nom_fichier.c_str());
 	cout << "Reseau " << m_testedLetter << " - recuperation de : " << str_nom_fichier << endl;
-	recuperateur();	// On récupère le réseau stocké dans le fichier de svg le plus récent
+	recuperateur(); // On récupère le réseau stocké dans le fichier de svg le plus récent
 }
 
 void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires)
 {
 	//initialisations
-	ofstream	base_donnes;
-	time_t		rawtime;
+	ofstream base_donnes;
+	time_t rawtime;
 	struct tm * timeinfo;
-	char		buffer [80];
+	char buffer [80];
 
 	time(&rawtime);
 	Layer* temp;
@@ -310,33 +323,34 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 
 void Network::learnNetwork(const int nbExemples, char** fileArray, double** inputs)
 {
-	clock_t t0(clock());//temps de départ du programme
+	clock_t t0(clock()); //temps de départ du programme
 
 	cout << endl << "Apprentissage de la lettre " << m_testedLetter << " ..." << endl << endl;
 
 	// Initialisations
-	int		exemple			= 0;					//exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
-	int		successes		= 0;					//le réseau doit enchainer nbExemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
-	int		successesInLoop = 0;
-	int		count			= 0;					//nombre de passage dans la boucle
-	double	dist			= 0;					//pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
-	double	totalDistance	= 0;
-	double	maxDist			= 0;
-	double	outputExpected[LAST_LAYER_SIZE];		//valeur attendue en sortie du réseau
-	double	outputExperimental[LAST_LAYER_SIZE];	//valeur prototypale en sortie du réseau
+	int exemple   = 0; //exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
+	int successes  = 0; //le réseau doit enchainer nbExemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
+	int successesInLoop = 0;
+	int count   = 0; //nombre de passage dans la boucle
+	double dist   = 0; //pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
+	double totalDistance = 0;
+	double maxDist   = 0;
+	double outputExpected[LAST_LAYER_SIZE]; //valeur attendue en sortie du réseau
+	double outputExperimental[LAST_LAYER_SIZE]; //valeur prototypale en sortie du réseau
 
 
 	clock_t t1(clock());
 
 	//APPRENTISSAGE
-	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples))	//tant qu'on a pas enchaîné nbExemples succès
-	{																			//incrémentation
+	while ((successes < nbExemples) && (count < m_maxLimitLoop * nbExemples)) //tant qu'on a pas enchaîné nbExemples succès
+	{
+		//incrémentation
 		exemple++;
-		exemple %= nbExemples;													//On ne dépasse pas nbExemples
+		exemple %= nbExemples;  //On ne dépasse pas nbExemples
 		count++;
 
 		// Affichages de temps en temps ...
-		if (count % (NB_LEARNING * nbExemples) == nbExemples - 1 )	//de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
+		if (count % (NB_LEARNING * nbExemples) == nbExemples - 1 )  //de temps en temps, on affiche dist et un poids(ça sert à rien le poids mais bon)
 		{
 			//cout << "count = " << count << " soit " << count / nbExemples << " boucles : ";
 			//cout << " ( " << NB_LEARNING << " boucles  en : " << ((float)(clock() - t1) / CLOCKS_PER_SEC) << " s. ) ." << endl;
@@ -349,8 +363,8 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		if (count % nbExemples == 0)
 		{
 			successesInLoop = 0;
-			totalDistance	= 0;
-			maxDist			= 0;
+			totalDistance = 0;
+			maxDist   = 0;
 		}
 
 		//Résultat attendu
@@ -360,14 +374,14 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 			outputExpected[0] = 0;
 
 		//Calcul de la réponse du réseau
-		initNetwork(inputs[exemple]);	//on initialise avec les valeurs inputs
-		launch(outputExperimental);		//on lance et on récupère les outputs
+		initNetwork(inputs[exemple]);  //on initialise avec les valeurs inputs
+		launch(outputExperimental);  //on lance et on récupère les outputs
 
 		//Calcul de l'écart
 		if (count < nbExemples * MAX_LIMIT_CASE && false)
-			dist = distance(outputExperimental, outputExpected, LAST_LAYER_SIZE );		//on calcule l'écart
+			dist = distance(outputExperimental, outputExpected, LAST_LAYER_SIZE );   //on calcule l'écart
 		else
-			dist = distanceMod(outputExperimental, outputExpected, LAST_LAYER_SIZE );	//on calcule l'écart
+			dist = distanceMod(outputExperimental, outputExpected, LAST_LAYER_SIZE );   //on calcule l'écart
 
 		//changement de maxDist et de totalDistance
 		if (dist > maxDist)
@@ -375,13 +389,13 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 		totalDistance += dist;
 
 		//On apprend, ou pas en fonction du résultat
-		if (dist < m_maximal_distance)	//si c'est assez petit, c'est un succès
+		if (dist < m_maximal_distance)  //si c'est assez petit, c'est un succès
 			successes++;
-		else							//sinon c'est un echec et le réseau recalcule les poids des liaisons
+		else  //sinon c'est un echec et le réseau recalcule les poids des liaisons
 		{
 			initNetworkGradient(outputExpected);
 			learn();
-			successes = 0;	//on réinitialise aussi les nombre de succès enchaînés
+			successes = 0;  //on réinitialise aussi les nombre de succès enchaînés
 		}
 
 	}
@@ -421,14 +435,14 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 
 	// On met à jour les données dans le fichier
 	writeReport((count < m_maxLimitLoop * nbExemples), count / nbExemples,
-				totalDistance / nbExemples, temps_mis, " ");
+	            totalDistance / nbExemples, temps_mis, " ");
 }
 
 char Network::getLettreTestee()
 {
-	return m_testedLetter;							//récupère la lettre testee.
+	return m_testedLetter; //récupère la lettre testee.
 }
-void Network::setLettreTestee(char lettre_testee)	//change la lettre
+void Network::setLettreTestee(char lettre_testee) //change la lettre
 {
 	cout << "Network " << m_testedLetter << " change de lettre et devient ";
 	m_testedLetter = lettre_testee;
@@ -454,7 +468,7 @@ void Network::setMaxLimitLoop(int maxLimitLoop)
 }
 
 template <class T>
-void displayArray(T* data, int length)	//afficher un tableau de valeur
+void displayArray(T* data, int length) //afficher un tableau de valeur
 {
 	cout << "[";
 	for ( int i = 0; i < length - 1; i++)
@@ -462,29 +476,29 @@ void displayArray(T* data, int length)	//afficher un tableau de valeur
 	cout << (data[length - 1] >= 0 ? "+" : "") << data[length - 1] << "]";
 }
 
-double distance(double* data1, double* data2, int length)			//on fait la moyenne des carrés de chaque écart entre data1 et data2
+double distance(double* data1, double* data2, int length)   //on fait la moyenne des carrés de chaque écart entre data1 et data2
 {
-	double res = 0;													//initialisation
+	double res = 0;      //initialisation
 
-	for (int i = 0; i < length; i++)								//on parcourt la liste
-		res += ((data1[i] - data2[i]) * (data1[i] - data2[i]));		//On augmente la moyenne du carré de la distance entre data1 et data2 ~ Variance
-	res /= length;													// On moyenne
+	for (int i = 0; i < length; i++) //on parcourt la liste
+		res += ((data1[i] - data2[i]) * (data1[i] - data2[i]));   //On augmente la moyenne du carré de la distance entre data1 et data2 ~ Variance
+	res /= length;      // On moyenne
 
 	return res;
 }
 
 double distanceMod(double* data1, double* data2, int length)
 {
-	double	res = 0;	//initialisation
-	int		j	= -1;	//initialisation
+	double res = 0; //initialisation
+	int j = -1; //initialisation
 
 	for (int i = 0; i < length; i++)
 	{
-		res += ((data1[i] - data2[i]) * (data1[i] - data2[i]));	//carré de la distance
-		j	= (i + 26) % length;								//position de la majuscule
-		res += ((data1[i] - data2[j]) * (data1[i] - data2[j]));	//carré de la distance à la majuscule
+		res += ((data1[i] - data2[i]) * (data1[i] - data2[i]));  //carré de la distance
+		j = (i + 26) % length;  //position de la majuscule
+		res += ((data1[i] - data2[j]) * (data1[i] - data2[j]));  //carré de la distance à la majuscule
 	}
-	res /= length * 2;											// on moyenne
+	res /= length * 2;    // on moyenne
 
 	return res;
 }
