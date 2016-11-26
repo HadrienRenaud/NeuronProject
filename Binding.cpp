@@ -3,16 +3,14 @@
 using namespace std;
 
 // Useless default constructor
-Binding::Binding() :
-	neuron_(0),
-	weight_(0)
+Binding::Binding()
+	: neuron_(0), weight_(0)
 {
 	previousStep_ = 0.0;
 }
 // Useless default constructor
-Binding::Binding(Neuron* neuron, double weight) :
-	neuron_(neuron),
-	weight_(weight)
+Binding::Binding(Neuron* neuron, double weight)
+	: neuron_(neuron), weight_(weight)
 {
 	previousStep_ = 0.0;
 }
