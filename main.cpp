@@ -5,8 +5,8 @@ using namespace std;
 
 void graphics()
 {
-	SDL_Window *	window(0);
-	SDL_Renderer *	ren = init(window);
+	SDL_Window * window(0);
+	SDL_Renderer * ren = init(window);
 
 	menu(ren);
 	SDL_DestroyRenderer(ren);
@@ -19,16 +19,16 @@ void help()
 	cout << "NeuronProject is a little software created by french students for their school project." << endl;
 	cout << endl;
 	cout<< "Usage :" <<endl;
-	cout << "	./NeuronProject" << endl;
-	cout << "	./NeuronProject [-h/--help]" << endl;
-	cout << "	./NeuronProject [-f/--file] FILE" << endl;
-	cout << "	./NeuronProject [-c/--commands] COMMANDS" << endl;
+	cout << "	./NeuronProject"<< endl;
+	cout << "	./NeuronProject [-h/--help]"<< endl;
+	cout << "	./NeuronProject [-f/--file] FILE"<< endl;
+	cout << "	./NeuronProject [-c/--commands] COMMANDS"<< endl;
 	cout << endl;
 	cout << "Options :"<< endl;
-	cout << "	[None] : default, graphics utilisation" <<endl;
-	cout << "	-h, --help : display this help file" << endl;
-	cout << "	-f, --file [FILE]: call script with FILE" << endl;
-	cout << "	-c, --commands [COMMANDS] : call script with COMMANDS" << endl;
+	cout << "	[None] : default, graphics utilisation"<<endl;
+	cout << "	-h, --help : display this help file"<< endl;
+	cout << "	-f, --file [FILE]: call script with FILE"<< endl;
+	cout << "	-c, --commands [COMMANDS] : call script with COMMANDS"<< endl;
 	cout << endl;
 }
 

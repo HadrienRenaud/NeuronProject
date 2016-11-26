@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-void	menu(SDL_Renderer *ren);
-void	keyboard(SDL_Event event, bool* keyboardInput);
+void  menu(SDL_Renderer *ren);
+void  keyboard(SDL_Event event, bool* keyboardInput);
 
-#endif	// MENU_H_INCLUDED
+#endif  // MENU_H_INCLUDED

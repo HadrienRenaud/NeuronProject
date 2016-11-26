@@ -38,6 +38,6 @@ void Binding::addWeight(double weight)
 {
 	double temp = m_weight;
 
-	m_weight		+= (weight + getNeuron()->getLayer()->getNetwork()->getMomentum() * m_previousStep);
-	m_previousStep	= m_weight - temp;
+	m_weight  += (weight + getNeuron()->getLayer()->getNetwork()->getMomentum() * m_previousStep);
+	m_previousStep = m_weight - temp;
 }
