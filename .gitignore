@@ -70,3 +70,4 @@ obj/Release/*
 **.cfg
 NeuronProject
 *.gcc-flags.json
+NeuronProject.cfg
