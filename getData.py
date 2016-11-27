@@ -7,6 +7,7 @@
 # ********************************* Imports ***********************************
 # Imports :
 import subprocess as sp
+import re
 
 # *********************************** Data ************************************
 # Data :
@@ -77,8 +78,9 @@ def get_result(commands, timeout=None, is_commands=True):
         pre_output.append(lines[l])
         l += 1
     for i, command in enumerate(commands):
+        print
         if i < len(commands) - 1:
-            while l < len(lines) and lines[l] != "Command {} : ".format(i + 1, commands[i + 1]):
+            while l < len(lines) and lines[l] != "Command {} : {}".format(i + 1, commands[i + 1]):
                 commands_output[i].append(lines[l])
                 l += 1
         else:
@@ -97,16 +99,48 @@ def get_result(commands, timeout=None, is_commands=True):
 
 def get_data_save(output):
     """Process data from save command."""
-    return output
+    if len(output) > 1 and output[1] == 'Sauvegarde des réseaux ... Réseaux sauvegardés !':
+        return True
+    else:
+        return False
 
 
 def get_data_test(output):
     """Process data from test command."""
+    if len(output) > 4 and output[3] == 'Test effectué !' and output[4] != '-nan':
+        return float(output[4])
+    else:
+        return False
+
+
+def splitter_letters_learn(output):
+    """Split output in letters."""
+    output_splited = {
+        'pre': []
+    }
+    letter = 'pre'
+    for line in output:
+        l = re.match(r"Apprentissage de la lettre (?P<letter>\S) \.\.\.", line)
+        if l:
+            letter = l
+            output_splited[letter] = [line]
+        output_splited[-1].append(line)
+    return output_splited
+
+
+def get_data_learn_single(output):
+    """Process data from one letter."""
     return output
 
 
 def get_data_learn(output):
     """Process data from learn command."""
+    output_splited = splitter_letters_learn(output)
+    succes_total = True
+    indiv = {}
+    for letter, output_l in output_splited.items():
+        if letter != 'pre':
+            indiv[letter] = get_data_learn_single(output_l)
     return output
 
 
@@ -144,5 +178,7 @@ def get_data(commands, commands_output):
 # Excecutable code :
 
 if __name__ == '__main__':
-    commands = ['save']
-    print(get_data(commands, get_result(commands)[1]))
+    commands = ['test', 'save']
+    result = get_result(commands)
+    if result:
+        print(get_data(commands, result[1]))

@@ -63,8 +63,10 @@ void commands(int nbCmds, string cmds[])
             cout << tablo_net->testAll() << endl;
         }
 
-        cout << endl << "End commands" << endl;
+        cout << endl;
     }
+
+     cout << "End commands" << endl;
 
     if (tablo_net)
         delete tablo_net;
