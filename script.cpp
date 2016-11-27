@@ -27,12 +27,11 @@ void scriptFile(ifstream &input)
 void commands(int nbCmds, string cmds[])
 {
     int length_alphabet = getLenghtAlphabet();
-    std::cout << length_alphabet << "\n";
     NetworkArray* tablo_net = new NetworkArray(length_alphabet);
 
     for (int i = 0; i < nbCmds; ++i)
     {
-        cout << i << " : " << cmds[i] <<endl;
+        cout << "Command " << i << " : " << cmds[i] <<endl;
 
         if (cmds[i] == "new")
         {
@@ -64,7 +63,7 @@ void commands(int nbCmds, string cmds[])
             cout << tablo_net->testAll() << endl;
         }
 
-        cout << endl;
+        cout << endl << "End commands" << endl;
     }
 
     if (tablo_net)

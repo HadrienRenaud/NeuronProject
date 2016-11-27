@@ -9,7 +9,7 @@ NetworkArray::NetworkArray(int length_alphabet) :
 	m_length_alphabet(length_alphabet),
 	m_momentum(ALPHA)
 {
-	cout << "Creation des reseaux ... " << flush;
+	cout << "Creation des " << m_length_alphabet << " reseaux ... " << flush;
 	for (int i = 0; i < m_length_alphabet; ++i)
 	{
 		m_tablo_net[i] = new Network(CHARS[i]);                                                                                                                 //Le réseau

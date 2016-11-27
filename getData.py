@@ -21,17 +21,17 @@ ranges = {
 # ******************************** Functions **********************************
 # Functions :
 
-def exec_NeuronProject(*cmds, timeout=None, commands=True):
+def exec_NeuronProject(commands, timeout=None, is_commands=True):
     """Execute NeuronProject.
 
-    cmds : commandes de NeuronProject
+    commands : commandes de NeuronProject
     timeout : timeout argument of subprocess.run
     """
-    if commands:
+    if is_commands:
         commands_list = ['-c']
     else:
         commands_list = []
-    output = sp.run(['./NeuronProject'] + commands_list + list(cmds),
+    output = sp.run(['./NeuronProject'] + commands_list + list(commands),
                     timeout=timeout, stdout=sp.PIPE).stdout
     return output.decode('UTF-8')
 
@@ -62,11 +62,87 @@ def print_file(file_name):
     print("\nEND.")
 
 
+def get_result(commands, timeout=None, is_commands=True):
+    """Launch NeuronProject and analyse output string to get data."""
+    output = exec_NeuronProject(commands, timeout=timeout, is_commands=is_commands)
+    lines = output.split('\n')
+    if len(commands) == 0:
+        return False
+    commands_output = [[] for c in commands]  # commands output
+    pre_output = []  # lines before commands
+    post_output = []  # lines after commands
+    good_ending = False
+    l = 0  # line number
+    while l < len(lines) and lines[l] != "Command 0 : " + commands[0]:
+        pre_output.append(lines[l])
+        l += 1
+    for i, command in enumerate(commands):
+        if i < len(commands) - 1:
+            while l < len(lines) and lines[l] != "Command {} : ".format(i + 1, commands[i + 1]):
+                commands_output[i].append(lines[l])
+                l += 1
+        else:
+            while l < len(lines) and lines[l] != 'End commands':
+                commands_output[i].append(lines[l])
+                good_ending = True
+                l += 1
+            l += 1
+    while l < len(lines):
+        post_output.append(lines[l])
+        l += 1
+    if not good_ending:
+        return False
+    return (pre_output, commands_output, post_output)
+
+
+def get_data_save(output):
+    """Process data from save command."""
+    return output
+
+
+def get_data_test(output):
+    """Process data from test command."""
+    return output
+
+
+def get_data_learn(output):
+    """Process data from learn command."""
+    return output
+
+
+def get_data_filter(output):
+    """Process data from filter command."""
+    return output
+
+
+def get_data_database(output):
+    """Process data from database command."""
+    return output
+
+
+def get_data_new(output):
+    """Process data from new command."""
+    return output
+
+
+def get_data(commands, commands_output):
+    """Get data from results."""
+    dico = {
+        'learn': get_data_learn,
+        'save': get_data_save,
+        'test': get_data_test,
+        'filter': get_data_filter,
+        'database': get_data_database,
+        'new': get_data_new,
+    }
+    data = [0 for i in range(len(commands))]
+    for i in range(len(commands)):
+        data[i] = dico[commands[i]](commands_output[i])
+    return data
+
 # ***************************** Excecutable code ******************************
 # Excecutable code :
 
 if __name__ == '__main__':
-    print(exec_NeuronProject('save'))
-    print_file('NeuronProject.cfg')
-    set_networks_settings(max_limit_loop=450)
-    print_file('NeuronProject.cfg')
+    commands = ['save']
+    print(get_data(commands, get_result(commands)[1]))
