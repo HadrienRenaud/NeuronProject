@@ -5,9 +5,6 @@
 #include <cstdio>
 #include <iostream>
 #include <fstream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include <string.h>
 #include <dirent.h>
 #include <math.h>
@@ -19,6 +16,12 @@
 #include <iomanip>
 #include <algorithm>
 #include <stdexcept>
+
+#ifndef NO_GRAPHIC
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#endif // NO_GRAPHIC
 
 #define THRESHOLD 0
 //! demi-pente de la sigmoide à l'origine
@@ -82,17 +85,20 @@
 #define EXTENSION_SVG ".svg_reseau"
 
 
-#include "menu.h"
-#include "system.h"
 #include "NetworkArray.h"
 #include "Neuron.h"
 #include "Layer.h"
-#include "filtres2.h"
-#include "database.h"
-#include "buttons.h"
 #include "Network.h"
 #include "Binding.h"
 #include "script.h"
+
+#ifndef NO_GRAPHIC
+#include "system.h"
+#include "filtres2.h"
+#include "database.h"
+#include "buttons.h"
+#include "menu.h"
+#endif // NO_GRAPHIC
 
 using namespace std;
 
