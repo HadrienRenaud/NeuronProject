@@ -65,7 +65,7 @@ void commands(int nbCmds, string cmds[])
       #ifndef NO_GRAPHIC
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
       #endif //NO_GRAPHIC
-			cout << tablo_net->testAll() << endl;
+			tablo_net->testAll();
 		}
 
 		cout << endl;

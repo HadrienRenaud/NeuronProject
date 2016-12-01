@@ -142,8 +142,10 @@ double NetworkArray::testAll(string directory)
 	}
 	cout << endl;
 	cout << "Test effectué !" << endl;
+	std::cout << "succes : " << succes << " sur " << nb_exemples << std::endl;
+	std::cout << (double)succes / (double)nb_exemples << std::endl;
 
-	if (nb_exemples==0) {
+	if ((double)nb_exemples==0) {
 		return -3.14159; // on retourne une valeur négative
 	}
 	else {
