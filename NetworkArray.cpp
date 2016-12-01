@@ -103,6 +103,12 @@ double NetworkArray::testAll(string directory)
 	//nombre d'exemples à traiter
 	int const nb_exemples(countExemples(directory));
 
+	if ((double)nb_exemples==0) {
+		return -3.14159; // on retourne une valeur négative
+	}
+
+	std::cout << "nb_exemples : " << nb_exemples << std::endl;
+
 	//compteur de succes
 	int succes = 0;
 
@@ -145,13 +151,8 @@ double NetworkArray::testAll(string directory)
 	std::cout << "succes : " << succes << " sur " << nb_exemples << std::endl;
 	std::cout << (double)succes / (double)nb_exemples << std::endl;
 
-	if ((double)nb_exemples==0) {
-		return -3.14159; // on retourne une valeur négative
-	}
-	else {
-		// On retourne la proportion de succes
-		return (double)succes / (double)nb_exemples;
-	}
+	// On retourne la proportion de succes
+	return (double)succes / (double)nb_exemples;
 
 
 }
