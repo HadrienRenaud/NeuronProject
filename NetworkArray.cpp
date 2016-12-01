@@ -144,12 +144,13 @@ double NetworkArray::testAll(string directory)
 	cout << "Test effectué !" << endl;
 
 	if (nb_exemples==0) {
-		nb_exemples = 1;
-		succes = -3.14159;
+		return -3.14159; // on retourne une valeur négative
+	}
+	else {
+		// On retourne la proportion de succes
+		return (double)succes / (double)nb_exemples;
 	}
 
-	// On retourne la proportion de succes
-	return (double)succes / (double)nb_exemples;
 
 }
 
