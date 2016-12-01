@@ -3,9 +3,10 @@
 
 #include <cstdlib>
 #include <cstdio>
+#include <string.h>
 #include <iostream>
 #include <fstream>
-#include <string.h>
+
 #include <dirent.h>
 #include <math.h>
 #include <vector>
