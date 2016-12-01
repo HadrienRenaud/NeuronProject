@@ -79,7 +79,7 @@ void recuperateur();
 void getMostRecent();
 
 //! Ecrit le resultat de l'apprentissage dans un fichier
-void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
+void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, std::string commentaires);
 
 //! Apprentissage sur la base de donnee
 /*!

@@ -32,7 +32,7 @@ char testNetworks(double input[], bool verbose = true);
     \param directory string (optionnal : default = DOSSIERTESTTEXT ) dossier de test
     \return stat double ratio of succes
  */
-double testAll(string directory = DOSSIERTESTTEXT);
+double testAll(std::string directory = DOSSIERTESTTEXT);
 
 //! Lance l'apprentissage des reseaux.
 /*!	Chaque reseau apprend l'un après l'autre sur les exemples donnes dans DOSSIERTEXTES,
