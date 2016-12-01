@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <fstream>
 
