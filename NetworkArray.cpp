@@ -146,13 +146,10 @@ double NetworkArray::testAll(string directory)
 	}
 	cout << endl;
 	cout << "Test effectué !" << endl;
-	std::cout << "succes : " << succes << " sur " << nb_exemples << std::endl;
 	std::cout << (double)succes / (double)nb_exemples << std::endl;
 
 	// On retourne la proportion de succes
 	return (double)succes / (double)nb_exemples;
-
-
 }
 
 
