@@ -8,6 +8,7 @@
 # Imports :
 import subprocess as sp
 import re
+import json
 
 # *********************************** Data ************************************
 # Data :
@@ -18,9 +19,34 @@ ranges = {
     'length_alphabet': [52],
 }
 
+data_file_name = "data.json"
+
+
+# ********************************** Classes **********************************
+# Classes :
+
+class IterRange:
+    """Iterable object itering on a dictionnary of lists."""
+
+    def __init__(self, dico, keys):
+        """Initialisor.
+
+        dico is the dictionnary to iter on.
+        """
+        self.keys = keys
+        self.ordonned_list = []
+        for key in keys:
+            assert key in dico, "dictionnary doesn't contain any key."
+            self.ordonned_list.append(dico[key])
+        self.position = [0 for k in keys]
+        return self
+
+    def next(self):
+        """Next method."""
 
 # ******************************** Functions **********************************
 # Functions :
+
 
 def exec_NeuronProject(commands, timeout=None, is_commands=True):
     """Execute NeuronProject.
@@ -141,22 +167,23 @@ def get_data_learn(output):
     for letter, output_l in output_splited.items():
         if letter != 'pre':
             indiv[letter] = get_data_learn_single(output_l)
-    return output
+            succes_total
+    return 0
 
 
 def get_data_filter(output):
     """Process data from filter command."""
-    return output
+    return 0
 
 
 def get_data_database(output):
     """Process data from database command."""
-    return output
+    return 0
 
 
 def get_data_new(output):
     """Process data from new command."""
-    return output
+    return 0
 
 
 def get_data(commands, commands_output):
@@ -173,6 +200,65 @@ def get_data(commands, commands_output):
     for i in range(len(commands)):
         data[i] = dico[commands[i]](commands_output[i])
     return data
+
+
+def read_data_file(file_name=data_file_name):
+    """Function reading the data file.
+
+    The file must be written in JSON.
+    The function construct a dictionnary with the list :
+    [ [[input],[output1],[output2], ... ],
+      [[input],[output1],[output2], ... ],
+      ...
+    ]
+    """
+    data = []
+    with open(file_name) as data_file:
+        data = json.load(data_file)
+    assert type(data) is list, "Load of JSON file failed, not compatible."
+    dico = {}
+    for elt in data:
+        assert type(elt) is list and len(elt) > 1, "Load of JSON file failed, not compatible."
+        dico[elt] = elt[1:]
+    return dico
+
+
+def write_data_file(dico, file_name=data_file_name):
+    """Function writing the dico in the file specified.
+
+    The dico must be of type :
+    {
+        [input]:[[output1],[output2] ... ],
+        [input]:[[output1],[output2] ... ],
+        ...
+    }
+    The file will be overwritten.
+    Return True if successful, False otherwise.
+    """
+    data = []
+    for inp, out in dico.items():
+        data.append([inp] + out)
+    try:
+        data_file = open(file_name, 'w')
+        json.dump(data, data_file)
+    except:
+        return False
+    return True
+
+
+def process_data(repet=20, file_name=data_file_name):
+    """Function processing the data.
+
+    Data situated in the file 'file_name' will be completed.
+    """
+    dico = read_data_file(file_name)
+    # for inp in IterRange(ranges):
+    #     if inp not in dico:
+    #         dico[inp] = [get_data(inp)]
+    #     elif len(dico[inp]) < repet + 1:
+    #         dico[inp].append(get_data(inp))
+    write_data_file(dico, file_name)
+
 
 # ***************************** Excecutable code ******************************
 # Excecutable code :
