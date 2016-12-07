@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-using namespace std;
+
 
 class Network;
 
@@ -32,7 +32,7 @@ char testNetworks(double input[], bool verbose = true);
     \param directory string (optionnal : default = DOSSIERTESTTEXT ) dossier de test
     \return stat double ratio of succes
  */
-double testAll(string directory = DOSSIERTESTTEXT);
+double testAll(std::string directory = DOSSIERTESTTEXT);
 
 //! Lance l'apprentissage des reseaux.
 /*!	Chaque reseau apprend l'un après l'autre sur les exemples donnes dans DOSSIERTEXTES,
@@ -103,15 +103,15 @@ void displayArray(T* data, int length);
 /*
    L'exemple est donne comme son nom de fichier `nom_fichier` et l'entrée recuperee sera sur `entrees`
  */
-bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory = DOSSIERTEXTES);
+bool readExemple(char* nom_fichier, double entrees[], int taille_entree, std::string directory = DOSSIERTEXTES);
 
 //! Compte les exemples dans directory
-int  countExemples(string directory = DOSSIERTEXTES);
+int  countExemples(std::string directory = DOSSIERTEXTES);
 
 //! Recupere les noms des fichiers dans un dossier, les met dans le `tabloFichiers` passe en argument
-void getArrayOfFileNames(char** tabloFichier, string directory = DOSSIERTEXTES);
+void getArrayOfFileNames(char** tabloFichier, std::string directory = DOSSIERTEXTES);
 
 //! Récupère tous les tableaux d'exemples
-void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory = DOSSIERTEXTES);
+void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, std::string directory = DOSSIERTEXTES);
 
 #endif  //NETWORKARRAY_H_INCLUDED

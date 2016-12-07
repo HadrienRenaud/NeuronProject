@@ -103,6 +103,10 @@ double NetworkArray::testAll(string directory)
 	//nombre d'exemples à traiter
 	int const nb_exemples(countExemples(directory));
 
+	if ((double)nb_exemples==0) {
+		return -3.14159; // on retourne une valeur négative
+	}
+
 	//compteur de succes
 	int succes = 0;
 
@@ -125,7 +129,7 @@ double NetworkArray::testAll(string directory)
 		readExemple(tabloFichiers[i], input, FIRST_LAYER_SIZE, directory);                                                                                                                 //on lit l'exemple
 		if (testNetworks(input, false ) == tabloFichiers[i][0])                                                                                                                 // on le teste
 			succes++;                                                                                                                                                                          //on incrémente succes, si c'est un succes
-		if (i % ( nb_exemples / 100 ) == 0 )
+		if (nb_exemples > 100 && i % ( nb_exemples / 100 ) == 0 )
 		{
 			cout << "Progress : [";
 			for (int j = 0; j < 51; ++j)
@@ -142,10 +146,10 @@ double NetworkArray::testAll(string directory)
 	}
 	cout << endl;
 	cout << "Test effectué !" << endl;
+	std::cout << (double)succes / (double)nb_exemples << std::endl;
 
 	// On retourne la proportion de succes
 	return (double)succes / (double)nb_exemples;
-
 }
 
 

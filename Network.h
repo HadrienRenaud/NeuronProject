@@ -17,7 +17,7 @@ Network();
    \param nom_fichier string qui servira a stocke le nom du fichier pendant les recuperations, sauvegardes
    \param maximal_distance initialisation de l'attribut [m_maximal_distance](@maximal_distance)
  */
-Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
+Network(char lettre_testee, std::string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
 
 //! Destructeur
 ~Network();
@@ -79,7 +79,7 @@ void recuperateur();
 void getMostRecent();
 
 //! Ecrit le resultat de l'apprentissage dans un fichier
-void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
+void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, std::string commentaires);
 
 //! Apprentissage sur la base de donnee
 /*!
