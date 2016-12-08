@@ -26,23 +26,29 @@ data_file_name = "data.json"
 # Classes :
 
 class IterRange:
-    """Iterable object itering on a dictionnary of lists."""
+    """Iterable object itering on a cartesian product different length."""
 
-    def __init__(self, dico, keys):
+    def __init__(self, lengths):
         """Initialisor.
 
-        dico is the dictionnary to iter on.
+        lengths is the lengths of the sets on which we are itering.
         """
-        self.keys = keys
-        self.ordonned_list = []
-        for key in keys:
-            assert key in dico, "dictionnary doesn't contain any key."
-            self.ordonned_list.append(dico[key])
-        self.position = [0 for k in keys]
+        self.lengths = lengths
+        self.position = [0 for i in lengths]
         return self
 
     def next(self):
         """Next method."""
+        for i, l in enumerate(self.lengths):
+            self.position[i] += 1
+            if self.position[i] >= l:
+                self.position[i] = 0
+            else:
+                break
+        else:
+            raise StopIteration
+        return self.position
+
 
 # ******************************** Functions **********************************
 # Functions :
@@ -79,14 +85,6 @@ def set_networks_settings(**args):
         config_file.write(line)
     default_file.close()
     config_file.close()
-
-
-def print_file(file_name):
-    """Print a file."""
-    print("\n\nFILE : " + file_name + '\n')
-    for line in open(file_name):
-        print(line, end='')
-    print("\nEND.")
 
 
 def get_result(commands, timeout=None, is_commands=True):
@@ -202,6 +200,14 @@ def get_data(commands, commands_output):
     return data
 
 
+def process_data(**args):
+    """Function calling the networks and getting the data for the parameters."""
+    set_networks_settings(**args)
+    commands = ['new', 'learn', 'test']
+    output = get_result(commands)
+    return get_data(commands, output)
+
+
 def read_data_file(file_name=data_file_name):
     """Function reading the data file.
 
@@ -246,17 +252,21 @@ def write_data_file(dico, file_name=data_file_name):
     return True
 
 
-def process_data(repet=20, file_name=data_file_name):
-    """Function processing the data.
+def command_data(repet=20, file_name=data_file_name, ranges=ranges):
+    """Function commanding the data.
 
-    Data situated in the file 'file_name' will be completed.
+    Data situated in the file 'file_name' will be completed with every possible key in the cartesian
+    product of the sets defined in ranges, repet times.
+    The function cal for process_data on every key.
     """
     dico = read_data_file(file_name)
-    # for inp in IterRange(ranges):
-    #     if inp not in dico:
-    #         dico[inp] = [get_data(inp)]
-    #     elif len(dico[inp]) < repet + 1:
-    #         dico[inp].append(get_data(inp))
+    keys = dico.keys()
+    for position in IterRange(keys):
+        key = [ranges[keys[i]][position[i]] for i in range(len(position))]
+        if key not in dico:
+            dico[key] = [process_data(key, keys)]
+        elif len(dico[key]) < repet + 1:
+            dico[key].append(process_data(key, keys))
     write_data_file(dico, file_name)
 
 
