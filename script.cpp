@@ -37,7 +37,7 @@ void commands(int nbCmds, string cmds[])
 		{
 			if (tablo_net)
 				delete tablo_net;
-			NetworkArray* tablo_net = new NetworkArray(length_alphabet);
+			NetworkArray* tablo_net = new NetworkArray(length_alphabet);    // ATTENTION ! Variable signalée comme inutilisée par CODEBLOCKS, à vérifier ?
 		}
 
 		else if (cmds[i] == "save")
@@ -45,7 +45,7 @@ void commands(int nbCmds, string cmds[])
 			if (tablo_net)
 				tablo_net->save();
 			else
-				cout << "Réseaux vides" <<endl;
+				cout << "Reseaux vides" <<endl;
 		}
 
 		else if (cmds[i] == "learn")
@@ -55,7 +55,7 @@ void commands(int nbCmds, string cmds[])
 			filtres();
 
 		else if (cmds[i] == "database")
-			database(false, true, length_alphabet);
+			database(false, true);
 
 		else if (cmds[i] == "test")
 		{
