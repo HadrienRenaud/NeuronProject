@@ -10,13 +10,36 @@ import subprocess as sp
 import re
 import json
 
+# *********************************** Regex ***********************************
+# Regex + links to regex101.com where explanations are stocked
+
+regexp = {
+    # Regex for matching different parts of the learning output
+    "ApprentissageLettre": re.compile(r"Apprentissage de la lettre (?P<letter>\S) \.\.\."),
+
+
+    # Regex for matching learning output :
+    # https://regex101.com/r/kBplnY
+    "learningProductif": re.compile(
+        r"Apprentissage productif : (?P<number_examples_read>[0-9]+) exemples lus sur" + \
+        r" (?P<number_examples_total>[0-9]+) avec (?P<number_succes>[0-9]+) succes, effectue" +\
+        r" en (?P<time>[0-9]+.[0-9]*) secondes."),
+    # https://regex101.com/r/7aemyh
+    "learningAverageDistance": re.compile(
+        r"Distance moyenne sur les exemples : (?P<average_distance>[0-9]+.?[0-9]*)"),
+    # https://regex101.com/r/oLAg68
+    "learningFailed": re.compile(
+        r"Apprentissage INFRUCTUEUX sur (?P<number_examples_total>[0-9]+) exemples lus\. avec " + \
+        r"(?P<number_succes>[0-9]+) succes, effectue en (?P<time>[0-9]+.?[0-9]*) secondes\.")
+}
+
 # *********************************** Data ************************************
 # Data :
 ranges = {
     'momentum': [0.1],
-    'maximal_distance': [0.1],
-    'max_limit_loop': [200],
-    'length_alphabet': [52],
+    'maximal_distance': [0.5],
+    'max_limit_loop': [10, 50],
+    'length_alphabet': [26],
 }
 
 data_file_name = "data.json"
@@ -34,10 +57,15 @@ class IterRange:
         lengths is the lengths of the sets on which we are itering.
         """
         self.lengths = lengths
-        self.position = [0 for i in lengths]
+
+    def __iter__(self):
+        """Iterator."""
+        self.position = [0 for i in self.lengths]
+        if self.position:
+            self.position[0] = -1
         return self
 
-    def next(self):
+    def __next__(self):
         """Next method."""
         for i, l in enumerate(self.lengths):
             self.position[i] += 1
@@ -102,7 +130,6 @@ def get_result(commands, timeout=None, is_commands=True):
         pre_output.append(lines[l])
         l += 1
     for i, command in enumerate(commands):
-        print
         if i < len(commands) - 1:
             while l < len(lines) and lines[l] != "Command {} : {}".format(i + 1, commands[i + 1]):
                 commands_output[i].append(lines[l])
@@ -139,34 +166,46 @@ def get_data_test(output):
 
 def splitter_letters_learn(output):
     """Split output in letters."""
-    output_splited = {
-        'pre': []
-    }
+    output_splited = {'pre': []}
     letter = 'pre'
     for line in output:
-        l = re.match(r"Apprentissage de la lettre (?P<letter>\S) \.\.\.", line)
+        l = regexp['ApprentissageLettre'].match(line)
         if l:
-            letter = l
+            letter = l.group('letter')
             output_splited[letter] = [line]
-        output_splited[-1].append(line)
+        output_splited[letter].append(line)
     return output_splited
 
 
 def get_data_learn_single(output):
     """Process data from one letter."""
-    return output
+    result = {}
+    for line in output:
+        if regexp['learningProductif'].match(line):
+            result.update(regexp['learningProductif'].match(line).groupdict())
+            result['succes'] = True
+        elif regexp['learningAverageDistance'].match(line):
+            result.update(regexp['learningAverageDistance'].match(line).groupdict())
+        elif regexp['learningFailed'].match(line):
+            result.update(regexp['learningFailed'].match(line).groupdict())
+            result['succes'] = False
+    if 'succes' not in result:
+        result['succes'] = False
+    return result
 
 
 def get_data_learn(output):
     """Process data from learn command."""
     output_splited = splitter_letters_learn(output)
-    succes_total = True
-    indiv = {}
+    result = {'succes': True, 'number_succes': 0}
     for letter, output_l in output_splited.items():
         if letter != 'pre':
-            indiv[letter] = get_data_learn_single(output_l)
-            succes_total
-    return 0
+            result[letter] = get_data_learn_single(output_l)
+            if result[letter]['succes']:
+                result['number_succes'] += 1
+            else:
+                result['succes'] = False
+    return result
 
 
 def get_data_filter(output):
@@ -200,11 +239,11 @@ def get_data(commands, commands_output):
     return data
 
 
-def process_data(**args):
+def process_data(key, keys):
     """Function calling the networks and getting the data for the parameters."""
-    set_networks_settings(**args)
+    set_networks_settings(**dict(zip(keys, key)))
     commands = ['new', 'learn', 'test']
-    output = get_result(commands)
+    output = get_result(commands)[1]
     return get_data(commands, output)
 
 
@@ -225,7 +264,7 @@ def read_data_file(file_name=data_file_name):
     dico = {}
     for elt in data:
         assert type(elt) is list and len(elt) > 1, "Load of JSON file failed, not compatible."
-        dico[elt] = elt[1:]
+        dico[str(elt)] = elt[1:]
     return dico
 
 
@@ -260,13 +299,15 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges):
     The function cal for process_data on every key.
     """
     dico = read_data_file(file_name)
-    keys = dico.keys()
-    for position in IterRange(keys):
+    keys = list(ranges.keys())
+    for position in IterRange([len(ranges[k]) for k in keys]):
+        print(position)
         key = [ranges[keys[i]][position[i]] for i in range(len(position))]
-        if key not in dico:
-            dico[key] = [process_data(key, keys)]
+        json_key = json.dumps(key)
+        if json_key not in dico:
+            dico[json_key] = [process_data(key, keys)]
         elif len(dico[key]) < repet + 1:
-            dico[key].append(process_data(key, keys))
+            dico[json_key].append(process_data(key, keys))
     write_data_file(dico, file_name)
 
 
@@ -274,7 +315,4 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges):
 # Excecutable code :
 
 if __name__ == '__main__':
-    commands = ['test', 'save']
-    result = get_result(commands)
-    if result:
-        print(get_data(commands, result[1]))
+    command_data()
