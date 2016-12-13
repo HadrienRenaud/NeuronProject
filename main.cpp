@@ -18,7 +18,7 @@ void help()
 	cout << "Welcome to NeuronProject help page !" << endl;
 	cout << "NeuronProject is a little software created by french students for their school project." << endl;
 	cout << endl;
-	cout<< "Usage :" <<endl;
+	cout << "Usage :" <<endl;
 	cout << "	./NeuronProject"<< endl;
 	cout << "	./NeuronProject [-h/--help]"<< endl;
 	cout << "	./NeuronProject [-f/--file] FILE"<< endl;

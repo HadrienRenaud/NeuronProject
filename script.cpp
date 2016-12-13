@@ -26,49 +26,50 @@ void scriptFile(ifstream &input)
 
 void commands(int nbCmds, string cmds[])
 {
-    int length_alphabet = getLenghtAlphabet();
-    std::cout << length_alphabet << "\n";
-    NetworkArray* tablo_net = new NetworkArray(length_alphabet);
+  
+	int length_alphabet = getLenghtAlphabet();
+	std::cout << length_alphabet << "\n";
+	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
 
-    for (int i = 0; i < nbCmds; ++i)
-    {
-        cout << i << " : " << cmds[i] <<endl;
+	for (int i = 0; i < nbCmds; ++i)
+	{
+		cout << i << " : " << cmds[i] <<endl;
 
-        if (cmds[i] == "new")
-        {
-            if (tablo_net)
-                delete tablo_net;
-            NetworkArray* tablo_net = new NetworkArray(length_alphabet);
-        }
+		if (cmds[i] == "new")
+		{
+			if (tablo_net)
+				delete tablo_net;
+			NetworkArray* tablo_net = new NetworkArray(length_alphabet);    // ATTENTION ! Variable signalée comme inutilisée par CODEBLOCKS, à vérifier ?
+		}
 
-        else if (cmds[i] == "save")
-        {
-            if (tablo_net)
-                tablo_net -> save();
-            else
-                cout << "Réseaux vides" <<endl;
-        }
+		else if (cmds[i] == "save")
+		{
+			if (tablo_net)
+				tablo_net->save();
+			else
+				cout << "Reseaux vides" <<endl;
+		}
 
-        else if (cmds[i] == "learn")
-            tablo_net->learnAllNetworks();
+		else if (cmds[i] == "learn")
+			tablo_net->learnAllNetworks();
 
-        else if (cmds[i] == "filter")
-            filtres();
+		else if (cmds[i] == "filter")
+			filtres();
 
-        else if (cmds[i] == "database")
-            database(false, true, length_alphabet);
+		else if (cmds[i] == "database")
+			database(false, true);
 
-        else if (cmds[i] == "test")
-        {
-            filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
-            cout << tablo_net->testAll() << endl;
-        }
+		else if (cmds[i] == "test")
+		{
+			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
+			cout << tablo_net->testAll() << endl;
+		}
 
-        cout << endl;
-    }
+		cout << endl;
+	}
 
-    if (tablo_net)
-        delete tablo_net;
+	if (tablo_net)
+		delete tablo_net;
 }
 
 int getLenghtAlphabet()

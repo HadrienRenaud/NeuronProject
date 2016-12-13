@@ -17,7 +17,7 @@ NetworkArray::NetworkArray(int length_alphabet) :
 		Layer* l1  = new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0);                                                                                                                 //première couche
 		Layer* l2  = new Layer(m_tablo_net[i], 100, l1, 0);                                                                                                                 //seconde
 		Layer* l3  = new Layer(m_tablo_net[i], 10, l2, 0);                                                                                                                 //troisieme
-		Layer* lend = new Layer(m_tablo_net[i], LAST_LAYER_SIZE, l3, 0);                                                                                                                 //couche de fin
+		Layer* lend = new Layer(m_tablo_net[i], LAST_LAYER_SIZE, l3, 0);             // ATTENTION ! Variable signalée comme inutilisée par CODEBLOCKS, à vérifier ?                                                                                                       //couche de fin
 	}
 	cout << "Reseaux crees !" << endl;
 }
@@ -137,11 +137,11 @@ double NetworkArray::testAll(string directory)
 				else
 					cout << ' ';
 			}
-			cout << "] : " << i / ( nb_exemples / 100 ) << "% \r" << flush;
+			cout << "] : " << (int( (i+1) * 100 / nb_exemples)) << "% \r" << flush;
 		}
 	}
 	cout << endl;
-	cout << "Test effectué !" << endl;
+	cout << "Test effectue !" << endl;
 
 	// On retourne la proportion de succes
 	return (double)succes / (double)nb_exemples;
@@ -247,10 +247,10 @@ void NetworkArray::setOptions()
 
 void NetworkArray::save()
 {
-	cout<< "Sauvegarde des réseaux ... " << flush;
+	cout<< "Sauvegarde des reseaux ... " << flush;
 	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->save();
-	cout << "Réseaux sauvegardés !" << endl;
+	cout << "Reseaux sauvegardes !" << endl;
 }
 
 
