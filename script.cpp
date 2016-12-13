@@ -4,27 +4,29 @@ using namespace std;
 
 void scriptFile(ifstream &input)
 {
-	std::vector<string> cmdsVect;
+    std::vector<string> cmdsVect;
 	string cmdName;
+	int compteur(0);
 
-	while(input >> cmdName)
-	{
-		cmdsVect.push_back(cmdName);
-	}
+    while(input >> cmdName)
+    {
+        cmdsVect.push_back(cmdName);
+    }
 
-	string cmds[cmdsVect.size()];
-	for (unsigned int i = 0; i < cmdsVect.size(); ++i)
-		cmds[i]=cmdsVect[i];
+    string cmds[cmdsVect.size()];
+    for (unsigned int i = 0; i < (int)cmdsVect.size(); ++i)
+        cmds[i]=cmdsVect[i];
 
-	std::cout << cmdsVect.size() << "\n";
+    std::cout << cmdsVect.size() << "\n";
 
-	input.close();
+    input.close();
 
-	commands(cmdsVect.size(),cmds);
+    commands(cmdsVect.size(),cmds);
 }
 
 void commands(int nbCmds, string cmds[])
 {
+  
 	int length_alphabet = getLenghtAlphabet();
 	std::cout << length_alphabet << "\n";
 	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
@@ -72,12 +74,12 @@ void commands(int nbCmds, string cmds[])
 
 int getLenghtAlphabet()
 {
-	ifstream optionsFile(NAME_CONFIG_FILE);
-	string line;
-	string cmdName;
-	string bin;
-	string cmdValueStr;
-	int cmdValue = LENGTH_ALPHABET;
+	ifstream	optionsFile(NAME_CONFIG_FILE);
+	string		line;
+	string		cmdName;
+	string		bin;
+	string		cmdValueStr;
+	int		cmdValue = LENGTH_ALPHABET;
 
 	while (getline(optionsFile, line))
 	{
