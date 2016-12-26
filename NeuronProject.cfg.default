@@ -19,3 +19,7 @@ max_limit_loop = 200
 # l'alphabet = abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:!éàè'()+-=
 # length_alphabet : default = 52
 length_alphabet = 26
+
+# La demi-pente de la sigmoide à l'origine
+# slope = 1
+slope = 1

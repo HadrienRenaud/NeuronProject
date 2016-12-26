@@ -40,6 +40,7 @@ ranges = {
     'maximal_distance': [0.5],
     'max_limit_loop': [10, 50],
     'length_alphabet': [26],
+    'slope': [1],
 }
 
 data_file_name = "data.json"

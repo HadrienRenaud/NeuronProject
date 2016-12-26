@@ -115,6 +115,7 @@ double m_gradient;
 double threshold(double input); //! fonction de transfert 1
 double threshold1(double input); //! fonction de transfert 2
 
+double getSlope(); //! Get Slope from the options in NeuronProject.cfg
 double sigmo(double input);  //! Derivee de la fonction de transfert 1
 double sigmo1(double input);  //! Derivee de la fonction de transfert 1
 

@@ -167,6 +167,45 @@ double threshold1(double input) //dérivée de threshold
 	return 0;
 }
 
+double getSlope()
+{
+	// SEE NetworkArray::setOptions
+	
+	ifstream optionsFile(NAME_CONFIG_FILE);
+	string line;
+	string cmdName;
+	string bin;
+	string cmdValueStr;
+	double slope(PENTE);
+
+	while (getline(optionsFile, line))
+	{
+		if (!(line.length() == 0 || line[0] == '#'))
+		{
+			istringstream line_stream(line);
+
+			try
+			{
+				line_stream >> cmdName;
+				line_stream >> bin;
+				line_stream >> cmdValueStr;
+
+				if (cmdName == "Slope" || cmdName == "slope")
+					slope = atof(cmdValueStr.c_str());
+			}
+			catch (string const erreur)
+			{
+				cout << erreur << endl;
+			}
+			catch (const invalid_argument &ia)
+			{
+				cout << "Valeur invalide : " << ia.what() << endl;
+			}
+		}
+	}
+}
+
+
 inline double sigmo(double input)
 {
 	double result((exp(PENTE * input) - 1) / (exp(PENTE * input) + 1));

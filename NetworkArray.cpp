@@ -129,22 +129,23 @@ double NetworkArray::testAll(string directory)
 		readExemple(tabloFichiers[i], input, FIRST_LAYER_SIZE, directory);                                                                                                                 //on lit l'exemple
 		if (testNetworks(input, false ) == tabloFichiers[i][0])                                                                                                                 // on le teste
 			succes++;                                                                                                                                                                          //on incrémente succes, si c'est un succes
-		if (nb_exemples > 100 && i % ( nb_exemples / 100 ) == 0 )
+		if (nb_exemples > 100 && i % (nb_exemples/100) == 0 )
 		{
 			cout << "Progress : [";
 			for (int j = 0; j < 51; ++j)
 			{
-				if (j <= i / (nb_exemples / 50))
+				if (j <= i * 50 / nb_exemples)
 					cout << '=';
-				else if ( j == i / (nb_exemples / 50) + 1)
+				else if ( j == i * 50  / nb_exemples + 1)
 					cout << '>';
 				else
 					cout << ' ';
 			}
-			cout << "] : " << i / ( nb_exemples / 100 ) << "% \r" << flush;
+			cout << "] : " << i * 100 / nb_exemples << "% \r" << flush;
 		}
 	}
-	cout << endl;
+	cout << flush;
+	cout << "Progress : [===================================================] : 100%" << endl << endl;
 	cout << "Test effectué !" << endl;
 	std::cout << (double)succes / (double)nb_exemples << std::endl;
 
