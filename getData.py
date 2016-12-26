@@ -211,7 +211,11 @@ def get_data_learn(output):
     result['keys'] = keys
     for letter, output_l in output_splited.items():
         if letter != 'pre':
-            result[letter] = get_data_learn_single(output_l)
+            result[letter] = {
+                'succes': None, 'number_succes': None, 'average_distance': None,
+                'number_examples_read': None, 'number_examples_total': None, 'time': None
+            }
+            result[letter].update(get_data_learn_single(output_l))
             if result[letter]['succes']:
                 result['number_succes'] += 1
             else:
@@ -255,8 +259,11 @@ def process_data(key, keys):
     """Function calling the networks and getting the data for the parameters."""
     set_networks_settings(**dict(zip(keys, key)))
     commands = ['new', 'learn', 'test']
-    output = get_result(commands)[1]
-    return get_data(commands, output)
+    result = get_result(commands)
+    if type(result) is list and len(result) > 1:
+        return get_data(commands, result[1])
+    else:
+        return False
 
 
 def read_data_file(file_name=data_file_name):
