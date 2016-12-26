@@ -199,6 +199,9 @@ def get_data_learn(output):
     """Process data from learn command."""
     output_splited = splitter_letters_learn(output)
     result = {'succes': True, 'number_succes': 0}
+    keys = ['succes', 'number_succes', 'average_distance',
+            'number_examples_read', 'number_examples_total', 'time']
+    result['keys'] = keys
     for letter, output_l in output_splited.items():
         if letter != 'pre':
             result[letter] = get_data_learn_single(output_l)
@@ -206,6 +209,7 @@ def get_data_learn(output):
                 result['number_succes'] += 1
             else:
                 result['succes'] = False
+            result[letter] = [result[letter][k] for k in keys]
     return result
 
 
@@ -265,7 +269,7 @@ def read_data_file(file_name=data_file_name):
     dico = {}
     for elt in data:
         assert type(elt) is list and len(elt) > 1, "Load of JSON file failed, not compatible."
-        dico[str(elt)] = elt[1:]
+        dico[str(elt[0])] = elt[1:]
     return dico
 
 
@@ -287,12 +291,13 @@ def write_data_file(dico, file_name=data_file_name):
     try:
         data_file = open(file_name, 'w')
         json.dump(data, data_file)
+        data_file.close()
     except:
         return False
     return True
 
 
-def command_data(repet=20, file_name=data_file_name, ranges=ranges):
+def command_data(repet=2, file_name=data_file_name, ranges=ranges):
     """Function commanding the data.
 
     Data situated in the file 'file_name' will be completed with every possible key in the cartesian
@@ -301,14 +306,16 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges):
     """
     dico = read_data_file(file_name)
     keys = list(ranges.keys())
+    keys.sort()
     for position in IterRange([len(ranges[k]) for k in keys]):
         print(position)
         key = [ranges[keys[i]][position[i]] for i in range(len(position))]
         json_key = json.dumps(key)
         if json_key not in dico:
             dico[json_key] = [process_data(key, keys)]
-        elif len(dico[key]) < repet + 1:
-            dico[json_key].append(process_data(key, keys))
+        else:
+            while len(dico[json_key]) < repet + 1:
+                dico[json_key].append(process_data(key, keys))
     write_data_file(dico, file_name)
 
 

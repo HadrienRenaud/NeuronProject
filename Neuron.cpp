@@ -170,7 +170,7 @@ double threshold1(double input) //dérivée de threshold
 double getSlope()
 {
 	// SEE NetworkArray::setOptions
-	
+
 	ifstream optionsFile(NAME_CONFIG_FILE);
 	string line;
 	string cmdName;
@@ -208,7 +208,8 @@ double getSlope()
 
 inline double sigmo(double input)
 {
-	double result((exp(PENTE * input) - 1) / (exp(PENTE * input) + 1));
+	double pente = getSlope();
+	double result((exp(pente * input) - 1) / (exp(pente * input) + 1));
 
 	if (result != result)
 		cout << "sigmo probleme avec input = " << input << endl;
@@ -216,5 +217,6 @@ inline double sigmo(double input)
 }
 inline double sigmo1(double input) //dérivée de sigmo
 {
-	return 2 * PENTE * exp(PENTE * input) / ((exp(PENTE * input) + 1) * (exp(PENTE * input) + 1));
+	double pente = getSlope();
+	return 2 * pente * exp(pente * input) / ((exp(pente * input) + 1) * (exp(pente * input) + 1));
 }
