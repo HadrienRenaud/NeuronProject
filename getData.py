@@ -52,22 +52,30 @@ data_file_name = "data.json"
 class IterRange:
     """Iterable object itering on a cartesian product different length."""
 
-    def __init__(self, lengths):
+    def __init__(self, lengths, verbose=False):
         """Initialisor.
 
         lengths is the lengths of the sets on which we are itering.
         """
+        self.verbose = verbose
         self.lengths = lengths
+        self.length = 1
+        for elt in self.lengths:
+            self.length *= elt
 
     def __iter__(self):
         """Iterator."""
         self.position = [0 for i in self.lengths]
+        self.pos = 0
         if self.position:
             self.position[0] = -1
         return self
 
     def __next__(self):
         """Next method."""
+        if self.verbose:
+            print("Avancement : {:.2%} \r".format(self.pos / self.length))
+            self.pos += 1
         for i, l in enumerate(self.lengths):
             self.position[i] += 1
             if self.position[i] >= l:
@@ -110,7 +118,6 @@ def set_networks_settings(**args):
         if len(li) == 3 and li[1] == '=' and li[0] in args.keys():
             li[2] = str(args[li[0]])
             line = ' '.join(li)
-            print(line)
         config_file.write(line)
     default_file.close()
     config_file.close()
@@ -159,8 +166,8 @@ def get_data_save(output):
 
 def get_data_test(output):
     """Process data from test command."""
-    if len(output) > 4 and output[3] == 'Test effectué !' and output[4] != '-nan':
-        return float(output[4])
+    if len(output) > 5 and output[4] == 'Test effectué !' and output[5] != '-nan':
+        return float(output[5])
     else:
         return False
 
@@ -307,14 +314,13 @@ def command_data(repet=2, file_name=data_file_name, ranges=ranges):
     dico = read_data_file(file_name)
     keys = list(ranges.keys())
     keys.sort()
-    for position in IterRange([len(ranges[k]) for k in keys]):
-        print(position)
+    for position in IterRange([len(ranges[k]) for k in keys], verbose=True):
         key = [ranges[keys[i]][position[i]] for i in range(len(position))]
         json_key = json.dumps(key)
         if json_key not in dico:
             dico[json_key] = [process_data(key, keys)]
         else:
-            while len(dico[json_key]) < repet + 1:
+            while len(dico[json_key]) < repet + 2:
                 dico[json_key].append(process_data(key, keys))
     write_data_file(dico, file_name)
 
