@@ -91,13 +91,17 @@ void distanceChro(int **pixelsR, int **pixelsG, int **pixelsB, int largeur, int 
 void resize(SDL_Surface * lettre, SDL_Surface * resized, int reference[], int marges[]);
 
 
-/*! Réduit MANUELLEMENT la taille de l'image et écrit les résultats dans le fichier destination.
+/*! Réduit MANUELLEMENT la taille de l'image, calcule les rapports des distances chromatiques et inscrit les résultats dans le tableau final.
     \param fichier un flux ouvert sur le fichier sur lequel il faut écrire.
     \param distancemax les composantes du pixel le plus éloigné du pixel de référence.
 */
-void manualResizePrinting(FILE * fichier, SDL_Surface * image, int reference[], int marges[], int distancemax[], bool notEmpty);
+void manualResizeFinalMatrix(SDL_Surface * image, double final[TAILLE][TAILLE], int reference[], int marges[], int distancemax[]);
 
-//! À partir de l'image réduite, calcule les rapports des distances chromatiques et écrit le résultat dans le fichier destination.
-void printingTxt(FILE * fichier, SDL_Surface * resized, int reference[], int marges[], int distancemax[], bool notEmpty);
+
+//! À partir de l'image réduite, calcule les rapports des distances chromatiques et inscrit le résultat dans le tableau final.
+void finalMatrix(SDL_Surface * resized, double final[TAILLE][TAILLE], int reference[], int marges[], int distancemax[]);
+
+//! Inscrit le tableau final dans le fichier destination. Calcul topologique ajouté à la fin du fichier.
+void printingTxt(FILE * fichier, double final[TAILLE][TAILLE], bool notEmpty);
 
 #endif

@@ -7,14 +7,15 @@ ToMatrix::ToMatrix(const int nbRow, const int nbCol)
 int ToMatrix::operator()(int row, int col) { return m_nbCol * row + col; }
 const int ToMatrix::getRow() const { return m_nbRow; }
 const int ToMatrix::getCol() const { return m_nbCol; }
+
 bool ToMatrix::isValid(int row, int col) {
   return row > -1 && row < getRow() && col > -1 && col < getCol();
 }
 
 void print_matrix(int *matrix, ToMatrix t) {
   std::cout << "Matrix : " << t.getRow() << " - " << t.getCol() << std::endl;
-  for (size_t i = 0; i < t.getRow(); i++) {
-    for (size_t j = 0; j < t.getCol(); j++) {
+  for (int i = 0; i < t.getRow(); i++) {
+    for (int j = 0; j < t.getCol(); j++) {
       std::cout << matrix[t(i, j)] << " " << flush;
     }
     std::cout << std::endl;
@@ -47,20 +48,22 @@ void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t) {
 int nbConnectedComponent(double *image, const int taille) {
   int compteur = 0;
   int matrix[taille * taille];
-  int matAux[taille * taille] = {};
+  int matAux[taille * taille];
   ToMatrix t;
 
-  for (size_t i = 0; i < taille * taille; i++) {
-    if (image[i] * 2 >= 1) {
+  for (int i = 0; i < taille * taille; i++)
+  {
+    matAux[i] = 0;
+
+    if (image[i] * 2 >= 1)
       matrix[i] = 1;
-    } else {
+    else
       matrix[i] = 0;
-    }
   }
   // print_matrix(matrix, t);
   // print_matrix(matAux, t);
-  for (size_t i = 1; i < taille; i++) {
-    for (size_t j = 1; j < taille; j++) {
+  for (int i = 1; i < taille; i++) {
+    for (int j = 1; j < taille; j++) {
       if (matrix[t(i, j)] == 1 and matAux[t(i, j)] == 0) {
         compteur++;
         matAux[t(i, j)] = compteur;
@@ -73,3 +76,21 @@ int nbConnectedComponent(double *image, const int taille) {
 
   return compteur;
 }
+
+
+
+int nbConnectedComponentMatrix(double image[TAILLE][TAILLE])
+{
+    double line[TAILLE*TAILLE];
+
+    for (int j = 0; j < TAILLE; j++)
+    {
+        for (int i = 0; i < TAILLE; i++)
+            line[j*TAILLE + i] = image[j][i];
+
+    }
+
+    return nbConnectedComponent(line, TAILLE);
+}
+
+

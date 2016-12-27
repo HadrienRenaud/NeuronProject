@@ -108,6 +108,8 @@ void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixe
 	bool notEmpty = true;
 	bool needsManualResize;
 
+	double final[TAILLE][TAILLE] = {{0}};
+
 	int distancemax[3];                                                         //Le max de la "distance chromatique" séparant les pixels du pixel de référence (voir plus bas)
 	int reference [3] = { 0 };                                                         //La "référence" de couleur, qui sera définie comme la couleur du pixel de coordonnées (0,0)
 	int marges[4]  = { 0 };
@@ -142,14 +144,17 @@ void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixe
 			resized = SDL_CreateRGBSurface(SDL_SWSURFACE, TAILLE, TAILLE, 32, 0, 0, 0, 255);
 			resize(lettre, resized, reference, marges);
 
-			printingTxt(fichier, resized, reference, marges, distancemax, notEmpty);
+			finalMatrix(resized, final, reference, marges, distancemax);
+			printingTxt(fichier, final, notEmpty);
 		}
 		else
 		{
 			resized = SDL_CreateRGBSurface(SDL_SWSURFACE, MANUAL_RESIZE_MULTIPLIER * TAILLE, MANUAL_RESIZE_MULTIPLIER * TAILLE, 32, 0, 0, 0, 255);
 			resize(lettre, resized, reference, marges);
 
-			manualResizePrinting(fichier, resized, reference, marges, distancemax, notEmpty);
+			manualResizeFinalMatrix(resized, final, reference, marges, distancemax);
+
+			printingTxt(fichier, final, notEmpty);
 		}
 
 		fclose(fichier);
@@ -486,65 +491,79 @@ void resize(SDL_Surface *lettre, SDL_Surface *resized, int reference[], int marg
 
 }
 
-void manualResizePrinting(FILE * fichier, SDL_Surface * image, int reference[], int marges[], int distancemax[], bool notEmpty)
+void manualResizeFinalMatrix(SDL_Surface * image, double final[TAILLE][TAILLE], int reference[], int marges[], int distancemax[])
 {
 	Uint8 color[3];
 	int colorAverage[3];
 	double moyenne = 0;
 
-	if (!notEmpty)
-	{
-		for (int y = 0; y < TAILLE; y++)
-		{
-			for (int x = 0; x < TAILLE; x++)
-				fprintf(fichier, "0.00 ");
+    SDL_LockSurface(image);
+    for (int y = 0; y < TAILLE; y++)
+    {
+        for (int x = 0; x < TAILLE; x++)
+        {
+            for (int k = 0; k < 3; k++)
+                colorAverage[k] = 0;
 
-			fprintf(fichier, "\n ");
-		}
-	}
+            for (int j = 0; j < MANUAL_RESIZE_MULTIPLIER; j++)
+            {
+                for (int i = 0; i < MANUAL_RESIZE_MULTIPLIER; i++)
+                {
+                    SDL_GetRGB(getPixel(image, x * MANUAL_RESIZE_MULTIPLIER + i, y * MANUAL_RESIZE_MULTIPLIER + j), image->format, &color[0], &color[1], &color[2]);
+                    for (int k = 0; k < 3; k++)
+                        colorAverage[k] += (int)color[k];
+                }
+            }
 
-	else
-	{
-		SDL_LockSurface(image);
-		for (int y = 0; y < TAILLE; y++)
-		{
-			for (int x = 0; x < TAILLE; x++)
-			{
-				for (int k = 0; k < 3; k++)
-					colorAverage[k] = 0;
+            for (int k = 0; k < 3; k++)
+                colorAverage[k] /= (MANUAL_RESIZE_MULTIPLIER * MANUAL_RESIZE_MULTIPLIER);
 
-				for (int j = 0; j < MANUAL_RESIZE_MULTIPLIER; j++)
-				{
-					for (int i = 0; i < MANUAL_RESIZE_MULTIPLIER; i++)
-					{
-						SDL_GetRGB(getPixel(image, x * MANUAL_RESIZE_MULTIPLIER + i, y * MANUAL_RESIZE_MULTIPLIER + j), image->format, &color[0], &color[1], &color[2]);
-						for (int k = 0; k < 3; k++)
-							colorAverage[k] += (int)color[k];
-					}
-				}
+            //On calcule le rapport de (la distance chromatique à la référence du pixel) et de (distancemax), la distance chromatique maximale
+            moyenne = abs(colorAverage[0] - reference[0]) + abs(colorAverage[1] - reference[1]) + abs(colorAverage[2] - reference[2]);
+            moyenne /= (distancemax[0] + distancemax[1] + distancemax[2]);
 
-				for (int k = 0; k < 3; k++)
-					colorAverage[k] /= (MANUAL_RESIZE_MULTIPLIER * MANUAL_RESIZE_MULTIPLIER);
+            final[y][x] = moyenne;                                                                                                                                                                                                                          //On écrit le résultat avec 2 décimales
 
-				//On calcule le rapport de (la distance chromatique à la référence du pixel) et de (distancemax), la distance chromatique maximale
-				moyenne = abs(colorAverage[0] - reference[0]) + abs(colorAverage[1] - reference[1]) + abs(colorAverage[2] - reference[2]);
-				moyenne /= (distancemax[0] + distancemax[1] + distancemax[2]);
+        }
+    }
 
-				fprintf(fichier, "%.2f ", moyenne);                                                                                                                                                                                                                                 //On écrit le résultat avec 2 décimales
-
-			}
-			fprintf(fichier, "\n ");
-		}
-
-		SDL_UnlockSurface(image);
-	}
+    SDL_UnlockSurface(image);
 }
 
-void printingTxt(FILE* fichier, SDL_Surface *resized, int reference[], int marges[], int distancemax[], bool notEmpty)
+
+void finalMatrix(SDL_Surface * resized, double final[TAILLE][TAILLE], int reference[], int marges[], int distancemax[])
 {
+
 	Uint8 red, green, blue;
 	double moyenne = 0;
 
+
+    SDL_LockSurface(resized);                                                                                                                 //On verrouille la surface SDL (indispensable pour lire les pixels)
+
+    for (int y = 0; y < resized->h; y++)                                                                                                                 //On parcourt tous les pixels de l'image
+    {
+        for (int x = 0; x < resized->w; x++)
+        {
+            SDL_GetRGB(getPixel(resized, x, y), resized->format, &red, &green, &blue);
+
+            //On calcule le rapport de (la distance chromatique à la référence du pixel) et de (distancemax), la distance chromatique maximale
+            moyenne = abs((int)red - reference[0]) + abs((int)green - reference[1]) + abs((int)blue - reference[2]);
+            moyenne /= (distancemax[0] + distancemax[1] + distancemax[2]);
+
+            final[y][x] = moyenne;
+
+        }
+    }
+
+    SDL_UnlockSurface(resized);                                                                                                                 //On déverrouille la surface
+
+}
+
+
+void printingTxt(FILE * fichier, double final[TAILLE][TAILLE], bool notEmpty)
+{
+
+
 	if (!notEmpty)
 	{
 		for (int y = 0; y < TAILLE; y++)
@@ -554,27 +573,19 @@ void printingTxt(FILE* fichier, SDL_Surface *resized, int reference[], int marge
 
 			fprintf(fichier, "\n ");
 		}
+		fprintf(fichier, "0");
 	}
 	else
 	{
-		SDL_LockSurface(resized);                                                                                                                 //On verrouille la surface SDL (indispensable pour lire les pixels)
-
-		for (int y = 0; y < resized->h; y++)                                                                                                                 //On parcourt tous les pixels de l'image
+		for (int y = 0; y < TAILLE; y++)                                                                                                                 //On parcourt tous les pixels de l'image
 		{
-			for (int x = 0; x < resized->w; x++)
-			{
-				SDL_GetRGB(getPixel(resized, x, y), resized->format, &red, &green, &blue);
+			for (int x = 0; x < TAILLE; x++)
+				fprintf(fichier, "%.2f ", final[y][x]);                                                                                                                                                                                                                                 //On écrit le résultat avec 2 décimales
 
-				//On calcule le rapport de (la distance chromatique à la référence du pixel) et de (distancemax), la distance chromatique maximale
-				moyenne = abs((int)red - reference[0]) + abs((int)green - reference[1]) + abs((int)blue - reference[2]);
-				moyenne /= (distancemax[0] + distancemax[1] + distancemax[2]);
-
-				fprintf(fichier, "%.2f ", moyenne);                                                                                                                                                                                                                                 //On écrit le résultat avec 2 décimales
-			}
-			fprintf(fichier, "\n ");                                                                                                                                                                         //Au bout d'une ligne de pixels, on revient à la ligne avant d'écrire la ligne suivante (choix arbitraire, ajustable)
+			fprintf(fichier, "\n ");                                                                                                                                                                         //Au bout d'une ligne de pixels, on revient à la ligne avant d'écrire la ligne suivante
 		}
+		fprintf(fichier, "%d", nbConnectedComponentMatrix(final));
 
-		SDL_UnlockSurface(resized);                                                                                                                 //On déverrouille la surface
 	}
 }
 

@@ -29,4 +29,10 @@ void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t);
  */
 int nbConnectedComponent(double *image, const int taille = TOPOLOGY_INPUT_SIZE);
 
+
+//! Transforme une matrice correspondant à une image filtrée en une ligne dont on calcule le nombre de composantes connexes.
+int nbConnectedComponentMatrix(double image[TAILLE][TAILLE]);
+
+
+
 #endif /* end of include guard: TOPOLOGY_H_INCLUDED */
