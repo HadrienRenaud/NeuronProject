@@ -36,7 +36,7 @@ regexp = {
 # *********************************** Data ************************************
 # Data :
 ranges = {
-    'momentum': [0.1],
+    'momentum': [0],
     'maximal_distance': [0.5],
     'max_limit_loop': [10, 50],
     'length_alphabet': [26],
@@ -125,9 +125,11 @@ def set_networks_settings(verbose=False, **args):
     config_file.close()
 
 
-def get_result(commands, timeout=None, is_commands=True):
+def get_result(commands, timeout=None, is_commands=True, verbose=False):
     """Launch NeuronProject and analyse output string to get data."""
     output = exec_NeuronProject(commands, timeout=timeout, is_commands=is_commands)
+    if verbose:
+        print(output)
     lines = output.split('\n')
     if len(commands) == 0:
         return False
@@ -261,12 +263,12 @@ def process_data(key, keys, verbose=False):
     """Function calling the networks and getting the data for the parameters."""
     set_networks_settings(verbose=verbose, **dict(zip(keys, key)))
     commands = ['new', 'learn', 'test']
-    result = get_result(commands)
-    if verbose:
-        print(result[1])
-    if type(result) is list and len(result) > 1:
+    # commands = ['new', 'test']
+    result = get_result(commands, verbose=verbose)
+    if type(result) is tuple and len(result) > 1:
         return get_data(commands, result[1])
     else:
+        print(type(result))
         return False
 
 
@@ -315,7 +317,7 @@ def write_data_file(dico, file_name=data_file_name):
     return True
 
 
-def command_data(repet=2, file_name=data_file_name, ranges=ranges, verbose=False):
+def command_data(repet=20, file_name=data_file_name, ranges=ranges, verbose=False):
     """Function commanding the data.
 
     Data situated in the file 'file_name' will be completed with every possible key in the cartesian
@@ -341,4 +343,4 @@ def command_data(repet=2, file_name=data_file_name, ranges=ranges, verbose=False
 # Excecutable code :
 
 if __name__ == '__main__':
-    command_data(verbose=True)
+    command_data(repet=1, verbose=True)
