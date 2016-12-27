@@ -42,7 +42,7 @@ To compile on Windows, files needed :
 
 ### Configuration
 
-Default configuration can be found in `NeuronProject.cfg`.
+Default configuration can be found in `NeuronProject.cfg.default`.
 
 Folders needed :
 - `texts`
@@ -51,6 +51,8 @@ Folders needed :
 - `test`
 - `test_texts`
 - `svg_reseau`
+
+You need to copy `NeuronProject.cfg.default` to `NeuronProject.cfg`. (And personnalize it !)
 
 ## Commands and Script Writing
 
