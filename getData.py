@@ -106,7 +106,7 @@ def exec_NeuronProject(commands, timeout=None, is_commands=True):
     return output.decode('UTF-8')
 
 
-def set_networks_settings(**args):
+def set_networks_settings(verbose=False, **args):
     """Set NeuronProject.cfg with the right settings.
 
     Settings available can be found in NeuronProject.cfg.default
@@ -118,6 +118,8 @@ def set_networks_settings(**args):
         if len(li) == 3 and li[1] == '=' and li[0] in args.keys():
             li[2] = str(args[li[0]])
             line = ' '.join(li)
+            if verbose:
+                print(line)
         config_file.write(line)
     default_file.close()
     config_file.close()
@@ -255,11 +257,13 @@ def get_data(commands, commands_output):
     return data
 
 
-def process_data(key, keys):
+def process_data(key, keys, verbose=False):
     """Function calling the networks and getting the data for the parameters."""
-    set_networks_settings(**dict(zip(keys, key)))
+    set_networks_settings(verbose=verbose, **dict(zip(keys, key)))
     commands = ['new', 'learn', 'test']
     result = get_result(commands)
+    if verbose:
+        print(result[1])
     if type(result) is list and len(result) > 1:
         return get_data(commands, result[1])
     else:
@@ -311,7 +315,7 @@ def write_data_file(dico, file_name=data_file_name):
     return True
 
 
-def command_data(repet=2, file_name=data_file_name, ranges=ranges):
+def command_data(repet=2, file_name=data_file_name, ranges=ranges, verbose=False):
     """Function commanding the data.
 
     Data situated in the file 'file_name' will be completed with every possible key in the cartesian
@@ -321,14 +325,15 @@ def command_data(repet=2, file_name=data_file_name, ranges=ranges):
     dico = read_data_file(file_name)
     keys = list(ranges.keys())
     keys.sort()
-    for position in IterRange([len(ranges[k]) for k in keys], verbose=True):
+    for position in IterRange([len(ranges[k]) for k in keys], verbose=not verbose):
+        if verbose:
+            print(position)
         key = [ranges[keys[i]][position[i]] for i in range(len(position))]
         json_key = json.dumps(key)
         if json_key not in dico:
-            dico[json_key] = [process_data(key, keys)]
-        else:
-            while len(dico[json_key]) < repet + 2:
-                dico[json_key].append(process_data(key, keys))
+            dico[json_key] = [process_data(key, keys, verbose=verbose)]
+        while len(dico[json_key]) < repet + 2:
+            dico[json_key].append(process_data(key, keys, verbose=verbose))
     write_data_file(dico, file_name)
 
 
@@ -336,4 +341,4 @@ def command_data(repet=2, file_name=data_file_name, ranges=ranges):
 # Excecutable code :
 
 if __name__ == '__main__':
-    command_data()
+    command_data(verbose=True)
