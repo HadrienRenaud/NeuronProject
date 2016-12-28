@@ -3,6 +3,7 @@
 
 using namespace std;
 
+#ifndef NO_GRAPHIC
 void graphics()
 {
 	SDL_Window * window(0);
@@ -12,6 +13,7 @@ void graphics()
 	SDL_DestroyRenderer(ren);
 	quit(window);
 }
+#endif //NO_GRAPHIC
 
 void help()
 {
@@ -34,9 +36,12 @@ void help()
 
 int main(int argc, char** argv)
 {
-
 	if (argc < 2)
+		#ifndef NO_GRAPHIC
 		graphics();
+		#else
+		help();
+		#endif //NO_GRAPHIC
 
 	else
 	{

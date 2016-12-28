@@ -27,6 +27,12 @@ To compile on linux, use :
 g++ *.cpp `sdl2-config --libs --cflags` -lSDL2_image -lSDL2_ttf -std=c++14 -o NeuronProject
 ```
 
+To compile on Linux **with no graphics**, use :
+
+```bash
+g++ main.cpp Neuron.cpp Network.cpp NetworkArray.cpp script.cpp Layer.cpp Binding.cpp -std=c++14 -DNO_GRAPHIC -o NeuronProject
+```
+
 #### Windows
 
 To compile on Windows, files needed :
