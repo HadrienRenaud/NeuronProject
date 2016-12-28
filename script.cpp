@@ -26,6 +26,7 @@ void scriptFile(ifstream &input)
 
 void commands(int nbCmds, string cmds[])
 {
+
 	int length_alphabet = getLenghtAlphabet();
 	std::cout << length_alphabet << "\n";
 	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
@@ -46,7 +47,7 @@ void commands(int nbCmds, string cmds[])
 			if (tablo_net)
 				tablo_net->save();
 			else
-				cout << "Réseaux vides" <<endl;
+				cout << "Reseaux vides" <<endl;
 		}
 
 		else if (cmds[i] == "learn")
@@ -66,6 +67,7 @@ void commands(int nbCmds, string cmds[])
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
       #endif //NO_GRAPHIC
 			tablo_net->testAll();
+
 		}
 
 		cout << endl;
