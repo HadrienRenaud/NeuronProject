@@ -16,7 +16,7 @@ class Layer {
 
 public:
 //! Constructeur par défaut (vide)
-Layer();
+	Layer();
 
 //! Constructeur utilisé
 /*!
@@ -27,85 +27,85 @@ Layer();
     \param nextLayer la couche suivante
     \param trsf pointeur de type [transfert](@transfert) vers la fonction de transfert de chacun des neurones
  */
-Layer(Network* network, int neurons = 0,  Layer* previousLayer = 0, Layer* nextLayer = 0, transfert trsf = 0);
+	Layer(Network* network, int neurons = 0,  Layer* previousLayer = 0, Layer* nextLayer = 0, transfert trsf = 0);
 
 //! destructeur
-~Layer();
+	~Layer();
 
 //! nombre de neurones dans la couche
-int  getSize() const;
+	int  getSize() const;
 
 //! Retourne la couche suivante
-Layer* getNextLayer() const;
+	Layer* getNextLayer() const;
 
 //! Fixe la couche suivante
-bool setNextLayer(Layer* layer);
+	bool setNextLayer(Layer* layer);
 
 //! Retourne la couche precedente
-Layer* getPreviousLayer() const;
+	Layer* getPreviousLayer() const;
 
 //! Fixe la couche precedente
-bool setPreviousLayer(Layer* layer);
+	bool setPreviousLayer(Layer* layer);
 
 //! S'agit-il de la couche d'entrée ?
-bool isFirst() const;
+	bool isFirst() const;
 
 //! S'agit-il de la couche d sortie ?
-bool isLast() const;
+	bool isLast() const;
 
 //! On récupère le n-ième neurone
-Neuron* getNeuron(int n) const;
+	Neuron* getNeuron(int n) const;
 
 //! Ajouter un neurone dont on spécifie (ou pas) la fonction de transfert
 /*!
     \param trsf (optional)  pointeur de type [transfert](@transfert) vers la fonction de transfert du neurone
  */
-void addNeuron(transfert trsf = 0);
+	void addNeuron(transfert trsf = 0);
 
 //! Ajouter plusieurs neurones
 /*!
     \param n nombre de neurones a ajouter
     \param trsf (optional)  pointeur de type [transfert](@transfert) vers la fonction de transfert du neurone
  */
-void  addNeurons(int n, transfert trsf = 0);
+	void  addNeurons(int n, transfert trsf = 0);
 
 //! Demander à chaque neurone de calculer sa sortie
-void  calculate() const;
+	void  calculate() const;
 
 //! Demander à chaque neurone d'envoyer le gradient
-void  calculateGradient() const;
+	void  calculateGradient() const;
 
 //! Renvoi le nombre de liaisons partant de cette couche
-int   getBindingsNumber() const;
+	int   getBindingsNumber() const;
 
 //! Réseau parent
-Network* getNetwork() const;
+	Network* getNetwork() const;
 
 //! Dit a chaque neurone de Neuron::learn()
-bool  learn();
+	bool  learn();
 
 //! Préparer les neurones à propager
-void  resetNeurons() const;
+	void  resetNeurons() const;
 
 //! Préparer les neurones à rétropropager
-void  resetNeuronsGradient() const;
+	void  resetNeuronsGradient() const;
 
 private:
 
 //! Le réseau auquel la couche appartient
-Network* m_network;
+	Network* m_network;
 
 //! L'ensemble de ses neurones
-std::vector<Neuron*> m_neurons;
+	std::vector<Neuron*> m_neurons;
 
 //! Couche precedente
-Layer* m_previousLayer;
+	Layer* previousLayer_;
 
 //! Couche suivante
-Layer* m_nextLayer;
+	Layer* nextLayer_;
 
 //! nombre de [Bindings](@Bindings), s'incrémente à chaque nouvelle liaison
-int m_bindingsNumber;
+	int bindingsNumber_;
 };
 
 #endif

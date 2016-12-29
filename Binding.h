@@ -39,13 +39,13 @@ void addWeight(double weight);
 private:
 
 //! Neurone source
-Neuron* m_neuron;
+Neuron* neuron_;
 
 //! Poids de la liason
-double m_weight;
+double weight_;
 
 //! Poids a l'etape d'apprentissage precedent : utile pour l'inertie
-double m_previousStep;
+double previousStep_;
 };
 
 #endif

@@ -52,7 +52,7 @@ void setOptions();
 
 //! Retourne le moment d'inertie des reseaux.
 /*!
-   \return m_momentum : le moment d'inertie du reseau */
+   \return momentum_ : le moment d'inertie du reseau */
 double getMomentum();
 
 //! Fixe le moment d'inertie des reseaux
@@ -83,17 +83,17 @@ void save();
 
 private:
 //! Le tableau des networks
-Network** m_tablo_net;
+Network** tablo_net_;
 //! La distance maximale après un apprentissage producti
-double m_maximal_distance;
+double maximal_distance_;
 //! La limite du nombre de boucles d'apprentissag
-int m_maxLimitLoop;
+int maxLimitLoop_;
 //! L'alphabet concerne
 const char* m_alphabet;
 //! La longueur de l'alphabet concern
-int m_length_alphabet;
+int length_alphabet_;
 //! Le moment d'inertie de tous les réseau
-double m_momentum;
+double momentum_;
 };
 
 //! affichage d'un tableau

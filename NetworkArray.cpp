@@ -3,21 +3,21 @@
 using namespace std;
 
 NetworkArray::NetworkArray(int length_alphabet) :
-	m_tablo_net(new Network*[length_alphabet]),
-	m_maximal_distance(MAXIMAL_DISTANCE),
-	m_maxLimitLoop(MAX_LIMIT_LOOP * NB_LEARNING),
-	m_length_alphabet(length_alphabet),
-	m_momentum(ALPHA)
+	tablo_net_(new Network*[length_alphabet]),
+	maximal_distance_(MAXIMAL_DISTANCE),
+	maxLimitLoop_(MAX_LIMIT_LOOP * NB_LEARNING),
+	length_alphabet_(length_alphabet),
+	momentum_(ALPHA)
 {
 	cout << "Creation des reseaux ... " << flush;
-	for (int i = 0; i < m_length_alphabet; ++i)
+	for (int i = 0; i < length_alphabet_; ++i)
 	{
-		m_tablo_net[i] = new Network(CHARS[i]);                                                                                                                 //Le réseau
+		tablo_net_[i] = new Network(CHARS[i]);                                                                                                                 //Le réseau
 		//Layer* l = new Layer(adresse du réseau, nombre de neurones dans la couche, adresse de la couche précédente, adresse de la couche suivante, fonction de transfert des neuronres de la couche);
-		Layer* l1  = new Layer(m_tablo_net[i], FIRST_LAYER_SIZE,  0,  0);                                                                                                                 //première couche
-		Layer* l2  = new Layer(m_tablo_net[i], 100, l1, 0);                                                                                                                 //seconde
-		Layer* l3  = new Layer(m_tablo_net[i], 10, l2, 0);                                                                                                                 //troisieme
-		Layer* lend = new Layer(m_tablo_net[i], LAST_LAYER_SIZE, l3, 0);             // ATTENTION ! Variable signalée comme inutilisée par CODEBLOCKS, à vérifier ?                                                                                                       //couche de fin
+		Layer* l1  = new Layer(tablo_net_[i], FIRST_LAYER_SIZE,  0,  0);                                                                                                                 //première couche
+		Layer* l2  = new Layer(tablo_net_[i], 100, l1, 0);                                                                                                                 //seconde
+		Layer* l3  = new Layer(tablo_net_[i], 10, l2, 0);                                                                                                                 //troisieme
+		Layer* lend = new Layer(tablo_net_[i], LAST_LAYER_SIZE, l3, 0);                                                                                                                 //couche de fin
 	}
 	cout << "Reseaux crees !" << endl;
 }
@@ -25,11 +25,11 @@ NetworkArray::NetworkArray(int length_alphabet) :
 NetworkArray::~NetworkArray()
 {
 	cout << "Destruction des reseaux ... " << flush;
-	for (int i = 0; i < m_length_alphabet; ++i)
+	for (int i = 0; i < length_alphabet_; ++i)
 	{
-		delete m_tablo_net[i];
+		delete tablo_net_[i];
 	}
-	delete[] m_tablo_net;
+	delete[] tablo_net_;
 	cout << "Reseaux detruits !" << endl;
 }
 
@@ -61,9 +61,9 @@ void NetworkArray::learnAllNetworks()
 	cout << "Initialisation effectuee en " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes, l'apprentissage commence." << endl << endl;
 
 	//Apprentissage
-	for (int i = 0; i < m_length_alphabet; ++i)
+	for (int i = 0; i < length_alphabet_; ++i)
 	{
-		m_tablo_net[i]->learnNetwork(nb_exemples, tabloFichiers, inputs);
+		tablo_net_[i]->learnNetwork(nb_exemples, tabloFichiers, inputs);
 		cout << endl << endl;
 	}
 }
@@ -73,15 +73,15 @@ char NetworkArray::testNetworks(double input[], bool verbose)
 	//initialisation
 	char lettre_trouvee('_');
 	double maxi(LOWER_BOUND_DISTINCTION);
-	double exp_output[m_length_alphabet][LAST_LAYER_SIZE];
+	double exp_output[length_alphabet_][LAST_LAYER_SIZE];
 
 	//tests
 	if (verbose)
 		cout << "Resultats : ";
-	for (int i = 0; i < m_length_alphabet; ++i)                                                         //pour chaque réseau
+	for (int i = 0; i < length_alphabet_; ++i)                                                         //pour chaque réseau
 	{                                                            //on récupère la réponse
-		m_tablo_net[i]->initNetwork(input);
-		m_tablo_net[i]->launch(exp_output[i]);
+		tablo_net_[i]->initNetwork(input);
+		tablo_net_[i]->launch(exp_output[i]);
 		//on l'affiche si elle est suffisement grande
 		if (verbose && exp_output[i][0] > (LOWER_BOUND_DISTINCTION / 10))
 			cout << CHARS[i] << " : " << exp_output[i][0] * 100 << "% -- ";
@@ -155,44 +155,44 @@ double NetworkArray::testAll(string directory)
 
 void NetworkArray::getMostRecent()
 {
-	for (int i = 0; i < m_length_alphabet; ++i)
-		m_tablo_net[i]->getMostRecent();
+	for (int i = 0; i < length_alphabet_; ++i)
+		tablo_net_[i]->getMostRecent();
 }
 
 double NetworkArray::getMaximalDistance()
 {
-	return m_maximal_distance;
+	return maximal_distance_;
 }
 void NetworkArray::setMaximalDistance(double maximal_distance)
 {
 	cout << "Les reseaux changent pour une distance maximale apres apprentissage de " << maximal_distance << endl;
-	for (int i = 0; i < m_length_alphabet; ++i)
-		m_tablo_net[i]->setMaximalDistance(maximal_distance);
-	m_maximal_distance = maximal_distance;
+	for (int i = 0; i < length_alphabet_; ++i)
+		tablo_net_[i]->setMaximalDistance(maximal_distance);
+	maximal_distance_ = maximal_distance;
 }
 
 int NetworkArray::getMaxLimitLoop()
 {
-	return m_maxLimitLoop;
+	return maxLimitLoop_;
 }
 void NetworkArray::setMaxLimitLoop(int maxLimitLoop)
 {
 	cout << "Les reseaux changent pour une limite de boucles d'apprentissage de " << maxLimitLoop << endl;
-	for (int i = 0; i < m_length_alphabet; ++i)
-		m_tablo_net[i]->setMaxLimitLoop(maxLimitLoop);
-	m_maxLimitLoop = maxLimitLoop;
+	for (int i = 0; i < length_alphabet_; ++i)
+		tablo_net_[i]->setMaxLimitLoop(maxLimitLoop);
+	maxLimitLoop_ = maxLimitLoop;
 }
 
 double NetworkArray::getMomentum()
 {
-	return m_momentum;
+	return momentum_;
 }
 void NetworkArray::setMomentum(double momentum)
 {
 	cout << "Les reseaux changent pour un moment d'inertie de " << momentum << endl;
-	m_momentum = momentum;
-	for (int i = 0; i < m_length_alphabet; ++i)
-		m_tablo_net[i]->setMomentum(momentum);
+	momentum_ = momentum;
+	for (int i = 0; i < length_alphabet_; ++i)
+		tablo_net_[i]->setMomentum(momentum);
 }
 
 void NetworkArray::setOptions()
@@ -252,8 +252,8 @@ void NetworkArray::setOptions()
 void NetworkArray::save()
 {
 	cout<< "Sauvegarde des reseaux ... " << flush;
-	for (int i = 0; i < m_length_alphabet; ++i)
-		m_tablo_net[i]->save();
+	for (int i = 0; i < length_alphabet_; ++i)
+		tablo_net_[i]->save();
 	cout << "Reseaux sauvegardes !" << endl;
 }
 

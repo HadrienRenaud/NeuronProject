@@ -2,19 +2,17 @@
 #include <iostream>
 using namespace std;
 
-/* constructeur par défaut inutile */
-Binding::Binding() :
-	m_neuron(0),
-	m_weight(0)
+// Useless default constructor
+Binding::Binding()
+	: neuron_(0), weight_(0)
 {
-	m_previousStep = 0.0;
+	previousStep_ = 0.0;
 }
-/* constructeur vraiment utilisé */
-Binding::Binding(Neuron* neuron, double weight) :
-	m_neuron(neuron),
-	m_weight(weight)
+// Useless default constructor
+Binding::Binding(Neuron* neuron, double weight)
+	: neuron_(neuron), weight_(weight)
 {
-	m_previousStep = 0.0;
+	previousStep_ = 0.0;
 }
 Binding::~Binding()
 {
@@ -22,22 +20,22 @@ Binding::~Binding()
 
 Neuron* Binding::getNeuron() const
 {
-	return m_neuron;
+	return neuron_;
 }
 
 void Binding::setWeight(double weight)
 {
-	m_weight = weight;
+	weight_ = weight;
 }
 double Binding::getWeight() const
 {
-	return m_weight;
+	return weight_;
 }
 
 void Binding::addWeight(double weight)
 {
-	double temp = m_weight;
+	double temp = weight_;
 
-	m_weight  += (weight + getNeuron()->getLayer()->getNetwork()->getMomentum() * m_previousStep);
-	m_previousStep = m_weight - temp;
+	weight_  += (weight + getNeuron()->getLayer()->getNetwork()->getMomentum() * previousStep_);
+	previousStep_ = weight_ - temp;
 }
