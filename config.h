@@ -3,12 +3,10 @@
 
 #include <cstdlib>
 #include <cstdio>
+#include <string>
 #include <iostream>
 #include <fstream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <string.h>
+
 #include <dirent.h>
 #include <math.h>
 #include <vector>
@@ -19,6 +17,12 @@
 #include <iomanip>
 #include <algorithm>
 #include <stdexcept>
+
+#ifndef NO_GRAPHIC
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#endif // NO_GRAPHIC
 
 #define THRESHOLD 0
 //! demi-pente de la sigmoide à l'origine
@@ -61,14 +65,14 @@
 #define DOSSIERPOLICES "fonts/"
 //! Le sous-dossier où il faudra placer les images
 #define DOSSIERIMAGES "images/"
-//! nom du fichier de configuratio
+//! nom du fichier de configuration
 #define NAME_CONFIG_FILE "NeuronProject.cfg"
+//! nom du fichier de configuration
+#define NAME_SCRIPT_FILE "Script.txt"
 //! nom du dossier ou sont stockes les images de test
 #define DOSSIERTEST "test/"
 //! nom du dossier ou sont stockes les textes extraits des images de test
 #define DOSSIERTESTTEXT "test_texts/"
-//! liste des caracteres pour la database : TODO a supprimer
-#define CHARSBIS { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" }
 //! liste des caracteres
 #define CHARS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:!éàè'()+-\"="
 
@@ -82,17 +86,20 @@
 #define EXTENSION_SVG ".svg_reseau"
 
 
-#include "menu.h"
-#include "system.h"
 #include "NetworkArray.h"
 #include "Neuron.h"
 #include "Layer.h"
-#include "filtres2.h"
-#include "database.h"
-#include "buttons.h"
 #include "Network.h"
 #include "Binding.h"
 #include "script.h"
+
+#ifndef NO_GRAPHIC
+#include "system.h"
+#include "filtres2.h"
+#include "database.h"
+#include "buttons.h"
+#include "menu.h"
+#endif // NO_GRAPHIC
 
 using namespace std;
 

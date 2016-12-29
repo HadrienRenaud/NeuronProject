@@ -27,6 +27,12 @@ To compile on linux, use :
 g++ *.cpp `sdl2-config --libs --cflags` -lSDL2_image -lSDL2_ttf -std=c++14 -o NeuronProject
 ```
 
+To compile on Linux **with no graphics**, use :
+
+```bash
+g++ main.cpp Neuron.cpp Network.cpp NetworkArray.cpp script.cpp Layer.cpp Binding.cpp -std=c++14 -DNO_GRAPHIC -o NeuronProject
+```
+
 #### Windows
 
 To compile on Windows, files needed :
@@ -42,7 +48,7 @@ To compile on Windows, files needed :
 
 ### Configuration
 
-Default configuration can be found in `NeuronProject.cfg`.
+Default configuration can be found in `NeuronProject.cfg.default`.
 
 Folders needed :
 - `texts`
@@ -51,6 +57,8 @@ Folders needed :
 - `test`
 - `test_texts`
 - `svg_reseau`
+
+You need to copy `NeuronProject.cfg.default` to `NeuronProject.cfg`. (And personnalize it !)
 
 ## Commands and Script Writing
 

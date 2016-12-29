@@ -3,6 +3,7 @@
 
 using namespace std;
 
+#ifndef NO_GRAPHIC
 void graphics()
 {
 	SDL_Window * window(0);
@@ -12,13 +13,14 @@ void graphics()
 	SDL_DestroyRenderer(ren);
 	quit(window);
 }
+#endif //NO_GRAPHIC
 
 void help()
 {
 	cout << "Welcome to NeuronProject help page !" << endl;
 	cout << "NeuronProject is a little software created by french students for their school project." << endl;
 	cout << endl;
-	cout<< "Usage :" <<endl;
+	cout << "Usage :" <<endl;
 	cout << "	./NeuronProject"<< endl;
 	cout << "	./NeuronProject [-h/--help]"<< endl;
 	cout << "	./NeuronProject [-f/--file] FILE"<< endl;
@@ -34,9 +36,12 @@ void help()
 
 int main(int argc, char** argv)
 {
-
 	if (argc < 2)
+		#ifndef NO_GRAPHIC
 		graphics();
+		#else
+		help();
+		#endif //NO_GRAPHIC
 
 	else
 	{

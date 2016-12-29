@@ -1,6 +1,6 @@
 #include "database.h"
 
-void database(bool sauvegarde, bool filtre, int length_alphabet)
+void database(bool sauvegarde, bool filtre)
 {
 	int ** pixelsR = NULL;
 	int ** pixelsG = NULL;
@@ -14,6 +14,14 @@ void database(bool sauvegarde, bool filtre, int length_alphabet)
 		pixelsR[i] = (int*)malloc(sizeof(int) * TAILLEMAX);
 		pixelsG[i] = (int*)malloc(sizeof(int) * TAILLEMAX);
 		pixelsB[i] = (int*)malloc(sizeof(int) * TAILLEMAX);
+	}
+
+
+	char caracteres[LENGTH_ALPHABET][2] = {""};
+	for(int i = 0; i < LENGTH_ALPHABET; i++)
+	{
+	    caracteres[i][0] = CHARS[i];
+	    caracteres[i][1] = '\0';
 	}
 
 
@@ -40,7 +48,7 @@ void database(bool sauvegarde, bool filtre, int length_alphabet)
 			{
 				cout << endl << "Chargement : " << 100 * compteurPolices / nombrePolices << "% - ";
 				cout << ep->d_name << " : traitement ... " << flush;
-				filterPngs(ep->d_name, sauvegarde, filtre, pixelsR, pixelsG, pixelsB, length_alphabet);
+				filterPngs(ep->d_name, sauvegarde, filtre, pixelsR, pixelsG, pixelsB, caracteres);
 				compteurPolices++;
 				cout << endl << "Traitee." << endl;
 			}
@@ -63,10 +71,9 @@ void database(bool sauvegarde, bool filtre, int length_alphabet)
 
 }
 
-void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB, int length_alphabet)
+void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int **pixelsG, int **pixelsB, char caracteres[LENGTH_ALPHABET][2])
 {
 	int i        = 0;
-	char caracteres[LENGTH_ALPHABET][2] = CHARSBIS;
 
 	char pathFont[150];
 	char pathPng[150];
@@ -93,9 +100,9 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 	{
 		cout << "Police chargee : " << pathFont << endl;
 		cout << "Creation des images : ";
-		for (i = 0; i < length_alphabet; i++)
+		for (i = 0; i < LENGTH_ALPHABET; i++)
 		{
-			pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i);
+			pathNames(pathPng, pathTxt, nameFont, DOSSIERIMAGES, DOSSIERTEXTES, i, caracteres);
 
 			cout << caracteres[i] << " " << flush;
 			texte = TTF_RenderText_Solid(font, caracteres[i], color);
@@ -133,9 +140,8 @@ void filterPngs(char* nameFont, bool sauvegarde, bool filtre, int **pixelsR, int
 
 }
 
-void pathNames(char* pathPng, char* pathTxt, char* nameFont, const char* repertoryPng, const char* repertoryTxt, int i)
+void pathNames(char* pathPng, char* pathTxt, char* nameFont, const char* repertoryPng, const char* repertoryTxt, int i, char caracteres[LENGTH_ALPHABET][2])
 {
-	char caracteres[LENGTH_ALPHABET][2] = CHARSBIS;
 	char namePng[150];
 
 	strcpy(namePng, caracteres[i]);
