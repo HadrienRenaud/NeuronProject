@@ -6,8 +6,9 @@
 
 # ********************************* Imports ***********************************
 # Imports :
-import subprocess as sp
-import re
+from subprocess import PIPE, run
+from re import compile
+from multiprocessing import Pool
 import json
 
 # *********************************** Regex ***********************************
@@ -15,26 +16,28 @@ import json
 
 regexp = {
     # Regex for matching different parts of the learning output
-    "ApprentissageLettre": re.compile(r"Apprentissage de la lettre (?P<letter>\S) \.\.\."),
+    "ApprentissageLettre": compile(r"Apprentissage de la lettre (?P<letter>\S) \.\.\."),
 
 
     # Regex for matching learning output :
     # https://regex101.com/r/kBplnY
-    "learningProductif": re.compile(
+    "learningProductif": compile(
         r"Apprentissage productif : (?P<number_examples_read>[0-9]+) exemples lus sur" + \
         r" (?P<number_examples_total>[0-9]+) avec (?P<number_succes>[0-9]+) succes, effectue" +\
         r" en (?P<time>[0-9]+.[0-9]*) secondes."),
     # https://regex101.com/r/7aemyh
-    "learningAverageDistance": re.compile(
+    "learningAverageDistance": compile(
         r"Distance moyenne sur les exemples : (?P<average_distance>[0-9]+.?[0-9]*)"),
     # https://regex101.com/r/oLAg68
-    "learningFailed": re.compile(
+    "learningFailed": compile(
         r"Apprentissage INFRUCTUEUX sur (?P<number_examples_total>[0-9]+) exemples lus\. avec " + \
         r"(?P<number_succes>[0-9]+) succes, effectue en (?P<time>[0-9]+.?[0-9]*) secondes\.")
 }
 
 # *********************************** Data ************************************
 # Data :
+
+# data to collect
 ranges = {
     'momentum': [0],
     'maximal_distance': [0.5],
@@ -43,11 +46,15 @@ ranges = {
     'slope': [1],
 }
 
+# name of the data file in which is written the data
 data_file_name = "data.json"
 
+# number of instances calling NeuronProject simultaneously
+processes = 5
 
 # ********************************** Classes **********************************
 # Classes :
+
 
 class IterRange:
     """Iterable object itering on a cartesian product different length."""
@@ -74,7 +81,7 @@ class IterRange:
     def __next__(self):
         """Next method."""
         if self.verbose:
-            print("Avancement : {:.2%} \r".format(self.pos / self.length))
+            # print("Avancement : {:.2%} \r".format(self.pos / self.length))
             self.pos += 1
         for i, l in enumerate(self.lengths):
             self.position[i] += 1
@@ -85,6 +92,14 @@ class IterRange:
         else:
             raise StopIteration
         return self.position
+
+    def get_pos(self):
+        """Method returns pos."""
+        return self.pos
+
+    def get_length(self):
+        """Method returns length."""
+        return self.length
 
 
 # ******************************** Functions **********************************
@@ -101,8 +116,8 @@ def exec_NeuronProject(commands, timeout=None, is_commands=True):
         commands_list = ['-c']
     else:
         commands_list = []
-    output = sp.run(['./NeuronProject'] + commands_list + list(commands),
-                    timeout=timeout, stdout=sp.PIPE).stdout
+    output = run(['./NeuronProject'] + commands_list + list(commands),
+                 timeout=timeout, stdout=PIPE).stdout
     return output.decode('UTF-8')
 
 
@@ -288,7 +303,7 @@ def read_data_file(file_name=data_file_name):
     assert type(data) is list, "Load of JSON file failed, not compatible."
     dico = {}
     for elt in data:
-        assert type(elt) is list and len(elt) > 1, "Load of JSON file failed, not compatible."
+        assert type(elt) is list and len(elt) > 0, "Load of JSON file failed, not compatible."
         dico[str(elt[0])] = elt[1:]
     return dico
 
@@ -317,25 +332,60 @@ def write_data_file(dico, file_name=data_file_name):
     return True
 
 
-def command_data(repet=20, file_name=data_file_name, ranges=ranges, verbose=False):
+def command_data(repet=20, file_name=data_file_name, ranges=ranges,
+                 verbose=False, processes=processes):
     """Function commanding the data.
 
     Data situated in the file 'file_name' will be completed with every possible key in the cartesian
     product of the sets defined in ranges, repet times.
     The function cal for process_data on every key.
+    The function use the number specified in processes to get the data.
     """
+    # Data dictionnary, heavy.
     dico = read_data_file(file_name)
-    keys = list(ranges.keys())
-    keys.sort()
-    for position in IterRange([len(ranges[k]) for k in keys], verbose=not verbose):
-        if verbose:
-            print(position)
-        key = [ranges[keys[i]][position[i]] for i in range(len(position))]
-        json_key = json.dumps(key)
-        if json_key not in dico:
-            dico[json_key] = [process_data(key, keys, verbose=verbose)]
-        while len(dico[json_key]) < repet + 2:
-            dico[json_key].append(process_data(key, keys, verbose=verbose))
+    # Keys to call process_data
+    keys = sorted(ranges.keys())
+    # results of the execution of pool.apply_async
+    async_results = []
+    # IterRange object used here
+    iterateur = IterRange([len(ranges[k]) for k in keys], verbose=not verbose)
+
+    # In order to optimize the time of the execution, multiprocessing will be used here.
+    # The argumement of Pool is the number of processes that are running simultaneously.
+    # With less than 8 cpus, reduce that number.
+    with Pool(processes=processes) as pool:
+
+        # For each element of the cartesian product in ranges :
+        for position in iterateur:
+            key = [ranges[keys[i]][position[i]] for i in range(len(position))]
+
+            # the json_key is the str used to hash key in a dictionnary
+            json_key = json.dumps(key)
+
+            # if key is not referenced in dico, we create an entry
+            if json_key not in dico:
+                dico[json_key] = []
+
+            # then we add to this entry the required number of output
+            for i in range(repet + 1 - len(dico[json_key])):
+
+                if verbose:  # if required, we print some stuff...
+                    executed = (iterateur.get_pos() + i / repet) / (iterateur.get_length())
+                    print("Avancement : {:.2%} \r".format(executed))
+
+                # We apply process_data to the key, with the required argumements.
+                # The function is called by a child of the current process, allowing a certain
+                # number of function to be called simultaneously.
+                #  The result is then added to the dico entry
+                async_results.append(
+                    pool.apply_async(process_data, (key, keys), kwds={'verbose': verbose},
+                                     callback=dico[json_key].append))
+
+        # We wait for the processes to finish.
+        for res in async_results:
+            res.get()
+
+    # We write the data in the specified file.
     write_data_file(dico, file_name)
 
 
