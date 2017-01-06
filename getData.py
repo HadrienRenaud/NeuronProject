@@ -393,4 +393,12 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges,
 # Excecutable code :
 
 if __name__ == '__main__':
-    command_data(repet=1, verbose=True)
+
+    def printb(string):
+        """Print overide in a file."""
+        with open('getData.log', 'a') as f:
+            f.write(string)
+
+    print = printb
+
+    command_data(repet=1, verbose=False)
