@@ -370,8 +370,8 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges,
             for i in range(repet + 1 - len(dico[json_key])):
 
                 if verbose:  # if required, we print some stuff...
-                    executed = (iterateur.get_pos() + i / repet) / (iterateur.get_length())
-                    print("Avancement : {:.2%} \r".format(executed))
+                    print("Avancement : {:.2%} \r".format(
+                        (iterateur.get_pos() + i / repet) / (iterateur.get_length())))
 
                 # We apply process_data to the key, with the required argumements.
                 # The function is called by a child of the current process, allowing a certain
