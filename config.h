@@ -59,7 +59,8 @@
 //! Length of inputs in topology module
 //* The image is of format TOPOLOGY_INPUT_SIZE*TOPOLOGY_INPUT_SIZE
 #define TOPOLOGY_INPUT_SIZE 10
-
+//! Superior limit of what is considered to be
+#define LIMIT_EMPTY_TOPOLOGY 0.5
 //! dossier contenant les polices
 #define DOSSIERPOLICES "fonts/"
 //! Le sous-dossier où il faudra placer les images

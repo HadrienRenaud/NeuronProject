@@ -87,7 +87,7 @@ char NetworkArray::testNetworks(double input[], bool verbose)
 			cout << CHARS[i] << " : " << exp_output[i][0] * 100 << "% -- ";
 
 		//on trouve le maximum des réponses aux premiers réseaux
-		if (maxi < exp_output[i][0])                                                                                                                 //On modifie maxi si elle est supérieure
+		if (maxi < exp_output[i][0]) //On modifie maxi si elle est supérieure
 		{
 			maxi   = exp_output[i][0];
 			lettre_trouvee = CHARS[i];
@@ -122,9 +122,9 @@ double NetworkArray::testAll(string directory)
 	cout << "Test en cours de " << nb_exemples << " fichiers ..." << endl;
 	for (int i = 0; i < nb_exemples; ++i)
 	{
-		readExemple(tabloFichiers[i], input, FIRST_LAYER_SIZE, directory);                                                                                                                 //on lit l'exemple
-		if (testNetworks(input, false ) == tabloFichiers[i][0])                                                                                                                 // on le teste
-			succes++;                                                                                                                                                                          //on incrémente succes, si c'est un succes
+		readExemple(tabloFichiers[i], input, FIRST_LAYER_SIZE, directory); //on lit l'exemple
+		if (testNetworks(input, false ) == tabloFichiers[i][0]) // on le teste
+			succes++;  //on incrémente succes, si c'est un succes
 		if (i % ( nb_exemples / 100 ) == 0 )
 		{
 			cout << "Progress : [";
@@ -161,7 +161,8 @@ double NetworkArray::getMaximalDistance()
 }
 void NetworkArray::setMaximalDistance(double maximal_distance)
 {
-	cout << "Les reseaux changent pour une distance maximale apres apprentissage de " << maximal_distance << endl;
+	cout << "Les reseaux changent pour une distance maximale apres apprentissage de ";
+	cout << maximal_distance << endl;
 	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->setMaximalDistance(maximal_distance);
 	m_maximal_distance = maximal_distance;
@@ -173,7 +174,8 @@ int NetworkArray::getMaxLimitLoop()
 }
 void NetworkArray::setMaxLimitLoop(int maxLimitLoop)
 {
-	cout << "Les reseaux changent pour une limite de boucles d'apprentissage de " << maxLimitLoop << endl;
+	cout << "Les reseaux changent pour une limite de boucles d'apprentissage de ";
+	cout << maxLimitLoop << endl;
 	for (int i = 0; i < m_length_alphabet; ++i)
 		m_tablo_net[i]->setMaxLimitLoop(maxLimitLoop);
 	m_maxLimitLoop = maxLimitLoop;
@@ -260,17 +262,21 @@ void NetworkArray::save()
 
 
 template <class T>
-void displayArray(T* data, int length)          //afficher un tableau de valeur
+void displayArray(T* data, int length) //afficher un tableau de valeur
 {
-	cout << "[";                                                                //début de l'affichage
-	for (int i = 0; i < length - 1; i++)                                                          // pour chaque valeur du tableau,
-		cout << (data[i] >= 0 ? "+" : "") << data[i] << ",";                                                                                                                  // on l'affiche avec son signe
-	cout << (data[length - 1] >= 0 ? "+" : "") << data[length - 1] << "]";                                                         //fin de l'affichage
+	//début de l'affichage
+	cout << "[";
+	// pour chaque valeur du tableau,
+	for (int i = 0; i < length - 1; i++)
+		// on l'affiche avec son signe
+		cout << (data[i] >= 0 ? "+" : "") << data[i] << ",";
+	//fin de l'affichage
+	cout << (data[length - 1] >= 0 ? "+" : "") << data[length - 1] << "]";
 }
 
 bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory)
 {
-	ifstream file((directory + string(nom_fichier)).c_str());                                                         //ouverture du fichier
+	ifstream file((directory + string(nom_fichier)).c_str()); //ouverture du fichier
 
 	if (!file)
 	{
@@ -284,24 +290,26 @@ bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string 
 	{
 		// On lit le fichier
 		for (int i(0); i < taille_entree; i++)
-			file >> entrees[i];                                                                                                                                                                          // on insère les valeurs dans entrees
+			file >> entrees[i];  // on insère les valeurs dans entrees
 		return true;
 	}
 }
 
 int countExemples(string directory)
 {
-	int nombre_fichiers(0);                                                         //Initialisation
+	int nombre_fichiers(0); //Initialisation
 	DIR*   dp;
 	struct dirent* ep;
 
-	dp = opendir(directory.c_str());                                                         //On ouvre le répertoire contenant les images avant de le parcourir
-	if (dp != NULL)                                                         //Si l'ouverture du répertoire a fonctionné
+	dp = opendir(directory.c_str()); //On ouvre le répertoire contenant les images avant de le parcourir
+	if (dp != NULL) //Si l'ouverture du répertoire a fonctionné
 	{
-		while ((ep = readdir(dp)))                                                                                                                 //On parcourt le répertoire
-			if (strlen(ep->d_name) >= 4)                                                                                                                                                                         //Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp (sinon le programme détecte d'autres fichiers invisibles bizarres)
+		while ((ep = readdir(dp))) //On parcourt le répertoire
+			if (strlen(ep->d_name) >= 4)
+				// Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp
+				// (sinon le programme détecte d'autres fichiers invisibles bizarres)
 				nombre_fichiers++;
-		closedir(dp);                                                                                                                 //Fermeture du répertoire d'images
+		closedir(dp);  //Fermeture du répertoire d'images
 	}
 	return nombre_fichiers;
 }
@@ -312,18 +320,20 @@ void getArrayOfFileNames(char** tabloFichiers, string directory)
 	DIR*   dp;
 	struct dirent* ep;
 
-	dp = opendir(directory.c_str());                                                         //On ouvre le répertoire contenant les images avant de le parcourir
-	if (dp != NULL)                                                             //Si l'ouverture du répertoire a fonctionné
+	dp = opendir(directory.c_str()); //On ouvre le répertoire contenant les images avant de le parcourir
+	if (dp != NULL)  //Si l'ouverture du répertoire a fonctionné
 	{
-		while ((ep = readdir(dp)))                                                                                                                 //On parcourt le répertoire
+		while ((ep = readdir(dp))) //On parcourt le répertoire
 		{
-			if (strlen(ep->d_name) >= 4)                                                                                                                                                                         //Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp (sinon le programme détecte d'autres fichiers invisibles bizarres)
+			if (strlen(ep->d_name) >= 4)
+			// Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp
+			// (sinon le programme détecte d'autres fichiers invisibles bizarres)
 			{
-				strcpy(tabloFichiers[compteur], ep->d_name);                                                                                                                                                                                                                                 //on inscrit le nom du fichier dans le tablo
+				strcpy(tabloFichiers[compteur], ep->d_name); //on inscrit le nom du fichier dans le tablo
 				compteur++;
 			}
 		}
-		closedir(dp);                                                                                                                 //Fermeture du répertoire d'images
+		closedir(dp); //Fermeture du répertoire d'images
 	}
 }
 
@@ -331,6 +341,7 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
 {
 	cout << "Lecture des exemples ... " << flush;
 	for (int i(0); i < nb_exemples; i++)
-		readExemple(tabloFichiers[i], tabloExemple[i], FIRST_LAYER_SIZE, directory);                                                                                                                  //on lit chacun des exemples
+		//on lit chacun des exemples
+		readExemple(tabloFichiers[i], tabloExemple[i], FIRST_LAYER_SIZE, directory);
 	cout << "Lecture terminee, " << countExemples(DOSSIERTEXTES) << " exemples lus." << endl;
 }

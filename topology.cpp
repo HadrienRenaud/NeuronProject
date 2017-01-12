@@ -49,19 +49,18 @@ int nbConnectedComponent(double *image, const int taille) {
   int compteur = 0;
   int matrix[taille * taille];
   int matAux[taille * taille];
-  ToMatrix t;
+  ToMatrix t(taille,taille);
 
   for (int i = 0; i < taille * taille; i++)
   {
     matAux[i] = 0;
 
-    if (image[i] * 2 >= 1)
+    if (image[i] >= LIMIT_EMPTY_TOPOLOGY)
       matrix[i] = 1;
     else
       matrix[i] = 0;
   }
-  // print_matrix(matrix, t);
-  // print_matrix(matAux, t);
+
   for (int i = 1; i < taille; i++) {
     for (int j = 1; j < taille; j++) {
       if (matrix[t(i, j)] == 1 and matAux[t(i, j)] == 0) {
@@ -72,7 +71,8 @@ int nbConnectedComponent(double *image, const int taille) {
     }
   }
 
-  // print_matrix(matAux, t);
+  print_matrix(matAux, t);
+  std::cout << "Resultat: " << compteur << '\n';
 
   return compteur;
 }
@@ -92,5 +92,3 @@ int nbConnectedComponentMatrix(double image[TAILLE][TAILLE])
 
     return nbConnectedComponent(line, TAILLE);
 }
-
-
