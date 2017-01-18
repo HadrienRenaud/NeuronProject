@@ -350,7 +350,7 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges,
     iterateur = IterRange([len(ranges[k]) for k in keys], verbose=verbose)
 
     # Real number of processes
-    processes = min(processes, iterateur.get_length())
+    processes = min(processes, iterateur.get_length() * repet)
     if processes == 0:
          processes = 1
 
@@ -371,7 +371,7 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges,
                 dico[json_key] = []
 
             # then we add to this entry the required number of output
-            for i in range(repet + 1 - len(dico[json_key])):
+            for i in range(repet - len(dico[json_key])):
 
                 if verbose > 0:  # if required, we print some stuff...
                     executed = (iterateur.get_pos() + i / repet) / (iterateur.get_length())
