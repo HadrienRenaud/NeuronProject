@@ -40,8 +40,8 @@ regexp = {
 # data to collect
 ranges = {
     'momentum': [0],
-    'maximal_distance': [0.5],
-    'max_limit_loop': [10, 50],
+    'maximal_distance': [0.5, 0.2],
+    'max_limit_loop': [100],
     'length_alphabet': [26],
     'slope': [1],
 }
@@ -50,7 +50,7 @@ ranges = {
 data_file_name = "data.json"
 
 # number of instances calling NeuronProject simultaneously
-processes = 5
+processes = 8
 
 # ********************************** Classes **********************************
 # Classes :
@@ -59,7 +59,7 @@ processes = 5
 class IterRange:
     """Iterable object itering on a cartesian product different length."""
 
-    def __init__(self, lengths, verbose=False):
+    def __init__(self, lengths, verbose=0):
         """Initialisor.
 
         lengths is the lengths of the sets on which we are itering.
@@ -80,9 +80,7 @@ class IterRange:
 
     def __next__(self):
         """Next method."""
-        if self.verbose:
-            # print("Avancement : {:.2%} \r".format(self.pos / self.length))
-            self.pos += 1
+        self.pos += 1
         for i, l in enumerate(self.lengths):
             self.position[i] += 1
             if self.position[i] >= l:
@@ -121,7 +119,7 @@ def exec_NeuronProject(commands, timeout=None, is_commands=True):
     return output.decode('UTF-8')
 
 
-def set_networks_settings(verbose=False, **args):
+def set_networks_settings(verbose=0, **args):
     """Set NeuronProject.cfg with the right settings.
 
     Settings available can be found in NeuronProject.cfg.default
@@ -133,17 +131,17 @@ def set_networks_settings(verbose=False, **args):
         if len(li) == 3 and li[1] == '=' and li[0] in args.keys():
             li[2] = str(args[li[0]])
             line = ' '.join(li)
-            if verbose:
+            if verbose > 1:
                 print(line)
         config_file.write(line)
     default_file.close()
     config_file.close()
 
 
-def get_result(commands, timeout=None, is_commands=True, verbose=False):
+def get_result(commands, timeout=None, is_commands=True, verbose=0):
     """Launch NeuronProject and analyse output string to get data."""
     output = exec_NeuronProject(commands, timeout=timeout, is_commands=is_commands)
-    if verbose:
+    if verbose > 1:
         print(output)
     lines = output.split('\n')
     if len(commands) == 0:
@@ -274,7 +272,7 @@ def get_data(commands, commands_output):
     return data
 
 
-def process_data(key, keys, verbose=False):
+def process_data(key, keys, verbose=0):
     """Function calling the networks and getting the data for the parameters."""
     set_networks_settings(verbose=verbose, **dict(zip(keys, key)))
     commands = ['new', 'learn', 'test']
@@ -333,13 +331,14 @@ def write_data_file(dico, file_name=data_file_name):
 
 
 def command_data(repet=20, file_name=data_file_name, ranges=ranges,
-                 verbose=False, processes=processes):
+                 verbose=0, processes=processes):
     """Function commanding the data.
 
     Data situated in the file 'file_name' will be completed with every possible key in the cartesian
     product of the sets defined in ranges, repet times.
     The function cal for process_data on every key.
-    The function use the number specified in processes to get the data.
+    The function use the number specified in processes to get the data (except if the number of run 
+    needed is lower than the number of processes specified).
     """
     # Data dictionnary, heavy.
     dico = read_data_file(file_name)
@@ -348,7 +347,12 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges,
     # results of the execution of pool.apply_async
     async_results = []
     # IterRange object used here
-    iterateur = IterRange([len(ranges[k]) for k in keys], verbose=not verbose)
+    iterateur = IterRange([len(ranges[k]) for k in keys], verbose=verbose)
+
+    # Real number of processes
+    processes = min(processes, iterateur.length)
+    if processes == 0:
+         processes = 1
 
     # In order to optimize the time of the execution, multiprocessing will be used here.
     # The argumement of Pool is the number of processes that are running simultaneously.
@@ -369,8 +373,8 @@ def command_data(repet=20, file_name=data_file_name, ranges=ranges,
             # then we add to this entry the required number of output
             for i in range(repet + 1 - len(dico[json_key])):
 
-                if verbose:  # if required, we print some stuff...
-                    executed = (iterateur.get_pos() + i / repet) / (iterateur.get_length())
+                if verbose > 0:  # if required, we print some stuff...
+                    executed = (iterateur.get_pos() + i / min(repet, iterateur.length)) / (iterateur.get_length())
                     print("Avancement : {:.2%} \r".format(executed))
 
                 # We apply process_data to the key, with the required argumements.
@@ -401,4 +405,4 @@ if __name__ == '__main__':
 
     print = printb
 
-    command_data(repet=1, verbose=False)
+    command_data(repet=1, verbose=1)
