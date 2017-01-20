@@ -27,11 +27,11 @@ void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t);
     \param matrix : image
     \return nombre int number of holes
  */
-int* numbers(double *image, const int taille = TOPOLOGY_INPUT_SIZE);
+vector<int> numbers(double *image, const int taille = TOPOLOGY_INPUT_SIZE);
 
 
 //! Transforme une matrice correspondant à une image filtrée en une ligne dont on calcule le nombre de composantes connexes.
-int* topology(double image[TAILLE][TAILLE]);
+vector<int> topology(double image[TAILLE][TAILLE]);
 
 
 
