@@ -133,7 +133,7 @@ vector<int> numbers(double *image, const int taille) {
 	// std::cout << "Résultat :" << nbHoles << '\n';
 
 	// Result
-	result[0] = nbConnectedComponents);
+	result[0] = nbConnectedComponents;
 	result[1] = nbHoles;
 	return result;
 }
