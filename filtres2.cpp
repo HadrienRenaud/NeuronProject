@@ -573,7 +573,7 @@ void finalMatrix(SDL_Surface * resized, double final[TAILLE][TAILLE], int refere
 
 void printingTxt(FILE * fichier, double final[TAILLE][TAILLE], bool notEmpty)
 {
-
+	int nbTopo[2];
 
 	if (!notEmpty)
 	{
@@ -595,8 +595,8 @@ void printingTxt(FILE * fichier, double final[TAILLE][TAILLE], bool notEmpty)
 
 			fprintf(fichier, "\n "); //Au bout d'une ligne de pixels, on revient à la ligne avant d'écrire la ligne suivante
 		}
-		fprintf(fichier, "%d", nbConnectedComponentMatrix(final));
-
+		nbTopo = topology(final);
+		fprintf(fichier, "%d %d", nbTopo[0], nbTopo[1]);
 	}
 }
 
