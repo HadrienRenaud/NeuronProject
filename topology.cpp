@@ -75,7 +75,7 @@ vector<int> numbers(double *image, const int taille) {
 	int matrix[taille * taille];
 	int matAux[taille * taille];
 	ToMatrix t(taille,taille);
-	vector<int> result = {};
+	vector<int> result (2);
 	
 	
 	// matAux initialisation, matrix format
@@ -133,7 +133,7 @@ vector<int> numbers(double *image, const int taille) {
 	// std::cout << "Résultat :" << nbHoles << '\n';
 
 	// Result
-	result.push_back(nbConnectedComponents);
-	result.push_bask(nbHoles);
+	result[0] = nbConnectedComponents);
+	result[1] = nbHoles;
 	return result;
 }
