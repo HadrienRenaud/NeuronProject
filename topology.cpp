@@ -135,5 +135,5 @@ int* numbers(double *image, const int taille) {
 	// Result
 	result[0] = nbConnectedComponents;
 	result[1] = nbHoles;
-	return nbHoles;
+	return result;
 }
