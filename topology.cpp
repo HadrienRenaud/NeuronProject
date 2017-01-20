@@ -75,7 +75,7 @@ int* numbers(double *image, const int taille) {
 	int matrix[taille * taille];
 	int matAux[taille * taille];
 	ToMatrix t(taille,taille);
-	int* result[2];
+	int result[2];
 	
 	
 	// matAux initialisation, matrix format
