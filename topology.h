@@ -22,23 +22,16 @@ void print_matrix(int *matrix, ToMatrix t);
 
 void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t);
 
-//! Determine the number of connected component
-/*! In the image passed as component
-    \param matrix : image
-    \return nombre int number of connected component
- */
-int nbConnectedComponent(double *image, const int taille = TOPOLOGY_INPUT_SIZE);
-
 //! Determine the number of holes
 /*! In the image passed as component
     \param matrix : image
     \return nombre int number of holes
  */
-int nbHoles(double *image, const int taille = TOPOLOGY_INPUT_SIZE);
+int* numbers(double *image, const int taille = TOPOLOGY_INPUT_SIZE);
 
 
 //! Transforme une matrice correspondant à une image filtrée en une ligne dont on calcule le nombre de composantes connexes.
-int nbConnectedComponentMatrix(double image[TAILLE][TAILLE]);
+int* topology(double image[TAILLE][TAILLE]);
 
 
 
