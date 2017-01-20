@@ -573,7 +573,7 @@ void finalMatrix(SDL_Surface * resized, double final[TAILLE][TAILLE], int refere
 
 void printingTxt(FILE * fichier, double final[TAILLE][TAILLE], bool notEmpty)
 {
-	int nbTopo[2];
+	vector<int> nbTopo;
 
 	if (!notEmpty)
 	{
