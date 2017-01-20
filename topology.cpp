@@ -53,41 +53,8 @@ void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t) {
 	}
 }
 
-int nbConnectedComponent(double *image, const int taille) {
-	int compteur = 0;
-	int matrix[taille * taille];
-	int matAux[taille * taille];
-	ToMatrix t(taille,taille);
 
-	for (int i = 0; i < taille * taille; i++)
-	{
-		matAux[i] = 0;
-
-		if (image[i] >= LIMIT_EMPTY_TOPOLOGY)
-			matrix[i] = 1;
-		else
-			matrix[i] = 0;
-	}
-
-	for (int i = 1; i < taille; i++) {
-		for (int j = 1; j < taille; j++) {
-			if (matrix[t(i, j)] == 1 and matAux[t(i, j)] == 0) {
-				compteur++;
-				matAux[t(i, j)] = compteur;
-				changeConnected(i, j, matrix, matAux, t);
-			}
-		}
-	}
-
-	// print_matrix(matAux, t);
-	std::cout << "Resultat: " << compteur << '\n';
-
-	return compteur;
-}
-
-
-
-int nbConnectedComponentMatrix(double image[TAILLE][TAILLE])
+int* topology(double image[TAILLE][TAILLE])
 {
 	double line[TAILLE*TAILLE];
 
@@ -98,16 +65,19 @@ int nbConnectedComponentMatrix(double image[TAILLE][TAILLE])
 
 	}
 
-	return nbHoles(line, TAILLE);
+	return numbers(line, TAILLE);
 }
 
-int nbHoles(double *image, const int taille) {
+int* numbers(double *image, const int taille) {
+	int nbConnectedComponents = 0;
 	int nbSpaces = 0;
 	int nbHoles = 0;
 	int matrix[taille * taille];
 	int matAux[taille * taille];
 	ToMatrix t(taille,taille);
-
+	int* result[2];
+	
+	
 	// matAux initialisation, matrix format
 	for (int i = 0; i < taille * taille; i++)
 	{
@@ -146,10 +116,13 @@ int nbHoles(double *image, const int taille) {
 	for (int i = 1; i < taille; i++) {
 		for (int j = 1; j < taille; j++) {
 			if (matAux[t(i, j)] == 0) {
+				// compteurs
 				nbSpaces++;
-				if (matrix[t(i, j)] == 0) {
+				if (matrix[t(i, j)] == 0)
 					nbHoles++;
-				}
+				else
+					nbConnectedComponents++;
+				
 				matAux[t(i, j)] = nbSpaces;
 				changeConnected(i, j, matrix, matAux, t);
 			}
@@ -157,7 +130,10 @@ int nbHoles(double *image, const int taille) {
 	}
 
 	// print_matrix(matAux, t);
-	std::cout << "Résultat :" << nbHoles << '\n';
+	// std::cout << "Résultat :" << nbHoles << '\n';
 
+	// Result
+	result[0] = nbConnectedComponents;
+	result[1] = nbHoles;
 	return nbHoles;
 }
