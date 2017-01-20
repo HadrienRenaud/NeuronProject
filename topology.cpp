@@ -54,7 +54,7 @@ void changeConnected(int row, int col, int *matrix, int *matAux, ToMatrix t) {
 }
 
 
-int* topology(double image[TAILLE][TAILLE])
+vector<int> topology(double image[TAILLE][TAILLE])
 {
 	double line[TAILLE*TAILLE];
 
@@ -68,14 +68,14 @@ int* topology(double image[TAILLE][TAILLE])
 	return numbers(line, TAILLE);
 }
 
-int* numbers(double *image, const int taille) {
+vector<int> numbers(double *image, const int taille) {
 	int nbConnectedComponents = 0;
 	int nbSpaces = 0;
 	int nbHoles = 0;
 	int matrix[taille * taille];
 	int matAux[taille * taille];
 	ToMatrix t(taille,taille);
-	int result[2];
+	vector<int> result = {};
 	
 	
 	// matAux initialisation, matrix format
@@ -133,7 +133,7 @@ int* numbers(double *image, const int taille) {
 	// std::cout << "Résultat :" << nbHoles << '\n';
 
 	// Result
-	result[0] = nbConnectedComponents;
-	result[1] = nbHoles;
+	result.push_back(nbConnectedComponents);
+	result.push_bask(nbHoles);
 	return result;
 }
