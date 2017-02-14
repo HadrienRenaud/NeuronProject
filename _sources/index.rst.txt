@@ -10,6 +10,7 @@ Welcome to NeuronProject's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Bindings
 
 
 Indices and tables

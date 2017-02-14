@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bindinds module &#8212; NeuronProject 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to NeuronProject’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to NeuronProject’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NeuronProject 0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="bindinds-module">
+<h1>Bindinds module<a class="headerlink" href="#bindinds-module" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv28Bindings">
+<span id="Bindings"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">Bindings</code><a class="headerlink" href="#_CPPv28Bindings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Binding class, composed of the source neuron and a weight.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Note:</th><td class="field-body">A <code class="xref cpp cpp-class docutils literal"><span class="pre">Neuron</span></code> has the same number of <a class="reference internal" href="#_CPPv28Bindings" title="Bindings"><code class="xref cpp cpp-class docutils literal"><span class="pre">Bindings</span></code></a> than of predecessor <code class="xref cpp cpp-class docutils literal"><span class="pre">Neuron</span></code>.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="_CPPv2N8Bindings7BindingEv">
+<span id="Bindings::Binding"></span><code class="descclassname"></code><code class="descname">Binding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Bindings7BindingEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv2N8Bindings7BindingEP6Neurond">
+<span id="Bindings::Binding__NeuronP.double"></span><code class="descclassname"></code><code class="descname">Binding</code><span class="sig-paren">(</span>Neuron *<em>neuron</em>, double <em>weight</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Bindings7BindingEP6Neurond" title="Permalink to this definition">¶</a><br /></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>neuron</strong> &#8211; Source Neuron</li>
+<li><strong>weight</strong> &#8211; Weight of the binding</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8BindingsD0Ev">
+<span id="Bindings::~Binding"></span><code class="descclassname"></code><code class="descname">~Binding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8BindingsD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destructor</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK8Bindings9getNeuronEv">
+<span id="Bindings::getNeuronC"></span>Neuron *<code class="descclassname"></code><code class="descname">getNeuron</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK8Bindings9getNeuronEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the source neuron</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Bindings9setWeightEd">
+<span id="Bindings::setWeight__double"></span>void <code class="descclassname"></code><code class="descname">setWeight</code><span class="sig-paren">(</span>double <em>weight</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Bindings9setWeightEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the weight of the binding.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2NK8Bindings9getWeightEv">
+<span id="Bindings::getWeightC"></span>double <code class="descclassname"></code><code class="descname">getWeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv2NK8Bindings9getWeightEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the weight of the Binding.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv2N8Bindings9addWeightEd">
+<span id="Bindings::addWeight__double"></span>void <code class="descclassname"></code><code class="descname">addWeight</code><span class="sig-paren">(</span>double <em>weight</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv2N8Bindings9addWeightEd" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Shortcut for <cite>setWeight(weight + getWeight)</cite></p>
+</dd></dl>
+
+<dl class="var">
+<dt id="_CPPv2N8Bindings7neuron_E">
+<span id="Bindings::neuron___NeuronP"></span>Neuron *<code class="descclassname"></code><code class="descname">neuron_</code><a class="headerlink" href="#_CPPv2N8Bindings7neuron_E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Source neuron.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="_CPPv2N8Bindings7weight_E">
+<span id="Bindings::weight___double"></span>double <code class="descclassname"></code><code class="descname">weight_</code><a class="headerlink" href="#_CPPv2N8Bindings7weight_E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Weight of the binding.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="_CPPv2N8Bindings13previousStep_E">
+<span id="Bindings::previousStep___double"></span>double <code class="descclassname"></code><code class="descname">previousStep_</code><a class="headerlink" href="#_CPPv2N8Bindings13previousStep_E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Weight a the previous step of the learning algorithm.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to NeuronProject&#8217;s documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Bindings.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to NeuronProject’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NeuronProject 0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Guillaume Bressan, Hadrien Renaud-Lebret, Pierre Browne.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>
