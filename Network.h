@@ -3,6 +3,8 @@
 
 #include "config.h"
 
+using namespace std;
+
 class Layer; //on dit qu'on va utiliser la classe layer
 //! Classe Reseau de neurones
 /*! Contient sa premiere couche, les methodes et tous les parametres necessaire */

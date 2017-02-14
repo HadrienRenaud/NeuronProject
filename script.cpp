@@ -6,7 +6,6 @@ void scriptFile(ifstream &input)
 {
 	std::vector<string> cmdsVect;
 	string cmdName;
-	int compteur(0);
 
 	while(input >> cmdName)
 	{
@@ -14,7 +13,7 @@ void scriptFile(ifstream &input)
 	}
 
 	string cmds[cmdsVect.size()];
-	for (unsigned int i = 0; i < (int)cmdsVect.size(); ++i)
+	for (int i = 0; i < (int)cmdsVect.size(); ++i)
 		cmds[i]=cmdsVect[i];
 
 	std::cout << cmdsVect.size() << "\n";
@@ -57,7 +56,7 @@ void commands(int nbCmds, string cmds[])
 			filtres();
 
 		else if (cmds[i] == "database")
-			database(false, true, length_alphabet);
+			database(false, true);
 	  #endif
 
 		else if (cmds[i] == "test")
