@@ -13,14 +13,14 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ------------------------------------------------
 
@@ -32,14 +32,14 @@
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages']
+              'sphinx.ext.doctest',
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.todo',
+              'sphinx.ext.coverage',
+              'sphinx.ext.mathjax',
+              'sphinx.ext.ifconfig',
+              'sphinx.ext.viewcode',
+              'sphinx.ext.githubpages']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -48,7 +48,12 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+
+# ADDED accroding to www.sphinx-doc.org/en/stable/markdown.html
+source_parsers = {
+   '.md': 'recommonmark.parser.CommonMarkParser',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -91,7 +96,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'nature'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -160,8 +165,6 @@ texinfo_documents = [
      author, 'NeuronProject', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
