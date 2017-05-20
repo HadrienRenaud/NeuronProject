@@ -24,7 +24,6 @@ void database(bool sauvegarde, bool filtre)
 	    caracteres[i][1] = '\0';
 	}
 
-
 	int nombrePolices = 0, compteurPolices = 0;
 	DIR *   dp;
 	struct dirent * ep;

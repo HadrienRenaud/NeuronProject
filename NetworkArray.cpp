@@ -274,21 +274,24 @@ void displayArray(T* data, int length)          //afficher un tableau de valeur
 
 bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory)
 {
-	ifstream file((directory + string(nom_fichier)).c_str());                                                         //ouverture du fichier
+	char* temp = new char[MAX_LENGTH_NAME_FILE];
+	strncpy(temp, nom_fichier, MAX_LENGTH_NAME_FILE);
+	ifstream file((directory + string(temp)).c_str());                                                         //ouverture du fichier
 
 	if (!file)
 	{
 		//ERREUR -> message dans erreur.txt, affiché dans la console
-		ofstream file("erreur.txt");
-		file << "Apprentissage - Bug 1 : Exemple " << directory << nom_fichier << " non lu." << endl;
-		cout << "Apprentissage - Bug 1 : Exemple " << directory << nom_fichier << " non lu." << endl;
+		err("Apprentissage - Bug 1 : Exemple " + directory + string(temp) + " non lu.",1);
+		delete temp;
 		return false;
 	}
 	else
 	{
 		// On lit le fichier
 		for (int i(0); i < taille_entree; i++)
-			file >> entrees[i];                                                                                                                                                                          // on insère les valeurs dans entrees
+			file >> entrees[i];
+
+		delete temp;                                                                                                                                                                        // on insère les valeurs dans entrees
 		return true;
 	}
 }
@@ -310,7 +313,7 @@ int countExemples(string directory)
 	return nombre_fichiers;
 }
 
-void getArrayOfFileNames(char** tabloFichiers, string directory)
+int getArrayOfFileNames(char** tabloFichiers, string directory)
 {
 	int compteur(0);
 	DIR*   dp;
@@ -321,14 +324,15 @@ void getArrayOfFileNames(char** tabloFichiers, string directory)
 	{
 		while ((ep = readdir(dp)))                                                                                                                 //On parcourt le répertoire
 		{
-			if (strlen(ep->d_name) >= 4)                                                                                                                                                                         //Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp (sinon le programme détecte d'autres fichiers invisibles bizarres)
+			if (strlen(ep->d_name) >= 4 && ep->d_name[0]!=0)                                                                                                                                                                         //Si le nom du fichier est d'au moins 4 caractères du genre .png ou .bmp (sinon le programme détecte d'autres fichiers invisibles bizarres)
 			{
-				strcpy(tabloFichiers[compteur], ep->d_name);                                                                                                                                                                                                                                 //on inscrit le nom du fichier dans le tablo
+				strncpy(tabloFichiers[compteur], ep->d_name,MAX_LENGTH_NAME_FILE);                                                                                                                                                                                                                        //on inscrit le nom du fichier dans le tablo
 				compteur++;
 			}
 		}
 		closedir(dp);                                                                                                                 //Fermeture du répertoire d'images
 	}
+	return compteur;
 }
 
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory)

@@ -60,14 +60,14 @@ public:
 /*!
     \param trsf (optional)  pointeur de type [transfert](@transfert) vers la fonction de transfert du neurone
  */
-	void addNeuron(transfert trsf = 0);
+	void addNeuron(int option = RAND, transfert trsf = 0);
 
 //! Ajouter plusieurs neurones
 /*!
     \param n nombre de neurones a ajouter
     \param trsf (optional)  pointeur de type [transfert](@transfert) vers la fonction de transfert du neurone
  */
-	void  addNeurons(int n, transfert trsf = 0);
+	void  addNeurons(int n, int option = RAND, transfert trsf = 0);
 
 //! Demander à chaque neurone de calculer sa sortie
 	void  calculate() const;

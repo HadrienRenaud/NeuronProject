@@ -71,7 +71,7 @@ double  getGradient() const;
 /*!
    Si le neuron est dans la première couche du réseau, input est pris en compte.
  */
-bool  initNeuron(double input);
+void  initNeuron(double input);
 //! Remet à zero l'output.
 /*!
     Si le réseau est dans la dernière couche, assignation de expectedOutput est autorisée

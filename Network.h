@@ -3,6 +3,8 @@
 
 #include "config.h"
 
+using namespace std;
+
 class Layer; //on dit qu'on va utiliser la classe layer
 //! Classe Reseau de neurones
 /*! Contient sa premiere couche, les methodes et tous les parametres necessaire */
@@ -109,7 +111,7 @@ class Network {
 	//! Fixe le nombre maximal de boucles d'apprentissage a effectuer par le reseau
 	void setMaxLimitLoop(int maxLimitLoop);
 
-    private:
+protected:
 
 	//! Pointeur vers la premiere couche
 	/*! Seule la premiere couche suffit, le reseau fonctionne comme une liste chainee */

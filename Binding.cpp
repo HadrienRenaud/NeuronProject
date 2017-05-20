@@ -35,7 +35,6 @@ double Binding::getWeight() const
 void Binding::addWeight(double weight)
 {
 	double temp = weight_;
-
 	weight_  += (weight + getNeuron()->getLayer()->getNetwork()->getMomentum() * previousStep_);
 	previousStep_ = weight_ - temp;
 }

@@ -109,7 +109,7 @@ bool readExemple(char* nom_fichier, double entrees[], int taille_entree, std::st
 int  countExemples(std::string directory = DOSSIERTEXTES);
 
 //! Recupere les noms des fichiers dans un dossier, les met dans le `tabloFichiers` passe en argument
-void getArrayOfFileNames(char** tabloFichier, std::string directory = DOSSIERTEXTES);
+int getArrayOfFileNames(char** tabloFichier, std::string directory = DOSSIERTEXTES);
 
 //! Récupère tous les tableaux d'exemples
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, std::string directory = DOSSIERTEXTES);

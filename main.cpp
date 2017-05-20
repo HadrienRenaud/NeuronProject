@@ -1,7 +1,9 @@
-
 #include "config.h"
+#include "ReadNetwork.h"
 
 using namespace std;
+
+
 
 #ifndef NO_GRAPHIC
 void graphics()
@@ -36,6 +38,37 @@ void help()
 
 int main(int argc, char** argv)
 {
+	cout << "Paramètres : \nPENTE = "<< PENTE << "\nMU = "<<MU<<"\nLAST_LAYER_SIZE = "<<LAST_LAYER_SIZE<<"\nALPHA = "<<ALPHA<<"\nMAXIMAL_DISTANCE = " << MAXIMAL_DISTANCE << endl;
+
+	// cout << "hello\n" ;
+
+	srand(time(0));//ne pas enlever
+
+	//*
+	//ON PREPARE LES ARGUMENTS DU CONSTRUCTEUR DE ReadNetwork
+	int sizes[] = {FIRST_LAYER_SIZE,(int)(1.5*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
+	//on l'appelle : ReadNetwork(	nbr de couche,
+	//								tableau de leurs tailles,//la dernière couche sera donc le nombre de lettres de l'alphabet (qui peut être plus grand en longueur)
+	//								alphabet à reconnaitre,
+	//								fonction de transfert, //0 = sigmoide
+	//								MAXIMAL_DISTANCE);
+	ReadNetwork* rdnk = new ReadNetwork(3,sizes,CHARS2,0,MAXIMAL_DISTANCE);
+	rdnk->train();
+	rdnk->save("aka00");//sauvegarde le distance maximal, l'alphabet et le réseau
+
+	ReadNetwork* rr = load("aka00");
+	rr->train();
+
+	double* input = new double[FIRST_LAYER_SIZE];
+
+	filtres("test/","test_texts/",true);//mettez vos exemples à vous
+
+	if (readExemple("lettre.txt", input, FIRST_LAYER_SIZE, "test_texts/")){
+		cout << "c'est un " << rr->test(input) << endl;
+		cout << "c'est un " << rdnk->test(input) << endl;
+	}
+
+	/*
 	if (argc < 2)
 		#ifndef NO_GRAPHIC
 		graphics();
@@ -75,7 +108,7 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-
+	//*/
 
 	return 0;
 }

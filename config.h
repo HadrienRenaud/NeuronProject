@@ -26,25 +26,23 @@
 
 #define THRESHOLD 0
 //! demi-pente de la sigmoide à l'origine
-#define PENTE 1
+#define PENTE 0.67
 //! taux d'apprentissage 0<MU<1
-#define MU 0.9
+#define MU 0.5
 //! nombre de neurones de la première couche
 #define FIRST_LAYER_SIZE 400
 //! nombe de neurones de la dernière couche
-#define LAST_LAYER_SIZE 1
+#define LAST_LAYER_SIZE 16
 //! momentum, quantité d'inertie
-#define ALPHA 0.05
+#define ALPHA 0.27
 //! longueur maximale d'un nom de fichier
 #define MAX_LENGTH_NAME_FILE 100
 //! période temporelle d'affichage des informations sur l'apprentissage en cour
 #define NB_LEARNING 10
 //! valeur par defaut de la distance maximale sur les exemples que peut avoir un reseau en sortie d'un apprentissage productif, modife par NetworkArray::setOptions
-#define MAXIMAL_DISTANCE 0.05
+#define MAXIMAL_DISTANCE 0.15
 //! valeur par defaut du nombre maximal de boucles d'apprentissage a effectuer en un apprentissage, modife par  NetworkArray::setOptions
 #define MAX_LIMIT_LOOP 500
-//! valeur par defaut de la longueur de l'alphabet, modife par NetworkArray::setOptions
-#define LENGTH_ALPHABET 52
 //! valeur par defaut de la longueur de l'alphabet, modife par NetworkArray::setOptions
 #define LENGTH_ALPHABET 52
 //! flotant sous lequel, lors d'un test, le reseau est considere comme repondant negativement
@@ -61,6 +59,11 @@
 #define TEXTCOLOR         0, 0, 0
 #define TEXTSIZE          280
 
+///////
+#define RAND 0
+#define ZERO 1
+///////
+
 //! dossier contenant les polices
 #define DOSSIERPOLICES "fonts/"
 //! Le sous-dossier où il faudra placer les images
@@ -73,8 +76,12 @@
 #define DOSSIERTEST "test/"
 //! nom du dossier ou sont stockes les textes extraits des images de test
 #define DOSSIERTESTTEXT "test_texts/"
+//erreurs
+#define ERROR "error.txt"
 //! liste des caracteres
 #define CHARS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:!éàè'()+-\"="
+//! liste des caracteres qui ne se ressemblent pas (ex u et U)
+#define CHARS2 "abcdefghijklmnopqrstuvwxyzABDEFGHIJKLMNQRTY0123456789,?;.:!éàè'()+-\"="
 
 //! Le sous-dossier où seront créés les textes
 #define DOSSIERTEXTES "texts/"
@@ -91,7 +98,9 @@
 #include "Layer.h"
 #include "Network.h"
 #include "Binding.h"
+// #include "ReadNetwork.h" //fait planter la compilation (plein d'erreurs)
 #include "script.h"
+#include "error.h"
 
 #ifndef NO_GRAPHIC
 #include "system.h"

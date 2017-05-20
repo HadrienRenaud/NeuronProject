@@ -10,7 +10,7 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 	totalBindingsNumber_(0),
 	initialized_(false),
 	gradientInitialized_(false),
-	maximal_distance_(MAXIMAL_DISTANCE),
+	maximal_distance_(maximal_distance),
 	maxLimitLoop_(MAX_LIMIT_LOOP),
 	testedLetter_(lettre_testee),
 	nameFile_(new char[MAX_LENGTH_NAME_FILE])
@@ -164,8 +164,9 @@ int Network::getFirstLayerSize() const
 void Network::initNetwork(double *inputs)
 {
 	//on initialise la premiere couche avec les inputs
-	for (int i = 0; i < getFirstLayerSize(); i++)
-		getFirstLayer()->getNeuron(i)->initNeuron(inputs[i]);
+	int fls = getFirstLayerSize();
+	for (int i = 0; i < fls; i++)
+		firstLayer_->getNeuron(i)->initNeuron(inputs[i]);
 
 	//puis on réinitialise tous les aures neurones du réseau
 	Layer* temp = firstLayer_;

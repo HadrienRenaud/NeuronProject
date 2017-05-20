@@ -26,7 +26,7 @@ Layer::Layer(Network* network, int neurons, Layer* previousLayer, Layer* nextLay
 	setNextLayer(nextLayer); //on fait le lien dans les deux sens
 	setPreviousLayer(previousLayer);
 	for (int i = 0; i < neurons; i++)
-		addNeuron(trsf);  //on ajoute le nombre de neurones demandé
+		addNeuron(RAND, trsf);  //on ajoute le nombre de neurones demandé
 }
 
 Layer::~Layer() //destructeur, inintéressant
@@ -96,17 +96,21 @@ Neuron* Layer::getNeuron(int n) const
 	return 0;
 }
 
-void Layer::addNeuron(transfert trsf) //NOUVEAU NEURONE !!!
+void Layer::addNeuron(int option, transfert trsf) //NOUVEAU NEURONE !!!
 {
 	Neuron* neuron = new Neuron(this, trsf);
-	double weight;
+	double weight = 0.0 ;
 
 	if (!isLast()) //on établit des liens avec les neurones de la couche d'après
 	{ //que s'ils existent
 		for (int i = 0; i < getNextLayer()->getSize(); i++)
 		{
-			weight = rand() % 1000;
-			weight = (weight - 500) / 500;
+			if(option == RAND){
+				weight = rand() % 1000;
+				weight = (weight - 500) / 500;
+			}
+			if(option == ZERO)
+				weight = 0.0;
 			//weight est maintenant un nombre aléatoire entre -1 et 1
 			//std::cout << weight << std::endl;
 			Binding* bdg = new Binding(neuron, weight);
@@ -119,22 +123,25 @@ void Layer::addNeuron(transfert trsf) //NOUVEAU NEURONE !!!
 	{ //que s'ils existent
 		for (int i = 0; i < getPreviousLayer()->getSize(); i++)
 		{
-			weight = rand() % 1000;
-			weight = (weight - 500) / 500;
+			if(option == RAND){
+				weight = rand() % 1000;
+				weight = (weight - 500) / 500;
+			}
+			if(option == ZERO)
+				weight = 0.0;
 			//weight est maintenant un nombre aléatoire entre -1 et 1
 			//std::cout << weight << std::endl;
 			Binding* bdg = new Binding(getPreviousLayer()->getNeuron(i), weight);
-			neuron->addBinding(bdg); //chaque neurone
-			//de la couche n-1 augmente de 1 la taille de son tableau weight
+			neuron->addBinding(bdg);
 		}
 	}
 	m_neurons.push_back(neuron);
 }
 
-void Layer::addNeurons(int n, transfert trsf)
+void Layer::addNeurons(int n, int option, transfert trsf)
 {
 	for (int i = 0; i < n; i++)
-		addNeuron(trsf);
+		addNeuron(option, trsf);
 }
 
 void Layer::calculate() const //propagation normale
