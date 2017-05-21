@@ -38,13 +38,20 @@ void help()
 
 int main(int argc, char** argv)
 {
-	cout << "Paramètres : \nPENTE = "<< PENTE << "\nMU = "<<MU<<"\nLAST_LAYER_SIZE = "<<LAST_LAYER_SIZE<<"\nALPHA = "<<ALPHA<<"\nMAXIMAL_DISTANCE = " << MAXIMAL_DISTANCE << endl;
-
-	// cout << "hello\n" ;
+	cout << "Parametres : \nPENTE = " << PENTE << "\nMU = " << MU << "\nLAST_LAYER_SIZE = " << LAST_LAYER_SIZE << "\nALPHA = " << ALPHA << "\nMAXIMAL_DISTANCE = " << MAXIMAL_DISTANCE << "\nNombre de lettres utilisees : " << LENGTH_ALPHABET << endl << endl;
 
 	srand(time(0));//ne pas enlever
 
-	//*
+
+    // Chargement de l'interface graphique
+
+	graphics();
+
+
+
+    // Version Démo proposée par Guillaume : les fonctions ci-dessous sont les principaux outils pour interagir avec le réseau
+
+	/*
 	//ON PREPARE LES ARGUMENTS DU CONSTRUCTEUR DE ReadNetwork
 	int sizes[] = {FIRST_LAYER_SIZE,(int)(1.5*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
 	//on l'appelle : ReadNetwork(	nbr de couche,
@@ -52,21 +59,28 @@ int main(int argc, char** argv)
 	//								alphabet à reconnaitre,
 	//								fonction de transfert, //0 = sigmoide
 	//								MAXIMAL_DISTANCE);
-	ReadNetwork* rdnk = new ReadNetwork(3,sizes,CHARS2,0,MAXIMAL_DISTANCE);
+	ReadNetwork* rdnk = new ReadNetwork(3,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
 	rdnk->train();
-	rdnk->save("aka00");//sauvegarde le distance maximal, l'alphabet et le réseau
+	rdnk->save("aka00");    //sauvegarde le distance maximal, l'alphabet et le réseau
 
-	ReadNetwork* rr = load("aka00");
+
+	ReadNetwork* rr = load("aka00", true);
 	rr->train();
 
 	double* input = new double[FIRST_LAYER_SIZE];
 
-	filtres("test/","test_texts/",true);//mettez vos exemples à vous
+	filtres("test/","test_texts/",true);    //mettez vos exemples à vous
 
-	if (readExemple("lettre.txt", input, FIRST_LAYER_SIZE, "test_texts/")){
-		cout << "c'est un " << rr->test(input) << endl;
-		cout << "c'est un " << rdnk->test(input) << endl;
-	}
+    cout << "c'est un " << rr->test("lettre.txt","test_texts/") << endl;
+    cout << "c'est un " << rdnk->test("lettre.txt","test_texts/") << endl;*/
+
+
+
+
+
+
+
+    // Ancien code, obsolète
 
 	/*
 	if (argc < 2)

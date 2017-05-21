@@ -13,7 +13,7 @@ void displayArray(T* data, int length) //afficher un tableau de valeur
 
 
 ReadNetwork::ReadNetwork():Network('b', "", MAXIMAL_DISTANCE){
-	m_alphabet = CHARS;
+	m_alphabet = (char*) CHARS;
 	m_length_alphabet = LENGTH_ALPHABET;
 }
 
@@ -55,8 +55,11 @@ void ReadNetwork::train(){
 	short lastLayerSize = getLastLayer()->getSize();
 	if(m_length_alphabet!=lastLayerSize)
 		err("ReadNetwork::train : certaines lettre ne seront pas prises en compte car m_length_alphabet!=lastLayerSize",1);
+
 	short firstLayerSize = firstLayer_->getSize();
 	short const nb_exemples(countExemples());
+	cout << endl << nb_exemples << " exemples d'entrainement trouves, debut de l'apprentissage." << endl;
+
 	short ignoredExemples = 0;
 	char**  tabloFichiers = new char*[nb_exemples];
 	double** inputs   = new double*[nb_exemples];
@@ -80,13 +83,14 @@ void ReadNetwork::train(){
 		// cout << tabloFichiers[i] << endl;
 		lettres[i] = tabloFichiers[i][0];
 	}
-	// cout << "#####################################";
+
 	getArrayOfExemples(tabloFichiers, inputs, nb_exemples);
 
-	for(int i = 0; i<nb_exemples;i++){
+	for(int i = 0; i < nb_exemples;i++){
 		// cout << tabloFichiers[i] << " : " << lettres[i] << endl;
-		int ca = findChar(lettres[i],m_alphabet,m_length_alphabet);
-		if(ca==-1){//échec
+		int ca = findChar(lettres[i], m_alphabet, m_length_alphabet);
+		if(ca == -1)
+		{   //échec
 			// delete outputExpected[i];
 			outputExpected[i] = NULL;
 			ignoredExemples++;
@@ -95,14 +99,16 @@ void ReadNetwork::train(){
 			outputExpected[i][ca] = 1;
 	}
 	// Initialisations
-	short exemple   = 0; //exemple actuellement selectionné pour l'apprentissage, cette variable est incrémenté à chaque fois qu'il réussi un exemple
+	short exemple   = 0; //exemple actuellement selectionné pour l'apprentissage, cette variable est incrémentée à chaque fois qu'il réussit un exemple
 	short successes  = 0; //le réseau doit enchainer nb_exemples - ignoredExemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
-	short successesInLoop = 0;
 	short maxSuccesses = 0;
 	short count   = 0; //nombre de passage dans la boucle
-	double dist   = 0; //pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
-	double totalDistance = 0;
-	double maxDist   = 0;
+
+	//Variables inutilisées
+	//short successesInLoop = 0;
+	//double dist   = 0; //pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
+	//double totalDistance = 0;
+	//double maxDist   = 0;
 
 	clock_t t0(clock()); //temps de départ du programme
 	short trueNb_exemples = nb_exemples - ignoredExemples;
@@ -111,7 +117,7 @@ void ReadNetwork::train(){
 	{
 		exemple++;
 		exemple %= nb_exemples;  //On ne dépasse pas nb_exemples
-		if(outputExpected[exemple]!=NULL){//
+		if(outputExpected[exemple] != NULL){//
 			count++;
 			initNetwork(inputs[exemple]);  //on initialise avec les valeurs inputs
 			launch(outputExperimental);  //on lance et on récupère les outputs
@@ -127,12 +133,12 @@ void ReadNetwork::train(){
 					maxSuccesses = successes;
 					cout << 100*maxSuccesses/trueNb_exemples << "%\n";
 				}
-				successes = 0;  //on réinitialise aussi les nombre de succès enchaînés
+				successes = 0;  //on réinitialise aussi le nombre de succès enchaînés
 			}
 		}
 	}
 	cout << "100%\n";
-	cout << "Temps : " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes." << endl;
+	cout << "Temps : " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes, apprentissage termine." << endl;
 
 	//On sauvegarde le réseau
 	// save();
@@ -202,7 +208,7 @@ void ReadNetwork::save(string name)
 	}
 }
 
-char ReadNetwork::test(double* input){
+/*char ReadNetwork::test(double* input){                // Voir version améliorée plus bas
 	double* output = new double[m_length_alphabet];
 	initNetwork(input);
 	launch(output);
@@ -211,23 +217,56 @@ char ReadNetwork::test(double* input){
 		if(output[k] > output [imax])
 			imax = k;
 	return m_alphabet[imax];
+}*/
+
+char ReadNetwork::test(char* name, char* directory){
+
+	double* imput = new double[FIRST_LAYER_SIZE];
+    double* output = new double[m_length_alphabet];
+    char result = '_';
+
+    if (readExemple(name, imput, FIRST_LAYER_SIZE, directory))
+    {
+        initNetwork(imput);
+        launch(output);
+
+        short imax = 0;
+        for(short k = 0; k < m_length_alphabet; k ++)
+            if(output[k] > output [imax])
+                imax = k;
+
+        result = m_alphabet[imax];
+    }
+    else
+        //err("L'exemple " + string(directory) + string(name) " n'a pas pu être ouvert.", 1);   // erreur avec le string ?! (je suis nul)
+        cout << "L'exemple " << string(directory) << string(name) << " n'a pas pu être ouvert." << endl;
+
+    delete imput;
+    delete output;
+    return result;
 }
 
-ReadNetwork* load(string name)
+ReadNetwork* load(string name, bool treat_error)
 {
 	// On ouvre le fichier
 	ifstream file(name);
-	if(!file){
-		err("Impossible d'ouvrir le fichier" + name,1);
+	if (!file){
+
+		if (treat_error)
+            err("Impossible d'ouvrir le fichier" + name,1);
+
 		return 0;
 	}
 
 	// Declarations
 	int nbTotalLayer, lengthLayer, lengthPreviousLayer,lab;
 	double weight, mdist;
-	char*  pEnd(0);
-	char tamp;
-	Neuron*  neurone;
+
+	//Variables inutilisées
+	//char*  pEnd(0);
+	//char tamp;
+	//Neuron*  neurone;
+
 	string ligne, weight_str, neurone_str,alpha;
 	Layer *  layer;
 	ReadNetwork* rdnk = new ReadNetwork();

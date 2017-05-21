@@ -19,7 +19,7 @@ class ReadNetwork: public Network{
 
         void train();
         void save(string name);
-        char test(double* input);
+        char test(char* name, char* directory);
 
     protected :
         //nombre max de boucle d'apprentissage
@@ -32,7 +32,7 @@ class ReadNetwork: public Network{
 
 };
 
-ReadNetwork* load(string name);
+ReadNetwork* load(string name, bool treat_error);
 int findChar(char, const char*,int);
 double abso(double d);
 bool isSuccess(double* tab1, double* tab2, int length, double dist);

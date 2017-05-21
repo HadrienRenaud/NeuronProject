@@ -337,8 +337,8 @@ int getArrayOfFileNames(char** tabloFichiers, string directory)
 
 void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exemples, string directory)
 {
-	cout << "Lecture des exemples ... " << flush;
+	//cout << "Lecture des exemples ... " << flush;
 	for (int i(0); i < nb_exemples; i++)
 		readExemple(tabloFichiers[i], tabloExemple[i], FIRST_LAYER_SIZE, directory);                                                                                                                  //on lit chacun des exemples
-	cout << "Lecture terminee, " << countExemples(DOSSIERTEXTES) << " exemples lus." << endl;
+	//cout << "Lecture terminee, " << countExemples(DOSSIERTEXTES) << " exemples lus." << endl;
 }
