@@ -1,6 +1,4 @@
 #include "ReadNetwork.h"
-#include <fstream>
-using namespace std;
 
 template <class T>
 void displayArray(T* data, int length) //afficher un tableau de valeur
@@ -219,7 +217,7 @@ void ReadNetwork::save(string name)
 	return m_alphabet[imax];
 }*/
 
-char ReadNetwork::test(char* name, char* directory){
+char ReadNetwork::test(char* name, string directory){
 
 	double* input = new double[FIRST_LAYER_SIZE];
     double* output = new double[m_length_alphabet];
@@ -238,11 +236,68 @@ char ReadNetwork::test(char* name, char* directory){
         result = m_alphabet[imax];
     }
     else
-        err("L'exemple " + string(directory) + string(name) + " n'a pas pu être ouvert.", 1);
+        err("L'exemple " + directory + string(name) + " n'a pas pu être ouvert.", 1);
 
     delete input;
     delete output;
     return result;
+}
+
+
+double ReadNetwork::testAllExamples(string directory)
+{
+	//nombre d'exemples à traiter
+	int const nb_exemples(countExemples(directory));
+
+	if ((double)nb_exemples==0) {
+		return -3.14159; // on retourne une valeur négative
+	}
+
+
+	// Initialisation des tableaux contenant les noms de fichiers des exemples
+	char** tabloFichiers = new char*[nb_exemples];
+
+	for (int i = 0; i < nb_exemples; ++i)
+		tabloFichiers[i] = new char[MAX_LENGTH_NAME_FILE];
+
+	//Récupération des données des fichiers
+	getArrayOfFileNames(tabloFichiers, directory);
+
+
+	//compteur de succes
+	int succes = 0;
+
+	//Affichage
+	cout << "Test en cours de " << nb_exemples << " fichiers ..." << endl;
+
+	for (int i = 0; i < nb_exemples; ++i)
+	{
+		// on le teste
+		if (test(tabloFichiers[i], directory.c_str()) == tabloFichiers[i][0])
+			succes++; //on incrémente succes, si c'est un succes
+
+		//Affichage de la progression
+		if (nb_exemples > 100 && i % ( nb_exemples / 100 ) == 0 )
+		{
+			cout << "Progress : [";
+			for (int j = 0; j < 51; ++j)
+			{
+				if (j <= i / (nb_exemples / 50))
+					cout << '=';
+				else if ( j == i / (nb_exemples / 50) + 1)
+					cout << '>';
+				else
+					cout << ' ';
+			}
+			cout << "] : " << (int( (i+1) * 100 / nb_exemples)) << "% \r" << flush;
+		}
+	}
+	cout << endl;
+	cout << "Test effectué !" << endl;
+	std::cout << (double)succes / (double)nb_exemples << std::endl;
+
+	// On retourne la proportion de succes
+	return (double)succes / (double)nb_exemples;
 }
 
 ReadNetwork* load(string name, bool treat_error)

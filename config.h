@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <stdexcept>
 
+
 #ifndef NO_GRAPHIC
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -106,12 +107,12 @@
 
 
 
-#include "NetworkArray.h"
 #include "Neuron.h"
 #include "Layer.h"
 #include "Network.h"
 #include "Binding.h"
-// #include "ReadNetwork.h" //fait planter la compilation (plein d'erreurs)
+#include "NetworkArray.h"
+//#include "ReadNetwork.h"
 #include "script.h"
 #include "error.h"
 

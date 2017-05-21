@@ -24,7 +24,7 @@ void menu(SDL_Renderer *ren)
 	DIR *   dp       = NULL;
 	struct dirent * ep;
 
-	clock_t t0(clock());                                                         //temps de départ du programme
+	clock_t t0(clock()); //temps de départ du programme
 	SDL_Event event;
 	SDL_Surface * backgroundSurface = IMG_Load("resources/background.png");
 	SDL_Texture * background   = SDL_CreateTextureFromSurface(ren, backgroundSurface);
@@ -33,19 +33,19 @@ void menu(SDL_Renderer *ren)
 	SDL_Surface * loadingText = TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 80), "Loading ...", color);
 	SDL_Texture * loading  = SDL_CreateTextureFromSurface(ren, loadingText);
 
-	const int buttonsNumber    = 7;
+	const int buttonsNumber    = 8;
 
 	Button exitButton(ren, "Exit", 16, 235, 680, 530, 100, 30);
 	Button databaseButton(ren, "Create images", 16, 235, 20, 440, 200, 30);
 	Button filterButton(ren, "Filter images", 16, 235, 20, 490, 200, 30);
-	//Button scriptButton(ren, "Execute script", 16, 235, 580, 450, 200, 30);
-	//Button statisticsButton(ren, "Statistics", 16, 235, 580, 490, 200, 30);   Bouton supprimé pour problèmes de compatibilité : voir avec Hadrien.
+	//Button scriptButton(ren, "Execute script", 16, 235, 580, 450, 200, 30); // Bouton supprimé pour problèmes de compatibilité : voir avec Hadrien.
+	Button statisticsButton(ren, "Statistics", 16, 235, 580, 490, 200, 30);
 	Button learnButton(ren, "Learn", 16, 235, 20, 530, 200, 30);
 	Button testButton(ren, "Test", 24, 235, 300, 500, 200, 60);
 	Button caseDatabase(ren, "resources/option1.png", "resources/option2.png", true, 25, 473);
 	Button caseLearn(ren, "resources/option1.png", "resources/option2.png", true, 25, 563);
 
-	Button*   allButtons[buttonsNumber] = { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn};
+	Button*   allButtons[buttonsNumber] = { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn, &statisticsButton};
 
 	SDL_Texture * textDatabase    = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Save filtered images only", color));
 	SDL_Texture * textLearn     = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Start from last save", color));
@@ -341,7 +341,8 @@ void menu(SDL_Renderer *ren)
                 cout << "Pas de script a executer." << endl;
 
 		}*/
-		/*else if (statisticsButton.hasBeenPressed() || keyboardInput[0])
+
+		else if (statisticsButton.hasBeenPressed() || keyboardInput[0])
 		{
 			keyboardInput[0] = false;
 			statisticsButton.reset();
@@ -349,9 +350,9 @@ void menu(SDL_Renderer *ren)
 			SDL_RenderPresent(ren);
 
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
-			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << tablo_net->testAll() << endl << endl;
+			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << rdnk->testAllExamples() << endl << endl;
+		}
 
-		}*/
 		else
 			SDL_RenderPresent(ren);
 	}

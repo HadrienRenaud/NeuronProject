@@ -1,9 +1,9 @@
 #ifndef READNETWORK_H_INCLUDED
-#include "Network.h"
+#define READNETWORK_H_INCLUDED
+
 #include "config.h"
 
-//class Network;
-
+class Network;
 class ReadNetwork: public Network{
     public :
         ReadNetwork();
@@ -19,7 +19,14 @@ class ReadNetwork: public Network{
 
         void train();
         void save(string name);
-        char test(char* name, char* directory);
+        char test(char* name, string directory);
+        //! Teste toutes les entrees du repertoire de teste
+        /*! Fait passer toutes les entrees dans les reseaux
+            \param directory string (optionnal : default = DOSSIERTESTTEXT ) dossier de test
+            \return stat double ratio of succes
+         */
+        double testAllExamples(std::string directory = DOSSIERTESTTEXT);
+
 
     protected :
         //nombre max de boucle d'apprentissage
@@ -37,5 +44,4 @@ int findChar(char, const char*,int);
 double abso(double d);
 bool isSuccess(double* tab1, double* tab2, int length, double dist);
 
-#define READNETWORK_H_INCLUDED
 #endif
