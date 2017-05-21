@@ -57,6 +57,7 @@ Folders needed :
 - `test`
 - `test_texts`
 - `svg_reseau`
+- `backup`
 
 You need to copy `NeuronProject.cfg.default` to `NeuronProject.cfg`. (And personnalize it !)
 
