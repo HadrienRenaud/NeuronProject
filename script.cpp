@@ -1,5 +1,5 @@
 #include "script.h"
-
+#include "ReadNetwork.h"
 using namespace std;
 
 void scriptFile(ifstream &input)
@@ -25,9 +25,20 @@ void scriptFile(ifstream &input)
 
 void commands(int nbCmds, string cmds[])
 {
+	double maximal_distance = MAXIMAL_DISTANCE;
 	int length_alphabet = getLenghtAlphabet();
-	std::cout << length_alphabet << "\n";
-	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
+	std::cout << "length_alphabet : " << length_alphabet << "\n";
+
+	int sizes[] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
+	int layerNb = 3;
+
+	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
+	if (rdnk == 0){
+    cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl;
+    rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
+  }
+  else
+    cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
 
 	for (int i = 0; i < nbCmds; ++i)
 	{
@@ -35,21 +46,46 @@ void commands(int nbCmds, string cmds[])
 
 		if (cmds[i] == "new")
 		{
-			if (tablo_net)
-				delete tablo_net;
-			NetworkArray* tablo_net = new NetworkArray(length_alphabet);
+			if (rdnk)
+				delete rdnk;
+			rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance);
 		}
-
 		else if (cmds[i] == "save")
-		{
-			if (tablo_net)
-				tablo_net->save();
-			else
-				cout << "Reseaux vides" <<endl;
-		}
+			rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
 
 		else if (cmds[i] == "learn")
-			tablo_net->learnAllNetworks();
+			rdnk->train();
+
+		else if (cmds[i][0] == '=')
+		{
+			int id_egal = cmds[i].find("=",1);
+			string cmd = cmds[i].substr(1,id_egal);
+			if (cmd=="length_alphabet")
+					length_alphabet = atoi(cmds[i].substr(id_egal+1).c_str());
+			else if (cmd=="maximal_distance")
+				maximal_distance = atof(cmds[i].substr(id_egal+1).c_str());
+
+			else if (cmd=="sizes")
+			{
+				int sizesbis[cmds[i].length()+1];
+				sizesbis[0] = FIRST_LAYER_SIZE;
+				short j = 0;
+				short jbis = 0;
+				int index = 0;
+				while (cmds[i].substr(j).find(",")!=std::string::npos)
+				{
+					jbis = cmds[i].substr(j).find(",");
+					index ++;
+					sizesbis[index] = atof(cmds[i].substr(j,jbis).c_str());
+					if (sizesbis[index] ==0 && index < layerNb)
+						sizesbis[index] = sizes[index];
+				}
+				layerNb = index+1;
+				int sizes[layerNb];
+				for (size_t j = 0; j < layerNb; j++)
+					sizes[j] = sizesbis[j];
+			}
+		}
 
 	  #ifndef NO_GRAPHIC
 		else if (cmds[i] == "filter")
@@ -64,15 +100,14 @@ void commands(int nbCmds, string cmds[])
       #ifndef NO_GRAPHIC
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
       #endif //NO_GRAPHIC
-			tablo_net->testAll();
-
+			rdnk->testAllExamples();
 		}
 
 		cout << endl;
 	}
 
-	if (tablo_net)
-		delete tablo_net;
+	if (rdnk)
+		delete rdnk;
 }
 
 int getLenghtAlphabet()
@@ -175,6 +210,7 @@ void getArrayOfExemples(char** tabloFichiers, double** tabloExemple, int nb_exem
 {
 	//cout << "Lecture des exemples ... " << flush;
 	for (int i(0); i < nb_exemples; i++)
-		readExemple(tabloFichiers[i], tabloExemple[i], FIRST_LAYER_SIZE, directory);                                                                                                                  //on lit chacun des exemples
+		//on lit chacun des exemples
+		readExemple(tabloFichiers[i], tabloExemple[i], FIRST_LAYER_SIZE, directory);
 	//cout << "Lecture terminee, " << countExemples(DOSSIERTEXTES) << " exemples lus." << endl;
 }

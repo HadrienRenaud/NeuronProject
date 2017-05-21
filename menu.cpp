@@ -33,19 +33,19 @@ void menu(SDL_Renderer *ren)
 	SDL_Surface * loadingText = TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 80), "Loading ...", color);
 	SDL_Texture * loading  = SDL_CreateTextureFromSurface(ren, loadingText);
 
-	const int buttonsNumber    = 8;
+	const int buttonsNumber    = 9;
 
 	Button exitButton(ren, "Exit", 16, 235, 680, 530, 100, 30);
 	Button databaseButton(ren, "Create images", 16, 235, 20, 440, 200, 30);
 	Button filterButton(ren, "Filter images", 16, 235, 20, 490, 200, 30);
-	//Button scriptButton(ren, "Execute script", 16, 235, 580, 450, 200, 30); // Bouton supprimé pour problèmes de compatibilité : voir avec Hadrien.
+	Button scriptButton(ren, "Execute script", 16, 235, 580, 450, 200, 30);
 	Button statisticsButton(ren, "Statistics", 16, 235, 580, 490, 200, 30);
 	Button learnButton(ren, "Learn", 16, 235, 20, 530, 200, 30);
 	Button testButton(ren, "Test", 24, 235, 300, 500, 200, 60);
 	Button caseDatabase(ren, "resources/option1.png", "resources/option2.png", true, 25, 473);
 	Button caseLearn(ren, "resources/option1.png", "resources/option2.png", true, 25, 563);
 
-	Button*   allButtons[buttonsNumber] = { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn, &statisticsButton};
+	Button*   allButtons[buttonsNumber] = { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn, &statisticsButton, &scriptButton};
 
 	SDL_Texture * textDatabase    = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Save filtered images only", color));
 	SDL_Texture * textLearn     = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Start from last save", color));
@@ -86,7 +86,7 @@ void menu(SDL_Renderer *ren)
 	length_alphabet = getLenghtAlphabet();
 
 
-	int sizes[] = {FIRST_LAYER_SIZE,(int)(1.5*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
+	int sizes[] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
 
 	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
 	if (rdnk == 0){
@@ -327,7 +327,7 @@ void menu(SDL_Renderer *ren)
 			previousButton.renderButton(ren, xMouse, yMouse);
 			SDL_RenderPresent(ren);
 		}
-		/*else if (scriptButton.hasBeenPressed() || keyboardInput[18])
+		else if (scriptButton.hasBeenPressed() || keyboardInput[18])
 		{
 			keyboardInput[18] = false;
 			scriptButton.reset();
@@ -340,7 +340,7 @@ void menu(SDL_Renderer *ren)
             else
                 cout << "Pas de script a executer." << endl;
 
-		}*/
+		}
 
 		else if (statisticsButton.hasBeenPressed() || keyboardInput[0])
 		{
@@ -358,7 +358,7 @@ void menu(SDL_Renderer *ren)
 	}
 
 	rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
-    cout << "Reseau sauvegarde." << endl;
+  cout << "Reseau sauvegarde." << endl;
 	delete rdnk;
 
 	//Obsolète
