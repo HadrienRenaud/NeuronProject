@@ -27,9 +27,9 @@ ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert
 	maximal_distance_ = maximal_distance;
 }
 
-ReadNetwork::~ReadNetwork(){
-	delete[] nameFile_;  //allocation dynamique
-	delete firstLayer_;  //supprime TOUTES les couches
+ReadNetwork::~ReadNetwork(){    // le destructeur parent est déjà appelé, donc rien à delete
+	//delete[] nameFile_;  //allocation dynamique
+	//delete firstLayer_;  //supprime TOUTES les couches
 }
 
 
@@ -221,13 +221,13 @@ void ReadNetwork::save(string name)
 
 char ReadNetwork::test(char* name, char* directory){
 
-	double* imput = new double[FIRST_LAYER_SIZE];
+	double* input = new double[FIRST_LAYER_SIZE];
     double* output = new double[m_length_alphabet];
     char result = '_';
 
-    if (readExemple(name, imput, FIRST_LAYER_SIZE, directory))
+    if (readExemple(name, input, FIRST_LAYER_SIZE, directory))
     {
-        initNetwork(imput);
+        initNetwork(input);
         launch(output);
 
         short imax = 0;
@@ -238,10 +238,9 @@ char ReadNetwork::test(char* name, char* directory){
         result = m_alphabet[imax];
     }
     else
-        //err("L'exemple " + string(directory) + string(name) " n'a pas pu être ouvert.", 1);   // erreur avec le string ?! (je suis nul)
-        cout << "L'exemple " << string(directory) << string(name) << " n'a pas pu être ouvert." << endl;
+        err("L'exemple " + string(directory) + string(name) + " n'a pas pu être ouvert.", 1);
 
-    delete imput;
+    delete input;
     delete output;
     return result;
 }

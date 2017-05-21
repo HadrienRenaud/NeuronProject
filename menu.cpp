@@ -291,6 +291,7 @@ void menu(SDL_Renderer *ren)
 				//NetworkArray* tablo_net = new NetworkArray(length_alphabet);
 				//tablo_net->learnAllNetworks();
 
+                delete rdnk;
 				rdnk = new ReadNetwork(3,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
 			}
 
