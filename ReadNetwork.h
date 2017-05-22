@@ -18,6 +18,7 @@ class ReadNetwork: public Network{
         void setAlphabet(char*);
 
         void train();
+        void train(double maximal_distance);
         void save(string name);
         char test(char* name, string directory);
         //! Teste toutes les entrees du repertoire de teste

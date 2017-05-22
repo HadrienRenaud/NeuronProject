@@ -86,12 +86,12 @@ void menu(SDL_Renderer *ren)
 	length_alphabet = getLenghtAlphabet();
 
 
-	int sizes[] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
+	int sizes[] = {FIRST_LAYER_SIZE,LAST_LAYER_SIZE};
 
 	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
 	if (rdnk == 0){
         cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl;
-        rdnk = new ReadNetwork(3,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
+        rdnk = new ReadNetwork(2,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
     }
     else
         cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;

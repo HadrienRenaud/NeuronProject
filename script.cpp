@@ -54,7 +54,7 @@ void commands(int nbCmds, string cmds[])
 			rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
 
 		else if (cmds[i] == "learn")
-			rdnk->train();
+			rdnk->train(maximal_distance);
 
 		else if (cmds[i][0] == '=')
 		{

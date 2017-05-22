@@ -43,11 +43,6 @@ int main(int argc, char** argv)
 	srand(time(0));//ne pas enlever
 
 
-    // Chargement de l'interface graphique
-
-	graphics();
-
-
 
     // Version Démo proposée par Guillaume : les fonctions ci-dessous sont les principaux outils pour interagir avec le réseau
 
@@ -80,9 +75,6 @@ int main(int argc, char** argv)
 
 
 
-    // Ancien code, obsolète
-
-	/*
 	if (argc < 2)
 		#ifndef NO_GRAPHIC
 		graphics();
@@ -122,7 +114,7 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-	//*/
+
 
 	return 0;
 }

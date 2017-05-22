@@ -17,7 +17,12 @@ ReadNetwork::ReadNetwork():Network('b', "", MAXIMAL_DISTANCE){
 
 //ReadNetwork::ReadNetwork(const ReadNetwork rdnk){}//constructeur de copie
 
-ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance):Network('b', "", maximal_distance),m_maxLimitLoop(0),m_alphabet(alphabet),m_length_alphabet(layerSizes[layerNb - 1]){
+ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance):
+		Network('b', "", maximal_distance),
+		m_maxLimitLoop(0),
+		m_alphabet(alphabet),
+		m_length_alphabet(layerSizes[layerNb - 1])
+{
 	Layer* layer = NULL;
 	for(int i = 0; i<layerNb; i++){
 		layer = new Layer(this, layerSizes[i], layer, 0, trsf);
@@ -26,8 +31,6 @@ ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert
 }
 
 ReadNetwork::~ReadNetwork(){    // le destructeur parent est déjà appelé, donc rien à delete
-	//delete[] nameFile_;  //allocation dynamique
-	//delete firstLayer_;  //supprime TOUTES les couches
 }
 
 
@@ -49,10 +52,14 @@ void ReadNetwork::setAlphabet(char* alphabet){
 }
 
 void ReadNetwork::train(){
+	train(maximal_distance_);
+}
+
+void ReadNetwork::train(double maximal_distance){
 
 	short lastLayerSize = getLastLayer()->getSize();
 	if(m_length_alphabet!=lastLayerSize)
-		err("ReadNetwork::train : certaines lettre ne seront pas prises en compte car m_length_alphabet!=lastLayerSize",1);
+		err("ReadNetwork::train : certaines lettres ne seront pas prises en compte car m_length_alphabet!=lastLayerSize",1);
 
 	short firstLayerSize = firstLayer_->getSize();
 	short const nb_exemples(countExemples());
@@ -96,20 +103,16 @@ void ReadNetwork::train(){
 		else
 			outputExpected[i][ca] = 1;
 	}
+
 	// Initialisations
 	short exemple   = 0; //exemple actuellement selectionné pour l'apprentissage, cette variable est incrémentée à chaque fois qu'il réussit un exemple
 	short successes  = 0; //le réseau doit enchainer nb_exemples - ignoredExemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
 	short maxSuccesses = 0;
 	short count   = 0; //nombre de passage dans la boucle
 
-	//Variables inutilisées
-	//short successesInLoop = 0;
-	//double dist   = 0; //pour stocker la moyenne des écarts quadratiques entre les valeurs attendues et les valeurs retournées
-	//double totalDistance = 0;
-	//double maxDist   = 0;
-
 	clock_t t0(clock()); //temps de départ du programme
 	short trueNb_exemples = nb_exemples - ignoredExemples;
+
 	//APPRENTISSAGE
 	while ((successes < trueNb_exemples) /*&& (count < maxLimitLoop_ * nb_exemples)*/) //tant qu'on a pas enchaîné nb_exemples succès
 	{
@@ -120,9 +123,9 @@ void ReadNetwork::train(){
 			initNetwork(inputs[exemple]);  //on initialise avec les valeurs inputs
 			launch(outputExperimental);  //on lance et on récupère les outputs
 			//On apprend, ou pas en fonction du résultat
-			if (isSuccess(outputExperimental, outputExpected[exemple], lastLayerSize, maximal_distance_)){  //si c'est assez petit, c'est un succès
+			if (isSuccess(outputExperimental, outputExpected[exemple], lastLayerSize, maximal_distance))
+				//si c'est assez petit, c'est un succès
 				successes++;
-			}
 			else  //sinon c'est un echec et le réseau recalcule les poids des liaisons
 			{
 				initNetworkGradient(outputExpected[exemple]);
@@ -138,38 +141,6 @@ void ReadNetwork::train(){
 	cout << "100%\n";
 	cout << "Temps : " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes, apprentissage termine." << endl;
 
-	//On sauvegarde le réseau
-	// save();
-
-	//Affichages ...
-	// cout << endl;
-	// if (count >= maxLimitLoop_ * nb_exemples)
-	// 	cout << "Apprentissage INFRUCTUEUX sur " << count << " exemples lus.";
-	// else
-	// 	cout << "Apprentissage productif : " << count << " exemples lus sur " << maxLimitLoop_ * nb_exemples << endl;
-
-	// cout << " avec " << successes << " succes, effectue en " << ((float)(clock() - t0) / CLOCKS_PER_SEC) << " secondes." << endl;
-
-	//Calcul de la distance moyenne
-	// for (exemple = 0; exemple < nb_exemples; exemple++){
-	// 	//Réponse du réseau
-	// 	initNetwork(inputs[exemple]);
-	// 	launch(outputExperimental);
-	//
-	// 	//Calcul de la distance
-	// 	totalDistance += distance(outputExperimental, outputExpected[exemple], lastLayerSize );
-	// }
-	// cout << "Distance moyenne sur les exemples : " << totalDistance / nb_exemples << endl;
-
-	//Calcul du temps mis
-	// double temps_mis(((float)(clock() - t0) / CLOCKS_PER_SEC));
-	// cout << "Apprentissage effectue en " << temps_mis << " secondes." << endl;
-
-	// On met à jour les données dans le fichier
-	// writeReport((count < maxLimitLoop_ * nb_exemples), count / nb_exemples,
-	// 			totalDistance / nb_exemples, temps_mis, " ");
-	// cout <<"lastone\n";
-	// scanf("%s",d);
 	for(int i = 0; i<nb_exemples; i++){
 		delete tabloFichiers[i];
 		delete inputs[i];
@@ -205,17 +176,6 @@ void ReadNetwork::save(string name)
 		}
 	}
 }
-
-/*char ReadNetwork::test(double* input){                // Voir version améliorée plus bas
-	double* output = new double[m_length_alphabet];
-	initNetwork(input);
-	launch(output);
-	short imax = 0;
-	for(short k = 0; k < m_length_alphabet; k ++)
-		if(output[k] > output [imax])
-			imax = k;
-	return m_alphabet[imax];
-}*/
 
 char ReadNetwork::test(char* name, string directory){
 
