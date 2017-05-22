@@ -8,7 +8,7 @@ class ReadNetwork: public Network{
     public :
         ReadNetwork();
         //ReadNetwork(const ReadNetwork rdnk);//constructeur de copie
-        ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance);
+        ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance = MAXIMAL_DISTANCE, double momentum = ALPHA, double mu = MU);
         ~ReadNetwork();
 
         int getLenghtAlphabet();
@@ -17,8 +17,7 @@ class ReadNetwork: public Network{
         char* getAlphabet();
         void setAlphabet(char*);
 
-        void train();
-        void train(double maximal_distance);
+        void train(double maximal_distance = MAXIMAL_DISTANCE);
         void save(string name);
         char test(char* name, string directory);
         //! Teste toutes les entrees du repertoire de teste

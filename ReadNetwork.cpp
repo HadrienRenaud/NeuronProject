@@ -17,17 +17,19 @@ ReadNetwork::ReadNetwork():Network('b', "", MAXIMAL_DISTANCE){
 
 //ReadNetwork::ReadNetwork(const ReadNetwork rdnk){}//constructeur de copie
 
-ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance):
-		Network('b', "", maximal_distance),
+ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance, double momentum, double mu):
+		Network('b', "", maximal_distance, momentum),
 		m_maxLimitLoop(0),
 		m_alphabet(alphabet),
 		m_length_alphabet(layerSizes[layerNb - 1])
 {
+	cout << "Creation d'un reseau a " << layerNb << " couches : ";
 	Layer* layer = NULL;
 	for(int i = 0; i<layerNb; i++){
-		layer = new Layer(this, layerSizes[i], layer, 0, trsf);
+		layer = new Layer(this, layerSizes[i], layer, 0, trsf, mu);
+		cout << layerSizes[i] << " ";
 	}
-	maximal_distance_ = maximal_distance;
+	cout << endl;
 }
 
 ReadNetwork::~ReadNetwork(){    // le destructeur parent est déjà appelé, donc rien à delete
@@ -51,10 +53,6 @@ void ReadNetwork::setAlphabet(char* alphabet){
 		err("ReadNetwork::setAlphabet : alphabet NULL",1);
 }
 
-void ReadNetwork::train(){
-	train(maximal_distance_);
-}
-
 void ReadNetwork::train(double maximal_distance){
 
 	short lastLayerSize = getLastLayer()->getSize();
@@ -64,6 +62,8 @@ void ReadNetwork::train(double maximal_distance){
 	short firstLayerSize = firstLayer_->getSize();
 	short const nb_exemples(countExemples());
 	cout << endl << nb_exemples << " exemples d'entrainement trouves, debut de l'apprentissage." << endl;
+
+	cout << "Distance maximale : " << maximal_distance << endl;
 
 	short ignoredExemples = 0;
 	char**  tabloFichiers = new char*[nb_exemples];

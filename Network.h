@@ -21,7 +21,7 @@ class Network {
 	   \param nom_fichier string qui servira a stocke le nom du fichier pendant les recuperations, sauvegardes
  	   \param maximal_distance initialisation de l'attribut [maximal_distance_](@maximal_distance)
 	*/
-	Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE);
+	Network(char lettre_testee, string nom_fichier = "", double maximal_distance = MAXIMAL_DISTANCE, double momentum = ALPHA);
 
 	//! Destructeur
 	~Network();

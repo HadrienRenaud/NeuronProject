@@ -13,7 +13,6 @@ void menu(SDL_Renderer *ren)
 	int compteurTest    = 0;
 	int nombreTests     = 0;
 	int posRep      = 0;
-	int length_alphabet    = LENGTH_ALPHABET;
 	char testedImageName[150]  = "";
 	char testedImageNameFull[200] = "";
 	char testedImageText[150]  = "";
@@ -83,15 +82,30 @@ void menu(SDL_Renderer *ren)
 	renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 	SDL_RenderPresent(ren);
 
-	length_alphabet = getLenghtAlphabet();
+	cout << "Initialisations" << endl;
+
+	// Initialisations
+	double maximal_distance = MAXIMAL_DISTANCE;
+	double momentum = ALPHA;
+	double mu = MU;
+	int length_alphabet = LENGTH_ALPHABET;
+	int sizesBis[MAX_NUMBER_LAYER] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
+	int layerNb = 3;
+
+	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &layerNb, sizesBis);
+	int sizes[layerNb];
+	for (size_t i = 0; i < layerNb; i++)
+		sizes[i] = sizesBis[i];
+
+	cout << "Parametres configures : \nPENTE = " << PENTE << "\nMU = " << mu << "\nLAST_LAYER_SIZE = " << sizes[layerNb -1] << "\nALPHA = " << momentum << "\nMAXIMAL_DISTANCE = " << maximal_distance << "\nNombre de lettres utilisees : " << length_alphabet << "\nlayerNumber = " << layerNb << endl << endl;
 
 
-	int sizes[] = {FIRST_LAYER_SIZE,LAST_LAYER_SIZE};
 
+	// Initialisation de ReadNetwork
 	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
 	if (rdnk == 0){
         cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl;
-        rdnk = new ReadNetwork(2,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
+        rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu);
     }
     else
         cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
@@ -223,8 +237,8 @@ void menu(SDL_Renderer *ren)
 						testTarget.y = heightNameImageTested + TESTING_BACKGROUND_DIMENSIONS - testTarget.h;
 					}
 
-					testedImageName[strlen(testedImageName) - 4] = '\0';                                                                                                                                                                                                                                                                                         //On enlève le .png
-					strcat(testedImageName, ".txt");                                                                                                                                                                                                                                                                                         // On ajoutee le .txt
+					testedImageName[strlen(testedImageName) - 4] = '\0';  //On enlève le .png
+					strcat(testedImageName, ".txt"); // On ajoutee le .txt
 
 					cout << endl << "Image testee : " << testedImageName << endl;
 
@@ -286,16 +300,11 @@ void menu(SDL_Renderer *ren)
 
 			if (!caseLearn.hasBeenPressed())
 			{
-			    // Obsolète
-				//delete tablo_net;
-				//NetworkArray* tablo_net = new NetworkArray(length_alphabet);
-				//tablo_net->learnAllNetworks();
-
-                delete rdnk;
-				rdnk = new ReadNetwork(3,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
+        delete rdnk;
+				rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu);
 			}
 
-            rdnk->train();
+            rdnk->train(maximal_distance);
             rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
             cout << "Reseau sauvegarde." << endl;
 

@@ -5,7 +5,7 @@ Network::Network()
 {
 	Network('_');
 }
-Network::Network(char lettre_testee, string nom_fichier, double maximal_distance) :
+Network::Network(char lettre_testee, string nom_fichier, double maximal_distance, double momentum) :
 	firstLayer_(0),
 	totalBindingsNumber_(0),
 	initialized_(false),
@@ -13,10 +13,10 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 	maximal_distance_(maximal_distance),
 	maxLimitLoop_(MAX_LIMIT_LOOP),
 	testedLetter_(lettre_testee),
+	momentum_(momentum),
 	nameFile_(new char[MAX_LENGTH_NAME_FILE])
 {
 	strcpy(nameFile_, nom_fichier.c_str());
-	momentum_ = ALPHA;
 }
 
 Network::~Network()

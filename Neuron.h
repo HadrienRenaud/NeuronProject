@@ -24,7 +24,7 @@ Neuron();
 Neuron(const Neuron &neuron);
 
 //! Si aucune fonction de transfert n'est donné en paramètre, on prend une sigmoide
-Neuron(Layer* layer, transfert trsf = 0);
+Neuron(Layer* layer, transfert trsf = 0, double mu = MU);
 
 //! Destructeur
 ~Neuron();
@@ -87,6 +87,9 @@ int   getIndexInLayer() const;
 //! Algorithme d'apprentissage
 void  learn();
 
+double getMu();
+void setMu(double mu);
+
 private:
 
 //! Somme pondérée des entrées
@@ -109,7 +112,11 @@ int indexInLayer_;
 
 //! Gradient du neurone
 double gradient_;
+
+//! Facteur d'apprentissage
+double mu_;
 };
+
 
 //2 couples (fonction,dérivée)
 double threshold(double input); //! fonction de transfert 1

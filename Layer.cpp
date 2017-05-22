@@ -10,7 +10,7 @@ Layer::Layer()
 {
 }
 
-Layer::Layer(Network* network, int neurons, Layer* previousLayer, Layer* nextLayer, transfert trsf)
+Layer::Layer(Network* network, int neurons, Layer* previousLayer, Layer* nextLayer, transfert trsf, double mu)
 	:       m_network(network),     bindingsNumber_(0)
 {
 	/* neurons : nombre de neurones dans la couche */
@@ -26,7 +26,7 @@ Layer::Layer(Network* network, int neurons, Layer* previousLayer, Layer* nextLay
 	setNextLayer(nextLayer); //on fait le lien dans les deux sens
 	setPreviousLayer(previousLayer);
 	for (int i = 0; i < neurons; i++)
-		addNeuron(RAND, trsf);  //on ajoute le nombre de neurones demandé
+		addNeuron(RAND, trsf, mu);  //on ajoute le nombre de neurones demandé
 }
 
 Layer::~Layer() //destructeur, inintéressant
@@ -96,9 +96,9 @@ Neuron* Layer::getNeuron(int n) const
 	return 0;
 }
 
-void Layer::addNeuron(int option, transfert trsf) //NOUVEAU NEURONE !!!
+void Layer::addNeuron(int option, transfert trsf, double mu) //NOUVEAU NEURONE !!!
 {
-	Neuron* neuron = new Neuron(this, trsf);
+	Neuron* neuron = new Neuron(this, trsf, mu);
 	double weight = 0.0 ;
 
 	if (!isLast()) //on établit des liens avec les neurones de la couche d'après
@@ -138,10 +138,10 @@ void Layer::addNeuron(int option, transfert trsf) //NOUVEAU NEURONE !!!
 	m_neurons.push_back(neuron);
 }
 
-void Layer::addNeurons(int n, int option, transfert trsf)
+void Layer::addNeurons(int n, int option, transfert trsf, double mu)
 {
 	for (int i = 0; i < n; i++)
-		addNeuron(option, trsf);
+		addNeuron(option, trsf, mu);
 }
 
 void Layer::calculate() const //propagation normale

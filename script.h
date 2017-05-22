@@ -16,8 +16,8 @@ void scriptFile(ifstream &input);
 //! Fonction executant une liste de commandes
 void commands(int nbCmds, string cmds[]);
 
-//! Fonction récupérant la longueur de l'alphabet, stocké dans le fichier de config
-int   getLenghtAlphabet();
+//! Fonction récupérant les valeurs par défaut, stockées dans le fichier de config
+int* getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, double* momentum, int* layerNb, int sizes[]);
 
 //! Lit un exemple :
 //! L'exemple est donne comme son nom de fichier `nom_fichier` et l'entrée recuperee sera sur `entrees`

@@ -106,6 +106,8 @@
 #define CHARS2 "abcdefghijklmnopqrstuvwxyzABDEFGHIJKLMNQRTY0123456789,?;.:!éàè'()+-\"="
 
 
+#define MAX_NUMBER_LAYER 10
+
 
 #include "Neuron.h"
 #include "Layer.h"

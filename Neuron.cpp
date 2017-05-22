@@ -8,7 +8,8 @@ Neuron::Neuron() :
 	trsf_(0),
 	layer_(0),
 	indexInLayer_(0),
-	gradient_(0)
+	gradient_(0),
+	mu_(MU)
 {
 }         //constructeur par défaut inutile
 Neuron::Neuron(const Neuron& neuron) :
@@ -18,16 +19,18 @@ Neuron::Neuron(const Neuron& neuron) :
 	layer_(neuron.layer_),
 	bindings_(neuron.bindings_),
 	indexInLayer_(neuron.indexInLayer_),
+	mu_(neuron.mu_),
 	gradient_(0)
 {
 }              //jamais utilisé
-Neuron::Neuron(Layer* layer, transfert trsf) :
+Neuron::Neuron(Layer* layer, transfert trsf, double mu) :
 	input_(0),
 	output_(0),
 	trsf_(trsf),
 	layer_(layer),
 	indexInLayer_(layer->getSize()),
-	gradient_(0)
+	gradient_(0),
+	mu_(mu)
 {
 	if (trsf == 0)
 		trsf_ = sigmo;
@@ -152,7 +155,17 @@ void Neuron::learn() //Le neuron recalcule le poids de toutes ces liaisons avec 
 {      //la fonction utilise MU, le gradient du neuron présent et l'output du neuron qui est à l'autre bout de la laison
 	// cout << "hello\n";
 	for (int i = 0; i < (int)bindings_.size(); i++)
-		bindings_[i]->addWeight((gradient_) * MU * (bindings_[i]->getNeuron()->output_));
+		bindings_[i]->addWeight((gradient_) * mu_ * (bindings_[i]->getNeuron()->output_));
+}
+
+double Neuron::getMu()
+{
+	return mu_;
+}
+
+void Neuron::setMu(double mu)
+{
+	mu_ = mu;
 }
 
 //////////////HORS NEURON////////////////////////////

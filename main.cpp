@@ -25,21 +25,19 @@ void help()
 	cout << "Usage :" <<endl;
 	cout << "	./NeuronProject"<< endl;
 	cout << "	./NeuronProject [-h/--help]"<< endl;
-	cout << "	./NeuronProject [-f/--file] FILE"<< endl;
+	cout << "	./NeuronProject [-f/--file] (FILE)"<< endl;
 	cout << "	./NeuronProject [-c/--commands] COMMANDS"<< endl;
 	cout << endl;
 	cout << "Options :"<< endl;
 	cout << "	[None] : default, graphics utilisation"<<endl;
 	cout << "	-h, --help : display this help file"<< endl;
-	cout << "	-f, --file [FILE]: call script with FILE"<< endl;
+	cout << "	-f, --file [FILE]: call script with FILE, default in config.h"<< endl;
 	cout << "	-c, --commands [COMMANDS] : call script with COMMANDS"<< endl;
 	cout << endl;
 }
 
 int main(int argc, char** argv)
 {
-	cout << "Parametres : \nPENTE = " << PENTE << "\nMU = " << MU << "\nLAST_LAYER_SIZE = " << LAST_LAYER_SIZE << "\nALPHA = " << ALPHA << "\nMAXIMAL_DISTANCE = " << MAXIMAL_DISTANCE << "\nNombre de lettres utilisees : " << LENGTH_ALPHABET << endl << endl;
-
 	srand(time(0));//ne pas enlever
 
 
@@ -91,13 +89,14 @@ int main(int argc, char** argv)
 
 			else if ((string)argv[i] == "-f" || (string)argv[i] == "--file")
 			{
+				ifstream file(NAME_SCRIPT_FILE);
 				if (i + 1 < argc)
-				{
 					ifstream file(argv[i+1]);
+
+				if (file)
 					scriptFile(file);
-				}
 				else
-					help();
+					cout << "Pas de script a executer." << endl;
 			}
 
 			else if ((string)argv[i] == "-c" || (string) argv[i] == "--commands")
