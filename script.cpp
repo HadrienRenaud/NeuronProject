@@ -148,10 +148,6 @@ int* getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, 
 			line_stream >> bin;
 			line_stream >> cmdValueStr;
 
-			cout << cmdName << " debut"<<endl;
-			for (size_t j = 0; j < *layerNb; j++)
-				cout << j<< " : " << sizes[j] << endl;
-
 			if (cmdName == "mu" && cmdValueStr.length() > 0)
 				*mu = atof(cmdValueStr.c_str());
 			if (cmdName == "length_alphabet" && cmdValueStr.length() > 0)
@@ -191,21 +187,9 @@ int* getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, 
 				// On recopie dans sizes
 				for (size_t j = 0; j < *layerNb; j++)
 					sizes[j] = sizesbis[j];
-				cout << cmdName << endl;
-				for (size_t j = 0; j < *layerNb; j++)
-					cout << j<< " : " << sizes[j] << endl;
-
 			}
-			cout << cmdName << " - " << cmdValueStr << endl;
-			for (size_t j = 0; j < *layerNb; j++)
-				cout << j<< " : " << sizes[j] << endl;
 		}
-		for (size_t j = 0; j < *layerNb; j++)
-			cout << j<< " : " << sizes[j] << endl;
 	}
-for (size_t j = 0; j < *layerNb; j++)
-	cout << j<< " : " << sizes[j] << endl;
-//return sizes;
 }
 
 bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory)
