@@ -1,7 +1,7 @@
 #include "ReadNetwork.h"
 
 template <class T>
-void displayArray(T* data, int length) //afficher un tableau de valeur
+void displayArray(T* data, int length) //afficher un tableau de valeurs
 {
 	cout << "[";
 	for ( int i = 0; i < length - 1; i++)
@@ -209,8 +209,12 @@ double ReadNetwork::testAllExamples(string directory)
 	//nombre d'exemples à traiter
 	int const nb_exemples(countExemples(directory));
 
+	//Affichage
+	cout << endl << "Test en cours de " << nb_exemples << " fichiers ..." << endl;
+
 	if ((double)nb_exemples==0) {
-		return -3.14159; // on retourne une valeur négative
+	    return 1;   // Plus logique de retourner une proportion égale à 1 : on a réussi à identifier toutes les images tests ("pour tout" dans un ensemble vide = vrai)
+		//return -3.14159265358979323846264338327969399375105084281971; // on retourne une valeur négative
 	}
 
 
@@ -226,9 +230,6 @@ double ReadNetwork::testAllExamples(string directory)
 
 	//compteur de succes
 	int succes = 0;
-
-	//Affichage
-	cout << "Test en cours de " << nb_exemples << " fichiers ..." << endl;
 
 	for (int i = 0; i < nb_exemples; ++i)
 	{
@@ -253,8 +254,8 @@ double ReadNetwork::testAllExamples(string directory)
 		}
 	}
 	cout << endl;
-	cout << "Test effectué !" << endl;
-	std::cout << (double)succes / (double)nb_exemples << std::endl;
+	cout << "Test effectue !" << endl;
+	//std::cout << (double)succes / (double)nb_exemples << std::endl;   inutile d'afficher le résultat : la fonction qui appelle celle-ci s'en chargera ...
 
 	// On retourne la proportion de succes
 	return (double)succes / (double)nb_exemples;
@@ -324,27 +325,6 @@ ReadNetwork* load(string name, bool treat_error)
 	return rdnk;
 }
 
-int findChar(const char c, const char* str,const int length){
-	int res = -1;
-	for(int i = 0; i< length; i++){
-		if(str[i] == c)
-			res = i;
-	}
-	if(res==-1){
-		char* msg = new char[2];
-		msg[0] = c;
-		msg[1] = '\0';
-		err("findChar : lettre non trouvée : " + string(msg),0);
-		delete msg;
-	}
-	return res;
-}
-double abso(double d){
-	if(d<0)
-		return -d;
-	return d;
-}
-
 bool isSuccess(double* tab1, double* tab2, int length, double dist){
 	for(int i = 0; i<length; i++){
 		if(abso(tab1[i]-tab2[i])>dist)
@@ -352,3 +332,29 @@ bool isSuccess(double* tab1, double* tab2, int length, double dist){
 	}
 	return true;
 }
+
+
+bool readExemple(char* nom_fichier, double entrees[], int taille_entree, string directory)
+{
+	char* temp = new char[MAX_LENGTH_NAME_FILE];
+	strncpy(temp, nom_fichier, MAX_LENGTH_NAME_FILE);
+	ifstream file((directory + string(temp)).c_str());                                                         //ouverture du fichier
+
+	if (!file)
+	{
+		//ERREUR -> message dans erreur.txt, affiché dans la console
+		err("Apprentissage - Bug 1 : Exemple " + directory + string(temp) + " non lu.",1);
+		delete temp;
+		return false;
+	}
+	else
+	{
+		// On lit le fichier
+		for (int i(0); i < taille_entree; i++)
+			file >> entrees[i];
+
+		delete temp;                                                                                                                                                                        // on insère les valeurs dans entrees
+		return true;
+	}
+}
+

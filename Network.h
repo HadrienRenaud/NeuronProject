@@ -67,7 +67,7 @@ class Network {
 	bool learn();
 
 	//! Sauver l'etat du réseau
-	void save();
+	//void save();
 
 	//! Fixe le moment d'inertie à momentum
 	void setMomentum(double momentum);
@@ -80,10 +80,10 @@ class Network {
 
 
 	//! Actualise le réseau
-	void getMostRecent();
+	//void getMostRecent();
 
 	//! Ecrit le resultat de l'apprentissage dans un fichier
-	void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
+	//void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
 
 	//! Apprentissage sur la base de donnee
 	/*!
@@ -92,14 +92,14 @@ class Network {
 	   \param tabloFichiers tableau de nb_exemples noms de fichiers sur lesquels apprendre, la sortie attendue pour chaque fichier etant la premiere lettre du nom
 	   \param inputs entree a donner au reseau
 	 */
-	void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
+	//void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
 
 
 	//! Retourne la lettre testee par le reseau
-	char getLettreTestee();
+	//char getLettreTestee();
 
 	//! Fixe la lettre testee par le reseau
-	void setLettreTestee(char lettre_testee);
+	//void setLettreTestee(char lettre_testee);
 
 	//! Retourne la distance maximale en fin d'apprentissage productif
 	double getMaximalDistance();
@@ -144,10 +144,10 @@ protected:
 	char* nameFile_;
 };
 
-template <class T>
+//template <class T>
 
 //! affichage d'un tableau
-void displayArray(T* data, int length);
+//void displayArray(T* data, int length);
 
 //! Calcul d'écart
 double distance(double* data1, double* data2, int length);

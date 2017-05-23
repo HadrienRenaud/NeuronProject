@@ -19,8 +19,8 @@ Neuron::Neuron(const Neuron& neuron) :
 	layer_(neuron.layer_),
 	bindings_(neuron.bindings_),
 	indexInLayer_(neuron.indexInLayer_),
-	mu_(neuron.mu_),
-	gradient_(0)
+	gradient_(0),
+	mu_(neuron.mu_)
 {
 }              //jamais utilisé
 Neuron::Neuron(Layer* layer, transfert trsf, double mu) :
