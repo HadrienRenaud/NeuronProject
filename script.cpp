@@ -47,6 +47,8 @@ void commands(int nbCmds, string cmds[])
   else
     cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
 
+	cout << nbCmds << endl;
+
 	for (int i = 0; i < nbCmds; ++i)
 	{
 		cout << i << " : " << cmds[i] <<endl;
@@ -88,21 +90,33 @@ void commands(int nbCmds, string cmds[])
 
 			else if (cmd=="sizes")
 			{
-				int sizesbis[cmds[i].length()+1];
+				int sizesbis[MAX_NUMBER_LAYER];
 				sizesbis[0] = FIRST_LAYER_SIZE;
 				short j = 0;
 				short jbis = 0;
 				int index = 0;
+
+				// On parcourt les couches
 				while (cmds[i].substr(j).find(",")!=std::string::npos)
 				{
-					jbis = cmds[i].substr(j).find(",");
-					index ++;
+					jbis = j + cmds[i].substr(j).find(",");
 					sizesbis[index] = atof(cmds[i].substr(j,jbis).c_str());
-					if (sizesbis[index] ==0 && index < layerNb)
+					if (sizesbis[index]==0 && index < layerNb)
 						sizesbis[index] = sizes[index];
+					index ++;
+					j = jbis + 1;
 				}
+
+				//Dernière couche
+				jbis = j + cmds[i].substr(j).find(",");
+				sizesbis[index] = atof(cmds[i].substr(j,jbis).c_str());
+				if (sizesbis[index] ==0 && index < layerNb)
+					sizesbis[index] = sizes[index];
+
+				//On actualise layerNb
 				layerNb = index+1;
-				int sizes[layerNb];
+
+				// On recopie dans sizes
 				for (size_t j = 0; j < layerNb; j++)
 					sizes[j] = sizesbis[j];
 			}
@@ -169,9 +183,9 @@ int* getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, 
 				{
 					jbis = j + cmdValueStr.substr(j).find(",");
 					sizesbis[index] = atof(cmdValueStr.substr(j,jbis).c_str());
-					index ++;
 					if (sizesbis[index] ==0 && index < *layerNb)
 						sizesbis[index] = sizes[index];
+					index ++;
 					j = jbis + 1;
 				}
 
