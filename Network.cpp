@@ -10,10 +10,10 @@ Network::Network(char lettre_testee, string nom_fichier, double maximal_distance
 	totalBindingsNumber_(0),
 	initialized_(false),
 	gradientInitialized_(false),
+	momentum_(momentum),
 	maximal_distance_(maximal_distance),
 	maxLimitLoop_(MAX_LIMIT_LOOP),
 	testedLetter_(lettre_testee),
-	momentum_(momentum),
 	nameFile_(new char[MAX_LENGTH_NAME_FILE])
 {
 	strcpy(nameFile_, nom_fichier.c_str());
@@ -79,7 +79,7 @@ void Network::recuperateur()
 		file >> lengthLayer;  // on lit la longueur de la prochaine couche
 	}
 }
-void Network::save()
+/*void Network::save()
 {
 	// On trouve le nom du fichier
 	time_t t = time(0);   // l'heure
@@ -118,7 +118,7 @@ void Network::save()
 	mostRecent = DOSSIER_SVG + string(NOM_SVG) + testedLetter_ + string(EXTENSION_SVG);
 	ofstream fichier_recent(mostRecent.c_str());
 	fichier_recent << nameFile_;
-}
+}*/
 
 void Network::setFirstLayer(Layer* layer)
 {
@@ -272,7 +272,7 @@ void Network::setMomentum(double momentum)
 	momentum_ = momentum;
 }
 
-void Network::getMostRecent()
+/*void Network::getMostRecent()
 {
 	//initialisations
 	string str_nom_fichier;
@@ -286,9 +286,9 @@ void Network::getMostRecent()
 	strcpy(nameFile_, str_nom_fichier.c_str());
 	cout << "Reseau " << testedLetter_ << " - recuperation de : " << str_nom_fichier << endl;
 	recuperateur(); // On récupère le réseau stocké dans le fichier de svg le plus récent
-}
+}*/
 
-void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires)
+/*void Network::writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires)
 {
 	//initialisations
 	ofstream base_donnes;
@@ -320,9 +320,9 @@ void Network::writeReport(bool resultat, int count, double distance_moyenne, dou
 	//fin de l'inscription des données
 	base_donnes << count << ',' << distance_moyenne << ',' << maximal_distance_ << ',';
 	base_donnes << resultat << ',' << temps_mis << ',' << commentaires << ',' << nameFile_ << endl;
-}
+}*/
 
-void Network::learnNetwork(const int nbExemples, char** fileArray, double** inputs)
+/*void Network::learnNetwork(const int nbExemples, char** fileArray, double** inputs)
 {
 	clock_t t0(clock()); //temps de départ du programme
 
@@ -437,18 +437,19 @@ void Network::learnNetwork(const int nbExemples, char** fileArray, double** inpu
 	// On met à jour les données dans le fichier
 	writeReport((count < maxLimitLoop_ * nbExemples), count / nbExemples,
 	            totalDistance / nbExemples, temps_mis, " ");
-}
+}*/
 
-char Network::getLettreTestee()
+/*char Network::getLettreTestee()
 {
 	return testedLetter_; //récupère la lettre testee.
-}
-void Network::setLettreTestee(char lettre_testee) //change la lettre
+}*/
+
+/*void Network::setLettreTestee(char lettre_testee) //change la lettre
 {
 	cout << "Network " << testedLetter_ << " change de lettre et devient ";
 	testedLetter_ = lettre_testee;
 	cout << testedLetter_ << endl;
-}
+}*/
 
 double Network::getMaximalDistance()
 {
@@ -468,14 +469,14 @@ void Network::setMaxLimitLoop(int maxLimitLoop)
 	maxLimitLoop_ = maxLimitLoop;
 }
 
-template <class T>
+/*template <class T>
 void displayArray(T* data, int length) //afficher un tableau de valeur
 {
 	cout << "[";
 	for ( int i = 0; i < length - 1; i++)
 		cout << (data[i] >= 0 ? "+" : "") << data[i] << ",";
 	cout << (data[length - 1] >= 0 ? "+" : "") << data[length - 1] << "]";
-}
+}*/
 
 double distance(double* data1, double* data2, int length)   //on fait la moyenne des carrés de chaque écart entre data1 et data2
 {

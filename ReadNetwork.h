@@ -3,6 +3,14 @@
 
 #include "config.h"
 
+
+
+
+
+//! affichage d'un tableau
+template <class T>
+void displayArray(T* data, int length);
+
 class Network;
 class ReadNetwork: public Network{
     public :
@@ -40,8 +48,13 @@ class ReadNetwork: public Network{
 };
 
 ReadNetwork* load(string name, bool treat_error);
-int findChar(char, const char*,int);
-double abso(double d);
+
 bool isSuccess(double* tab1, double* tab2, int length, double dist);
+
+
+
+//! Lit un exemple :
+//! L'exemple est donne comme son nom de fichier `nom_fichier` et l'entrée recuperee sera sur `entrees`
+bool readExemple(char* nom_fichier, double entrees[], int taille_entree, std::string directory = DOSSIERTEXTES);
 
 #endif

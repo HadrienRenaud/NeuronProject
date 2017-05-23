@@ -94,7 +94,7 @@ void menu(SDL_Renderer *ren)
 
 	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &layerNb, sizesBis);
 	int sizes[layerNb];
-	for (size_t i = 0; i < layerNb; i++)
+	for (int i = 0; i < layerNb; i++)
 		sizes[i] = sizesBis[i];
 
 	cout << "Parametres configures : \nPENTE = " << PENTE << "\nMU = " << mu << "\nLAST_LAYER_SIZE = " << sizes[layerNb -1] << "\nALPHA = " << momentum << "\nMAXIMAL_DISTANCE = " << maximal_distance << "\nNombre de lettres utilisees : " << length_alphabet << "\nlayerNumber = " << layerNb << endl << endl;
@@ -110,19 +110,6 @@ void menu(SDL_Renderer *ren)
     else
         cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
 
-
-
-// Ancienne méthode de création / récupération des réseaux ; obsolète
-/*
-	cout << "Recuperation des " << length_alphabet <<" reseaux ... " << flush;
-	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
-
-	tablo_net->getMostRecent();
-	cout << "Reseaux recuperes." << endl;
-
-
-
-	double input[FIRST_LAYER_SIZE];*/
 
 
 
@@ -298,9 +285,8 @@ void menu(SDL_Renderer *ren)
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
 
-			if (!caseLearn.hasBeenPressed())
-			{
-        delete rdnk;
+			if (!caseLearn.hasBeenPressed()){
+                delete rdnk;
 				rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu);
 			}
 
@@ -313,21 +299,40 @@ void menu(SDL_Renderer *ren)
 		{
 			keyboardInput[19] = false;
 			testButton.reset();
-			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 
-			testing = true;
-			nextButton.setPress(true);
+            if (!testing)
+            {
+                renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
+                SDL_RenderPresent(ren);
 
-			compteurTest = -1;
-			nombreTests  = countExemples(DOSSIERTEST);
+                testing = true;
+                nextButton.setPress(true);
 
-			dp    = opendir(DOSSIERTEST);
-			if (dp == NULL)
-				exit(1);
+                nombreTests  = countExemples(DOSSIERTEST);
+
+                if (nombreTests > 0){
+                    cout << endl << nombreTests << " images a tester trouvees." << endl << endl;
+
+                    compteurTest = -1;
+
+                    dp = opendir(DOSSIERTEST);
+                    if (dp == NULL)
+                        exit(1);
+
+                    filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
+                }
 
 
-			SDL_RenderPresent(ren);
-			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
+            }
+            else
+            {
+                testing = false;
+                SDL_RenderPresent(ren);
+            }
+
+
+
+
 		}
 		else if (testing)
 		{
@@ -336,14 +341,16 @@ void menu(SDL_Renderer *ren)
 			previousButton.renderButton(ren, xMouse, yMouse);
 			SDL_RenderPresent(ren);
 		}
-		else if (scriptButton.hasBeenPressed() || keyboardInput[18])
+		else if (scriptButton.hasBeenPressed() || keyboardInput[4])
 		{
 			keyboardInput[18] = false;
+			keyboardInput[4] = false;
 			scriptButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
 
 			ifstream file(NAME_SCRIPT_FILE);
+
 			if (file)
                 scriptFile(file);
             else
@@ -351,15 +358,15 @@ void menu(SDL_Renderer *ren)
 
 		}
 
-		else if (statisticsButton.hasBeenPressed() || keyboardInput[0])
+		else if (statisticsButton.hasBeenPressed() || keyboardInput[18])
 		{
-			keyboardInput[0] = false;
+			keyboardInput[18] = false;
 			statisticsButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
 
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
-			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << rdnk->testAllExamples() << endl << endl;
+			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << rdnk->testAllExamples()*100 << " %." << endl << endl;
 		}
 
 		else
@@ -367,12 +374,9 @@ void menu(SDL_Renderer *ren)
 	}
 
 	rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
-  cout << "Reseau sauvegarde." << endl;
+    cout << "Reseau sauvegarde." << endl;
 	delete rdnk;
 
-	//Obsolète
-	/*tablo_net->save();
-	delete tablo_net;*/
 }
 
 
@@ -387,6 +391,10 @@ void keyboard(SDL_Event event, bool* keyboardInput)
 
 	case SDLK_c:
 		keyboardInput[2] = true;
+		break;
+
+	case SDLK_e:
+		keyboardInput[4] = true;
 		break;
 
 	case SDLK_f:

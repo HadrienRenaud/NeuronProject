@@ -33,7 +33,7 @@
 //! momentum, quantité d'inertie
 #define ALPHA 0.27
 
-//! valeur par defaut de la longueur de l'alphabet, modife par NetworkArray::setOptions
+//! valeur par defaut de la longueur de l'alphabet
 #define LENGTH_ALPHABET 26
 
 //! nombre de neurones de la première couche
@@ -45,9 +45,9 @@
 #define MAX_LENGTH_NAME_FILE 100
 //! période temporelle d'affichage des informations sur l'apprentissage en cours
 #define NB_LEARNING 10
-//! valeur par defaut de la distance maximale sur les exemples que peut avoir un reseau en sortie d'un apprentissage productif, modife par NetworkArray::setOptions
+//! valeur par defaut de la distance maximale sur les exemples que peut avoir un reseau en sortie d'un apprentissage productif
 #define MAXIMAL_DISTANCE 0.15
-//! valeur par defaut du nombre maximal de boucles d'apprentissage a effectuer en un apprentissage, modife par  NetworkArray::setOptions
+//! valeur par defaut du nombre maximal de boucles d'apprentissage a effectuer en un apprentissage
 #define MAX_LIMIT_LOOP 500
 //! flotant sous lequel, lors d'un test, le reseau est considere comme repondant negativement
 #define LOWER_BOUND_DISTINCTION 0.05
@@ -93,12 +93,12 @@
 //Remarque : chaque nouvel apprentissage efface la sauvegarde du précédent réseau ; une seule sauvegarde à la fois : à améliorer si possible ...
 
 //Anciennes méthodes de sauvegarde / chargement
-//! Le dossier ou seront stockes les sauvegardes reseau
-#define DOSSIER_SVG "svg_reseau/"
-//! Le nom du fichier pointant vers la derniere sauvegarde
-#define NOM_SVG "plus_recent_"
-//! L'extension dediee aux sauvegardes reseau
-#define EXTENSION_SVG ".svg_reseau"
+// Le dossier ou seront stockes les sauvegardes reseau
+//#define DOSSIER_SVG "svg_reseau/"
+// Le nom du fichier pointant vers la derniere sauvegarde
+//#define NOM_SVG "plus_recent_"
+// L'extension dediee aux sauvegardes reseau
+//#define EXTENSION_SVG ".svg_reseau"
 
 //! liste des caracteres
 #define CHARS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:!éàè'()+-\"="
@@ -117,6 +117,7 @@
 //#include "ReadNetwork.h"
 #include "script.h"
 #include "error.h"
+#include "tools.h"
 
 #ifndef NO_GRAPHIC
 #include "system.h"
