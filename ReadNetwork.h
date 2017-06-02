@@ -16,7 +16,7 @@ class ReadNetwork: public Network{
     public :
         ReadNetwork();
         //ReadNetwork(const ReadNetwork rdnk);//constructeur de copie
-        ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance = MAXIMAL_DISTANCE, double momentum = ALPHA, double mu = MU);
+        ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert trsf, double maximal_distance = MAXIMAL_DISTANCE, double momentum = ALPHA, double mu = MU, short verbose = VERBOSE_NORMAL);
         ~ReadNetwork();
 
         int getLenghtAlphabet();
@@ -25,7 +25,7 @@ class ReadNetwork: public Network{
         char* getAlphabet();
         void setAlphabet(char*);
 
-        void train(double maximal_distance = MAXIMAL_DISTANCE);
+        void train(double maximal_distance = MAXIMAL_DISTANCE, short verbose = VERBOSE_NORMAL);
         void save(string name);
         char test(char* name, string directory);
         //! Teste toutes les entrees du repertoire de teste
@@ -33,7 +33,7 @@ class ReadNetwork: public Network{
             \param directory string (optionnal : default = DOSSIERTESTTEXT ) dossier de test
             \return stat double ratio of succes
          */
-        double testAllExamples(std::string directory = DOSSIERTESTTEXT);
+        double testAllExamples(short verbose = VERBOSE_NORMAL, std::string directory = DOSSIERTESTTEXT);
 
 
     protected :

@@ -33,8 +33,9 @@ void commands(int nbCmds, string cmds[])
 	int length_alphabet = LENGTH_ALPHABET;
 	int sizesBis[MAX_NUMBER_LAYER] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
 	int layerNb = 3;
+	short verbose = VERBOSE_MINIMAL;
 
-	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &layerNb, sizesBis);
+	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &verbose, &layerNb, sizesBis);
 	int sizes[layerNb];
 	for (int i = 0; i < layerNb; i++)
 		sizes[i] = sizesBis[i];
@@ -42,7 +43,7 @@ void commands(int nbCmds, string cmds[])
 	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
 	if (rdnk == 0){
     cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl;
-    rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu);
+    rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu, verbose);
   }
   else
     cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
@@ -57,13 +58,13 @@ void commands(int nbCmds, string cmds[])
 		{
 			if (rdnk)
 				delete rdnk;
-			rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum);
+			rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu, verbose);
 		}
 		else if (cmds[i] == "save")
 			rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
 
 		else if (cmds[i] == "learn")
-			rdnk->train(maximal_distance);
+			rdnk->train(maximal_distance, verbose);
 
 		else if (cmds[i] == "script")
 		{
@@ -87,6 +88,8 @@ void commands(int nbCmds, string cmds[])
 				momentum = atof(cmds[i].substr(id_egal+1).c_str());
 			else if (cmd=="mu")
 				mu = atof(cmds[i].substr(id_egal+1).c_str());
+			else if (cmd=="verbose")
+					verbose = (short)atoi(cmds[i].substr(id_egal+1).c_str());
 
 			else if (cmd=="sizes")
 			{
@@ -134,7 +137,7 @@ void commands(int nbCmds, string cmds[])
       #ifndef NO_GRAPHIC
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
       #endif //NO_GRAPHIC
-			rdnk->testAllExamples();
+			cout << rdnk->testAllExamples(verbose) << endl;
 		}
 
 		cout << endl;
@@ -144,7 +147,7 @@ void commands(int nbCmds, string cmds[])
 		delete rdnk;
 }
 
-void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, double* momentum, int* layerNb, int sizes[])
+void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, double* momentum, short* verbose, int* layerNb, int sizes[])
 {
 	ifstream	optionsFile(NAME_CONFIG_FILE);
 	string		line;
@@ -168,7 +171,10 @@ void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, 
 			if (cmdName == "maximal_distance" && cmdValueStr.length() > 0)
 				*maximal_distance = atoi(cmdValueStr.c_str());
 			if (cmdName == "momentum" && cmdValueStr.length() > 0)
-				*momentum = atoi(cmdValueStr.c_str());
+				*momentum = atof(cmdValueStr.c_str());
+			if (cmdName == "verbose" && cmdValueStr.length() > 0)
+				*length_alphabet = (short)atoi(cmdValueStr.c_str());
+
 
 			if (cmdName == "sizes") {
 				int sizesbis[MAX_NUMBER_LAYER];
@@ -203,4 +209,10 @@ void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, 
 			}
 		}
 	}
+}
+
+void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, double* momentum, int* layerNb, int sizes[])
+{
+	short verbose = VERBOSE_NORMAL;
+	getConfigValue(length_alphabet, mu, maximal_distance, momentum, &verbose, layerNb, sizes);
 }

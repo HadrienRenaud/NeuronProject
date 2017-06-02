@@ -17,6 +17,7 @@ void scriptFile(ifstream &input);
 void commands(int nbCmds, string cmds[]);
 
 //! Fonction récupérant les valeurs par défaut, stockées dans le fichier de config
+void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, double* momentum, short* verbose, int* layerNb, int sizes[]);
 void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, double* momentum, int* layerNb, int sizes[]);
 
 

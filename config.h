@@ -48,7 +48,7 @@
 //! valeur par defaut de la distance maximale sur les exemples que peut avoir un reseau en sortie d'un apprentissage productif
 #define MAXIMAL_DISTANCE 0.15
 //! valeur par defaut du nombre maximal de boucles d'apprentissage a effectuer en un apprentissage
-#define MAX_LIMIT_LOOP 500
+#define MAX_LIMIT_LOOP 250
 //! flotant sous lequel, lors d'un test, le reseau est considere comme repondant negativement
 #define LOWER_BOUND_DISTINCTION 0.05
 //! nombre de boucles d'apprentissage a partir duquel on commence a ne plus considerer la casse
@@ -92,6 +92,7 @@
 #define NOMBACKUP "network_backup.svg_reseau"
 //Remarque : chaque nouvel apprentissage efface la sauvegarde du précédent réseau ; une seule sauvegarde à la fois : à améliorer si possible ...
 
+
 //Anciennes méthodes de sauvegarde / chargement
 // Le dossier ou seront stockes les sauvegardes reseau
 //#define DOSSIER_SVG "svg_reseau/"
@@ -99,6 +100,14 @@
 //#define NOM_SVG "plus_recent_"
 // L'extension dediee aux sauvegardes reseau
 //#define EXTENSION_SVG ".svg_reseau"
+
+
+// Verbose settings
+#define VERBOSE_NORMAL 2
+#define VERBOSE_MUTE 0
+#define VERBOSE_DETAILS 3
+#define VERBOSE_MINIMAL 1
+
 
 //! liste des caracteres
 #define CHARS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:!éàè'()+-\"="
