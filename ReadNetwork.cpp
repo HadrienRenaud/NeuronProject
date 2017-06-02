@@ -23,7 +23,7 @@ ReadNetwork::ReadNetwork(int layerNb, int* layerSizes, char* alphabet, transfert
 		m_alphabet(alphabet),
 		m_length_alphabet(layerSizes[layerNb - 1])
 {
-	cout << "Creation d'un reseau a " << layerNb << " couches : ";
+	cout << endl << "Creation d'un reseau a " << layerNb << " couches : ";
 	Layer* layer = NULL;
 	for(int i = 0; i<layerNb; i++){
 		layer = new Layer(this, layerSizes[i], layer, 0, trsf, mu);
@@ -63,7 +63,7 @@ void ReadNetwork::train(double maximal_distance){
 	short const nb_exemples(countExemples());
 	cout << endl << nb_exemples << " exemples d'entrainement trouves, debut de l'apprentissage." << endl;
 
-	cout << "Distance maximale : " << maximal_distance << endl;
+	cout << "Distance maximale : " << maximal_distance << endl << endl;
 
 	short ignoredExemples = 0;
 	char**  tabloFichiers = new char*[nb_exemples];
@@ -109,6 +109,7 @@ void ReadNetwork::train(double maximal_distance){
 	short successes  = 0; //le réseau doit enchainer nb_exemples - ignoredExemples succès pour avoir fini l'apprentissage, cela ne devra pas être le cas pour les caractères manuscrits, parce qu'il y un risque de surapprentissage
 	short maxSuccesses = 0;
 	short count   = 0; //nombre de passage dans la boucle
+	short progression = 0; //pourcentage de progression
 
 	clock_t t0(clock()); //temps de départ du programme
 	short trueNb_exemples = nb_exemples - ignoredExemples;
@@ -119,9 +120,17 @@ void ReadNetwork::train(double maximal_distance){
 		exemple++;
 		exemple %= nb_exemples;  //On ne dépasse pas nb_exemples
 		if(outputExpected[exemple] != NULL){//
+
+			if (int(100*maxSuccesses/trueNb_exemples) > progression){
+                progression = int(100*maxSuccesses/trueNb_exemples);
+				cout << progression << "%\n";
+			}
+
 			count++;
+
 			initNetwork(inputs[exemple]);  //on initialise avec les valeurs inputs
 			launch(outputExperimental);  //on lance et on récupère les outputs
+
 			//On apprend, ou pas en fonction du résultat
 			if (isSuccess(outputExperimental, outputExpected[exemple], lastLayerSize, maximal_distance))
 				//si c'est assez petit, c'est un succès
@@ -132,7 +141,7 @@ void ReadNetwork::train(double maximal_distance){
 				learn();
 				if(successes > maxSuccesses){
 					maxSuccesses = successes;
-					cout << 100*maxSuccesses/trueNb_exemples << "%\n";
+                    cout << int(100*maxSuccesses/trueNb_exemples) << "%\n";
 				}
 				successes = 0;  //on réinitialise aussi le nombre de succès enchaînés
 			}

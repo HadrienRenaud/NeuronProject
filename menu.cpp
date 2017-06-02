@@ -205,7 +205,7 @@ void menu(SDL_Renderer *ren)
 				testedImage = IMG_Load(testedImageNameFull);
 
 				if (testedImage == NULL)
-                    err("Menu - Bug 1 : L'image " + string(testedImageNameFull) + " n'a pas pu être ouverte.", 1);
+                    err("Menu - Bug 1 : L'image " + string(testedImageNameFull) + " n'a pas pu etre ouverte.", 1);
 
 				else
 				{
