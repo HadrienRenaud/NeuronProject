@@ -89,15 +89,20 @@ void menu(SDL_Renderer *ren)
 	double momentum = ALPHA;
 	double mu = MU;
 	int length_alphabet = LENGTH_ALPHABET;
+
+	/*
 	int sizesBis[MAX_NUMBER_LAYER] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
 	int layerNb = 3;
 
 	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &layerNb, sizesBis);
 	int sizes[layerNb];
 	for (int i = 0; i < layerNb; i++)
-		sizes[i] = sizesBis[i];
+		sizes[i] = sizesBis[i];*/
 
-	cout << "Parametres configures : \nPENTE = " << PENTE << "\nMU = " << mu << "\nLAST_LAYER_SIZE = " << sizes[layerNb -1] << "\nALPHA = " << momentum << "\nMAXIMAL_DISTANCE = " << maximal_distance << "\nNombre de lettres utilisees : " << length_alphabet << "\nlayerNumber = " << layerNb << endl << endl;
+    int sizes[] = SIZES;
+    int layerNb = LAYERNB;
+
+	cout << "Parametres configures : \nPENTE = " << PENTE << "\nLAST_LAYER_SIZE = " << sizes[layerNb -1]  << "\nmu = " << mu<< "\nmomentum = " << momentum << "\nmaximal_distance = " << maximal_distance << "\nNombre de lettres utilisees : " << length_alphabet << "\nlayerNumber = " << layerNb << endl << endl;
 
 
 

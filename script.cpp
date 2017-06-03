@@ -16,7 +16,7 @@ void scriptFile(ifstream &input)
 	for (int i = 0; i < (int)cmdsVect.size(); ++i)
 		cmds[i]=cmdsVect[i];
 
-	std::cout << cmdsVect.size() << "\n";
+	cout << endl << cmdsVect.size() << " commandes trouvees, execution." << endl;
 
 	input.close();
 
@@ -31,24 +31,33 @@ void commands(int nbCmds, string cmds[])
 	double momentum = ALPHA;
 	double mu = MU;
 	int length_alphabet = LENGTH_ALPHABET;
+	short verbose = VERBOSE_MINIMAL;
+
+
+	/*
 	int sizesBis[MAX_NUMBER_LAYER] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
 	int layerNb = 3;
-	short verbose = VERBOSE_MINIMAL;
 
 	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &verbose, &layerNb, sizesBis);
 	int sizes[layerNb];
 	for (int i = 0; i < layerNb; i++)
-		sizes[i] = sizesBis[i];
+		sizes[i] = sizesBis[i];*/
+
+
+    int sizes[] = SIZES;
+    int layerNb = LAYERNB;
 
 	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
-	if (rdnk == 0){
-    cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl;
-    rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu, verbose);
-  }
-  else
-    cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
 
-	cout << nbCmds << endl;
+	if (rdnk == 0){
+        cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl << endl;
+        rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu, verbose);
+    }
+
+    else
+        cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl << endl;
+
+    //cout << nbCmds << endl;   Nombre de commandes déjà affiché dans scriptFile
 
 	for (int i = 0; i < nbCmds; ++i)
 	{
@@ -60,36 +69,48 @@ void commands(int nbCmds, string cmds[])
 				delete rdnk;
 			rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu, verbose);
 		}
-		else if (cmds[i] == "save")
-			rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
+		else if (cmds[i].length() >= 4 && cmds[i].substr(0,4) == "save")
+		{
+		    if (cmds[i].length() >= 6)
+		    {
+                string name = cmds[i].substr(5);
+                rdnk->save(string(DOSSIERBACKUP) + name);
+		    }
+            else
+                rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
+		}
 
 		else if (cmds[i] == "learn")
 			rdnk->train(maximal_distance, verbose);
 
-		else if (cmds[i] == "script")
+		/*else if (cmds[i] == "script")     Risque de boucle infinie
 		{
 			ifstream file(NAME_SCRIPT_FILE);
 			if (file)
 				scriptFile(file);
 			else
 				cout << "Pas de script a executer." << endl;
-		}
+		}*/
 
 		else if (cmds[i][0] == '=')
 		{
 			int id_egal = cmds[i].find("=",1);
+
+			string val = cmds[i].substr(id_egal+1);
 			string cmd = cmds[i].substr(1,id_egal - 1);
-			cout << "Change " << cmd << " vers " << cmds[i].substr(id_egal+1).c_str() << endl;
+
+			cout << "Change " << cmd << " vers " << val << endl;
+
 			if (cmd=="length_alphabet")
-				length_alphabet = atoi(cmds[i].substr(id_egal+1).c_str());
+				length_alphabet = atoi(val.c_str());
 			else if (cmd=="maximal_distance")
-				maximal_distance = atof(cmds[i].substr(id_egal+1).c_str());
+				maximal_distance = atof(val.c_str());
 			else if (cmd=="momentum")
-				momentum = atof(cmds[i].substr(id_egal+1).c_str());
+				momentum = atof(val.c_str());
 			else if (cmd=="mu")
-				mu = atof(cmds[i].substr(id_egal+1).c_str());
+				mu = atof(val.c_str());
 			else if (cmd=="verbose")
-					verbose = (short)atoi(cmds[i].substr(id_egal+1).c_str());
+					verbose = (short)atoi(val.c_str());
 
 			else if (cmd=="sizes")
 			{
@@ -137,7 +158,7 @@ void commands(int nbCmds, string cmds[])
       #ifndef NO_GRAPHIC
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
       #endif //NO_GRAPHIC
-			cout << rdnk->testAllExamples(verbose) << endl;
+			cout << rdnk->testAllExamples(verbose) * 100 << "% de succes."<< endl;
 		}
 
 		cout << endl;
@@ -152,17 +173,23 @@ void getConfigValue(int* length_alphabet, double* mu, double* maximal_distance, 
 	ifstream	optionsFile(NAME_CONFIG_FILE);
 	string		line;
 	string		cmdName;
-	string		bin;
 	string		cmdValueStr("");
+	int         id_egal;
 
 	while (getline(optionsFile, line))
 	{
 		if (!(line.length() == 0 || line[0] == '#'))
 		{
-			istringstream line_stream(line);
+			id_egal = line.find("=");
+
+			cmdName = line.substr(id_egal+1);
+			cmdValueStr = line.substr(0,id_egal);
+
+
+			/*istringstream line_stream(line);
 			line_stream >> cmdName;
 			line_stream >> bin;
-			line_stream >> cmdValueStr;
+			line_stream >> cmdValueStr;*/
 
 			if (cmdName == "mu" && cmdValueStr.length() > 0)
 				*mu = atof(cmdValueStr.c_str());

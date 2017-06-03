@@ -40,6 +40,10 @@
 #define FIRST_LAYER_SIZE 400
 //! nombe de neurones de la dernière couche : a priori il y aura toujours égalité avec le nombre de lettres utilisées dans l'alphabet, voir plus haut.
 #define LAST_LAYER_SIZE LENGTH_ALPHABET
+//! organisation des couches du réseau
+#define SIZES {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE}
+//! nombre de couches ; doit être en cohérence avec la constante précédente
+#define LAYERNB 3
 
 //! longueur maximale d'un nom de fichier
 #define MAX_LENGTH_NAME_FILE 100
