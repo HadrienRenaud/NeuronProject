@@ -70,11 +70,8 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
 
 					lettre = IMG_Load(pathPng);                                                                                                                                                                                                                                                                                         //On charge dans une surface SDL l'image à laquelle on accède par le chemin relatif dossierPng
 					if (lettre == NULL)                                                                                                                                                                                                                                                                                         //Si il y a eu un souci d'ouverture de l'image, on écrit une erreur dans erreur.txt
-					{
-						ofstream file("erreur.txt", ofstream::ate);
-						file << "Filtres2 - Bug 1 : L'image " << pathPng << " n'a pas pu etre ouverte." << endl;
-						cout << "Filtres2 - Bug 1 : L'image " << pathPng << " n'a pas pu etre ouverte." << endl;
-					}
+                        err("Filtres2 - Bug 1 : L'image " + string(pathPng) + " n'a pas pu etre ouverte.", 1);
+
 					else
 						filtres_indiv(lettre, pathTxt, pixelsR, pixelsG, pixelsB);
 
@@ -84,7 +81,7 @@ void filtres(const char* repertory_dep, const char* repertory_arr, bool selectif
 			}
 		}
 		(void)closedir(dp);                                                                                                                 //Fermeture du répertoire d'images
-		cout << "Chargement : " << 100 * compteurimages / nombreimages << "% - Programme termine !" << endl << endl;
+		cout << endl << "Chargement : " << 100 * compteurimages / nombreimages << "% - Programme termine !" << endl << endl;
 	}
 
 
@@ -119,11 +116,8 @@ void filtres_indiv(SDL_Surface *lettre, char* pathTxt, int **pixelsR, int **pixe
 	fichier = fopen(pathTxt, "w+");                                                         //On ouvre (ou on créé) un fichier txt
 
 	if (fichier == NULL)                                                         //Si l'ouverture du fichier texte a échoué, on inscrit une erreur dans erreur.txt
-	{
-		ofstream file("erreur.txt", ofstream::ate);
-		file << "Filtres2 - Bug 2 : Le fichier " << pathTxt << " n'a pas pu etre ouvert." << endl;
-		cout << "Filtres2 - Bug 2 : Le fichier " << pathTxt << " n'a pas pu etre ouvert." << endl;
-	}
+        err("Filtres2 - Bug 2 : Le fichier " + string(pathTxt) + " n'a pas pu etre ouvert.", 1);
+
 	else                                                         //Si l'ouverture a réussi
 
 	{

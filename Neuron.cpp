@@ -8,7 +8,8 @@ Neuron::Neuron() :
 	trsf_(0),
 	layer_(0),
 	indexInLayer_(0),
-	gradient_(0)
+	gradient_(0),
+	mu_(MU)
 {
 }         //constructeur par défaut inutile
 Neuron::Neuron(const Neuron& neuron) :
@@ -18,16 +19,18 @@ Neuron::Neuron(const Neuron& neuron) :
 	layer_(neuron.layer_),
 	bindings_(neuron.bindings_),
 	indexInLayer_(neuron.indexInLayer_),
-	gradient_(0)
+	gradient_(0),
+	mu_(neuron.mu_)
 {
 }              //jamais utilisé
-Neuron::Neuron(Layer* layer, transfert trsf) :
+Neuron::Neuron(Layer* layer, transfert trsf, double mu) :
 	input_(0),
 	output_(0),
 	trsf_(trsf),
 	layer_(layer),
 	indexInLayer_(layer->getSize()),
-	gradient_(0)
+	gradient_(0),
+	mu_(mu)
 {
 	if (trsf == 0)
 		trsf_ = sigmo;
@@ -60,10 +63,12 @@ int Neuron::getBindingsNumber() const
 	return bindings_.size();
 }
 
-void Neuron::receive() //le neurone calcule son input en récupérant la somme pondérée de neurones d'avant
+void Neuron::receive() //le neurone calcule son input en récupérant la somme pondérée des neurones d'avant
 {
-	for (int i = 0; i < (int)bindings_.size(); i++)
+	input_ = 0;
+	for (int i = 0; i < (int)bindings_.size(); i++){
 		input_ += (bindings_[i]->getNeuron()->getOutput()) * (bindings_[i]->getWeight());
+	}
 	//enfin, calcul de l'output avec la fonction de transfert
 	output_ = trsf_(input_);
 }
@@ -102,18 +107,15 @@ double Neuron::getGradient() const
 	return gradient_;
 }
 
-bool Neuron::initNeuron(double input) //on autorise de regler l'input si et seulement si il s'agit d'un neurone de la première couche
+void Neuron::initNeuron(double input) //on autorise de regler l'input si et seulement si il s'agit d'un neurone de la première couche
 {
-	if (getLayer()->getNetwork()->getFirstLayer() == getLayer() || input == 0)
-	{
+	// if (getLayer()->getNetwork()->getFirstLayer() == getLayer() || input == 0)
+	// {
 		input_ = input;
-		if (input != input)
-			cout << "Neuron : initNeuron : if_firstlayer : input : " << input << endl;
+		// if (input != input)
+		// 	cout << "Neuron : initNeuron : if_firstlayer : input : " << input << endl;
 		output_ = trsf_(input_);
-		return true;
-	}
-	else                                                         //si echec
-		return false;
+	// }
 }
 
 bool Neuron::initNeuronGradient(double expectedOutput)
@@ -151,8 +153,19 @@ int Neuron::getIndexInLayer() const
 
 void Neuron::learn() //Le neuron recalcule le poids de toutes ces liaisons avec les neurones précédents
 {      //la fonction utilise MU, le gradient du neuron présent et l'output du neuron qui est à l'autre bout de la laison
+	// cout << "hello\n";
 	for (int i = 0; i < (int)bindings_.size(); i++)
-		bindings_[i]->addWeight((gradient_) * MU * (bindings_[i]->getNeuron()->output_));
+		bindings_[i]->addWeight((gradient_) * mu_ * (bindings_[i]->getNeuron()->output_));
+}
+
+double Neuron::getMu()
+{
+	return mu_;
+}
+
+void Neuron::setMu(double mu)
+{
+	mu_ = mu;
 }
 
 //////////////HORS NEURON////////////////////////////
@@ -171,8 +184,10 @@ inline double sigmo(double input)
 {
 	double result((exp(PENTE * input) - 1) / (exp(PENTE * input) + 1));
 
-	if (result != result)
+	if (result != result){
 		cout << "sigmo probleme avec input = " << input << endl;
+		return 0;
+	}
 	return result;
 }
 inline double sigmo1(double input) //dérivée de sigmo

@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "ReadNetwork.h"
 
 
 using namespace std;
@@ -12,7 +13,6 @@ void menu(SDL_Renderer *ren)
 	int compteurTest    = 0;
 	int nombreTests     = 0;
 	int posRep      = 0;
-	int length_alphabet    = LENGTH_ALPHABET;
 	char testedImageName[150]  = "";
 	char testedImageNameFull[200] = "";
 	char testedImageText[150]  = "";
@@ -23,7 +23,7 @@ void menu(SDL_Renderer *ren)
 	DIR *   dp       = NULL;
 	struct dirent * ep;
 
-	clock_t t0(clock());                                                         //temps de départ du programme
+	clock_t t0(clock()); //temps de départ du programme
 	SDL_Event event;
 	SDL_Surface * backgroundSurface = IMG_Load("resources/background.png");
 	SDL_Texture * background   = SDL_CreateTextureFromSurface(ren, backgroundSurface);
@@ -44,9 +44,9 @@ void menu(SDL_Renderer *ren)
 	Button caseDatabase(ren, "resources/option1.png", "resources/option2.png", true, 25, 473);
 	Button caseLearn(ren, "resources/option1.png", "resources/option2.png", true, 25, 563);
 
-	Button*   allButtons[buttonsNumber] = { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn, &scriptButton, &statisticsButton};
+	Button*   allButtons[buttonsNumber] = { &exitButton, &databaseButton, &filterButton, &learnButton, &testButton, &caseDatabase, &caseLearn, &statisticsButton, &scriptButton};
 
-	SDL_Texture * textDatabase    = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Filter without saving images", color));
+	SDL_Texture * textDatabase    = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Save filtered images only", color));
 	SDL_Texture * textLearn     = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Blended(TTF_OpenFont("resources/font_buttons.ttf", 12), "Start from last save", color));
 
 
@@ -82,15 +82,43 @@ void menu(SDL_Renderer *ren)
 	renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 	SDL_RenderPresent(ren);
 
-	length_alphabet = getLenghtAlphabet();
+	cout << "Initialisations" << endl;
 
-	cout << "Recuperation des " << length_alphabet <<" reseaux ... " << flush;
-	NetworkArray* tablo_net = new NetworkArray(length_alphabet);
+	// Initialisations
+	double maximal_distance = MAXIMAL_DISTANCE;
+	double momentum = ALPHA;
+	double mu = MU;
+	int length_alphabet = LENGTH_ALPHABET;
 
-	// tablo_net->getMostRecent();
-	cout << "Reseaux recuperes." << endl;
+	/*
+	int sizesBis[MAX_NUMBER_LAYER] = {FIRST_LAYER_SIZE,(int)(2*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
+	int layerNb = 3;
 
-	double input[FIRST_LAYER_SIZE];
+	getConfigValue(&length_alphabet, &mu, &maximal_distance, &momentum, &layerNb, sizesBis);
+	int sizes[layerNb];
+	for (int i = 0; i < layerNb; i++)
+		sizes[i] = sizesBis[i];*/
+
+    int sizes[] = SIZES;
+    int layerNb = LAYERNB;
+
+	cout << "Parametres configures : \nPENTE = " << PENTE << "\nLAST_LAYER_SIZE = " << sizes[layerNb -1]  << "\nmu = " << mu<< "\nmomentum = " << momentum << "\nmaximal_distance = " << maximal_distance << "\nNombre de lettres utilisees : " << length_alphabet << "\nlayerNumber = " << layerNb << endl << endl;
+
+
+
+	// Initialisation de ReadNetwork
+	ReadNetwork* rdnk = load(string(DOSSIERBACKUP) + string(NOMBACKUP), false);
+	if (rdnk == 0){
+        cout << "Pas de sauvegarde trouvee, creation d'un reseau vierge." << endl;
+        rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu);
+    }
+    else
+        cout << "Chargement de la sauvegarde " << DOSSIERBACKUP << NOMBACKUP << " reussi." << endl;
+
+
+
+
+
 
 	while (!quitLoop)
 	{
@@ -130,8 +158,6 @@ void menu(SDL_Renderer *ren)
 
 			break;
 
-			// TODO : Blitscaled
-			// TODO : Rendre tous les arguments optionnels quand possible
 		}
 
 
@@ -184,11 +210,8 @@ void menu(SDL_Renderer *ren)
 				testedImage = IMG_Load(testedImageNameFull);
 
 				if (testedImage == NULL)
-				{
-					ofstream file("erreur.txt", ofstream::ate);
-					file << "Menu - Bug 1 : L'image " << testedImageNameFull << " n'a pas pu être ouverte." << endl;
-					cout << "Menu - Bug 1 : L'image " << testedImageNameFull << " n'a pas pu être ouverte." << endl;
-				}
+                    err("Menu - Bug 1 : L'image " + string(testedImageNameFull) + " n'a pas pu etre ouverte.", 1);
+
 				else
 				{
 					if (testedImage->w < testedImage->h)
@@ -206,14 +229,13 @@ void menu(SDL_Renderer *ren)
 						testTarget.y = heightNameImageTested + TESTING_BACKGROUND_DIMENSIONS - testTarget.h;
 					}
 
-					testedImageName[strlen(testedImageName) - 4] = '\0';                                                                                                                                                                                                                                                                                         //On enlève le .png
-					strcat(testedImageName, ".txt");                                                                                                                                                                                                                                                                                         // On ajoutee le .txt
+					testedImageName[strlen(testedImageName) - 4] = '\0';  //On enlève le .png
+					strcat(testedImageName, ".txt"); // On ajoutee le .txt
 
-					cout << "Image testee : " << testedImageName << endl;
-					if (readExemple(testedImageText, input, FIRST_LAYER_SIZE, DOSSIERTESTTEXT))
-						testResult[strlen(testResult) - 1] = tablo_net->testNetworks(input);
-					else
-						testResult[strlen(testResult) - 1] = '_';
+					cout << endl << "Image testee : " << testedImageName << endl;
+
+					testResult[strlen(testResult) - 1] = rdnk->test(testedImageText,(char*)DOSSIERTESTTEXT);
+
 					cout << "Resultat du test : " << testResult << endl;
 
 					resultTest    = TTF_RenderText_Blended(TTF_OpenFont("resources/font_test.ttf", 30), testResult, color);
@@ -251,7 +273,7 @@ void menu(SDL_Renderer *ren)
 			databaseButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
-			database(!caseDatabase.hasBeenPressed(), true);
+			database(!caseDatabase.hasBeenPressed(), caseDatabase.hasBeenPressed());
 		}
 		else if (filterButton.hasBeenPressed() || keyboardInput[5])
 		{
@@ -261,20 +283,6 @@ void menu(SDL_Renderer *ren)
 			SDL_RenderPresent(ren);
 			filtres();
 		}
-		else if (scriptButton.hasBeenPressed() || keyboardInput[18])
-		{
-			keyboardInput[18] = false;
-			scriptButton.reset();
-			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
-			SDL_RenderPresent(ren);
-
-			ifstream file(NAME_SCRIPT_FILE);
-			if (file)
-                scriptFile(file);
-            else
-                cout << "Pas de script a executer." << endl;
-
-		}
 		else if (learnButton.hasBeenPressed() || keyboardInput[11])
 		{
 			keyboardInput[11] = false;
@@ -282,33 +290,54 @@ void menu(SDL_Renderer *ren)
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
 
-			if (!caseLearn.hasBeenPressed())
-			{
-				delete tablo_net;
-				NetworkArray* tablo_net = new NetworkArray(length_alphabet);
-				tablo_net->learnAllNetworks();
+			if (!caseLearn.hasBeenPressed()){
+                delete rdnk;
+				rdnk = new ReadNetwork(layerNb,sizes,(char*)CHARS,0,maximal_distance, momentum, mu);
 			}
-			else
-				tablo_net->learnAllNetworks();
+
+            rdnk->train(maximal_distance);
+            rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
+            cout << "Reseau sauvegarde." << endl;
+
 		}
 		else if (testButton.hasBeenPressed() || keyboardInput[19])
 		{
 			keyboardInput[19] = false;
 			testButton.reset();
-			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 
-			testing = true;
-			nextButton.setPress(true);
+            if (!testing)
+            {
+                renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
+                SDL_RenderPresent(ren);
 
-			compteurTest = -1;
-			nombreTests  = countExemples(DOSSIERTEST);
+                testing = true;
+                nextButton.setPress(true);
 
-			dp    = opendir(DOSSIERTEST);
-			if (dp == NULL)
-				exit(1);
+                nombreTests  = countExemples(DOSSIERTEST);
 
-			SDL_RenderPresent(ren);
-			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
+                if (nombreTests > 0){
+                    cout << endl << nombreTests << " images a tester trouvees." << endl << endl;
+
+                    compteurTest = -1;
+
+                    dp = opendir(DOSSIERTEST);
+                    if (dp == NULL)
+                        exit(1);
+
+                    filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
+                }
+
+
+            }
+            else
+            {
+                testing = false;
+                SDL_RenderPresent(ren);
+            }
+
+
+
+
 		}
 		else if (testing)
 		{
@@ -317,22 +346,42 @@ void menu(SDL_Renderer *ren)
 			previousButton.renderButton(ren, xMouse, yMouse);
 			SDL_RenderPresent(ren);
 		}
-		else if (statisticsButton.hasBeenPressed() || keyboardInput[0])
+		else if (scriptButton.hasBeenPressed() || keyboardInput[4])
 		{
-			keyboardInput[0] = false;
+			keyboardInput[18] = false;
+			keyboardInput[4] = false;
+			scriptButton.reset();
+			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
+			SDL_RenderPresent(ren);
+
+			ifstream file(NAME_SCRIPT_FILE);
+
+			if (file)
+                scriptFile(file);
+            else
+                cout << "Pas de script a executer." << endl;
+
+		}
+
+		else if (statisticsButton.hasBeenPressed() || keyboardInput[18])
+		{
+			keyboardInput[18] = false;
 			statisticsButton.reset();
 			renderTexture(ren, loading, (400 - loadingText->w / 2) + 30, 50);
 			SDL_RenderPresent(ren);
 
 			filtres(DOSSIERTEST, DOSSIERTESTTEXT, true);
-			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << tablo_net->testAll() << endl << endl;
-
+			cout << "Sur les exemples donnes, le reseau a un taux de reussite de : " << rdnk->testAllExamples()*100 << " %." << endl << endl;
 		}
+
 		else
 			SDL_RenderPresent(ren);
 	}
-	tablo_net->save();
-	delete tablo_net;
+
+	rdnk->save(string(DOSSIERBACKUP) + string(NOMBACKUP));
+    cout << "Reseau sauvegarde." << endl;
+	delete rdnk;
+
 }
 
 
@@ -347,6 +396,10 @@ void keyboard(SDL_Event event, bool* keyboardInput)
 
 	case SDLK_c:
 		keyboardInput[2] = true;
+		break;
+
+	case SDLK_e:
+		keyboardInput[4] = true;
 		break;
 
 	case SDLK_f:

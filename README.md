@@ -56,7 +56,7 @@ Folders needed :
 - `fonts`
 - `test`
 - `test_texts`
-- `svg_reseau`
+- `backup`
 
 You need to copy `NeuronProject.cfg.default` to `NeuronProject.cfg`. (And personnalize it !)
 
@@ -72,9 +72,28 @@ You need to copy `NeuronProject.cfg.default` to `NeuronProject.cfg`. (And person
 | filter   | launch the filters
 | database | create/update the database
 | test     | testAll the NetworkArray
+| =[param]=[value] | set param to value
+| * | do nothing (print line)
 
 ### Script writings
 
 Use the same commands as in the command line.
 
 One command per line.
+
+Example :
+```
+new
+test
+learn
+blabla
+2
+test
+save
+```
+will do
+ - create a new network
+ - test the network
+ - learn
+ - test
+ - save

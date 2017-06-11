@@ -27,7 +27,7 @@ public:
     \param nextLayer la couche suivante
     \param trsf pointeur de type [transfert](@transfert) vers la fonction de transfert de chacun des neurones
  */
-	Layer(Network* network, int neurons = 0,  Layer* previousLayer = 0, Layer* nextLayer = 0, transfert trsf = 0);
+	Layer(Network* network, int neurons = 0,  Layer* previousLayer = 0, Layer* nextLayer = 0, transfert trsf = 0, double mu = MU);
 
 //! destructeur
 	~Layer();
@@ -60,14 +60,14 @@ public:
 /*!
     \param trsf (optional)  pointeur de type [transfert](@transfert) vers la fonction de transfert du neurone
  */
-	void addNeuron(transfert trsf = 0);
+	void addNeuron(int option = RAND, transfert trsf = 0, double mu = MU);
 
 //! Ajouter plusieurs neurones
 /*!
     \param n nombre de neurones a ajouter
     \param trsf (optional)  pointeur de type [transfert](@transfert) vers la fonction de transfert du neurone
  */
-	void  addNeurons(int n, transfert trsf = 0);
+	void  addNeurons(int n, int option = RAND, transfert trsf = 0, double mu = MU);
 
 //! Demander à chaque neurone de calculer sa sortie
 	void  calculate() const;
