@@ -18,6 +18,7 @@ void menu(SDL_Renderer *ren)
 	char testedImageText[150]  = "";
 
 	SDL_Color color      = { 255, 255, 255 };
+	// SDL_Color color      = { 0, 0, 0 };
 	char testResult[]    = "This is a A";
 
 	DIR *   dp       = NULL;

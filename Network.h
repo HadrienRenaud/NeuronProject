@@ -55,7 +55,7 @@ class Network {
 	void increaseTotalBindingsNumber(int n = 1);
 
 	//! Tester si le réseau boucle sur lui mm
-	bool isALoop() const;
+	// bool isALoop() const;
 
 	//! Lancer la propagation
 	void launch(double output[]);
@@ -77,29 +77,6 @@ class Network {
 
 	//! Fonction appelée pour récupérer à partir d'un fichier
 	void recuperateur();
-
-
-	//! Actualise le réseau
-	//void getMostRecent();
-
-	//! Ecrit le resultat de l'apprentissage dans un fichier
-	//void writeReport(bool resultat, int count, double distance_moyenne, double temps_mis, string commentaires);
-
-	//! Apprentissage sur la base de donnee
-	/*!
-	   Apprend sur toute la base de donne decrite par :
-	   \param nb_exemples nombre d'exemples a traiter
-	   \param tabloFichiers tableau de nb_exemples noms de fichiers sur lesquels apprendre, la sortie attendue pour chaque fichier etant la premiere lettre du nom
-	   \param inputs entree a donner au reseau
-	 */
-	//void learnNetwork(const int nb_exemples, char** tabloFichiers, double** inputs);
-
-
-	//! Retourne la lettre testee par le reseau
-	//char getLettreTestee();
-
-	//! Fixe la lettre testee par le reseau
-	//void setLettreTestee(char lettre_testee);
 
 	//! Retourne la distance maximale en fin d'apprentissage productif
 	double getMaximalDistance();
@@ -143,11 +120,6 @@ protected:
 	//! Nom du fichier dans lequel le reseau est sauvegarde/ recupere
 	char* nameFile_;
 };
-
-//template <class T>
-
-//! affichage d'un tableau
-//void displayArray(T* data, int length);
 
 //! Calcul d'écart
 double distance(double* data1, double* data2, int length);

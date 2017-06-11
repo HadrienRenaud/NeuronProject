@@ -11,27 +11,26 @@
 # mu : facteur d'apprentissage
 # length_alphabet : décrit l'alphabet à utiliser
 # verbose : affichage dans la console
-#
+# momentum : default = 0.27
+momentum = 0.27
 
-
-# momentum : default = 0.05
-
-momentum = 0.1
-
-
-#
 # maximal_distance : default = 0.1
-
 maximal_distance = 0.1
 
-
-#
 # mu : default = 0.5
 mu = 0.5
-#
+
+# max_limit_loop : default = 250
+max_limit_loop = 250
+
 # l'alphabet = abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:!éàè'()+-=
-
-#
-# length_alphabet : default = 52
-
+# length_alphabet : default = 26
 length_alphabet = 26
+
+# verbose :
+# - mute : 0
+# - minimal : 2
+# - normal : 10
+# - details : 20
+# - specific_details (!) : 3
+verbose = 10

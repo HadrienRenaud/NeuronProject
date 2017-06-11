@@ -40,39 +40,6 @@ int main(int argc, char** argv)
 {
 	srand(time(0));//ne pas enlever
 
-
-
-    // Version Démo proposée par Guillaume : les fonctions ci-dessous sont les principaux outils pour interagir avec le réseau
-
-	/*
-	//ON PREPARE LES ARGUMENTS DU CONSTRUCTEUR DE ReadNetwork
-	int sizes[] = {FIRST_LAYER_SIZE,(int)(1.5*LAST_LAYER_SIZE),LAST_LAYER_SIZE};
-	//on l'appelle : ReadNetwork(	nbr de couche,
-	//								tableau de leurs tailles,//la dernière couche sera donc le nombre de lettres de l'alphabet (qui peut être plus grand en longueur)
-	//								alphabet à reconnaitre,
-	//								fonction de transfert, //0 = sigmoide
-	//								MAXIMAL_DISTANCE);
-	ReadNetwork* rdnk = new ReadNetwork(3,sizes,(char*)CHARS,0,MAXIMAL_DISTANCE);
-	rdnk->train();
-	rdnk->save("aka00");    //sauvegarde le distance maximal, l'alphabet et le réseau
-
-
-	ReadNetwork* rr = load("aka00", true);
-	rr->train();
-
-	double* input = new double[FIRST_LAYER_SIZE];
-
-	filtres("test/","test_texts/",true);    //mettez vos exemples à vous
-
-    cout << "c'est un " << rr->test("lettre.txt","test_texts/") << endl;
-    cout << "c'est un " << rdnk->test("lettre.txt","test_texts/") << endl;*/
-
-
-
-
-
-
-
 	if (argc < 2)
 		#ifndef NO_GRAPHIC
 		graphics();

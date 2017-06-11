@@ -107,15 +107,13 @@ double Neuron::getGradient() const
 	return gradient_;
 }
 
-void Neuron::initNeuron(double input) //on autorise de regler l'input si et seulement si il s'agit d'un neurone de la première couche
+void Neuron::initNeuron(double input) //on regle l'output si demande
 {
-	// if (getLayer()->getNetwork()->getFirstLayer() == getLayer() || input == 0)
-	// {
 		input_ = input;
-		// if (input != input)
-		// 	cout << "Neuron : initNeuron : if_firstlayer : input : " << input << endl;
-		output_ = trsf_(input_);
-	// }
+		if(input == 0)
+			output_ = 0;
+		else
+			output_ = trsf_(input_);
 }
 
 bool Neuron::initNeuronGradient(double expectedOutput)
@@ -123,17 +121,17 @@ bool Neuron::initNeuronGradient(double expectedOutput)
 	//on initialise le gradient du neurone à une valeur différente de 0, seulement si le neurone est dans la dernière couche.
 	if (getLayer()->getNetwork()->getLastLayer() == getLayer())
 	{
-		gradient_ = /* 2 * */ sigmo1(input_) * (expectedOutput - output_);                                                                                                                 //le x2 est dans la poly mais pas sur wiki
-		return true;
+     gradient_ = /* 2 * */ sigmo1(input_) * (expectedOutput - output_);
+     return true;
 	}
-	//on peut initialiser le gradient de n'impote quel neurone à 0.
-	else if (expectedOutput == 0)
-	{
+ 	//on peut initialiser le gradient de n'impote quel neurone à 0.
+ 	else if (expectedOutput == 0)
+ 	{
 		gradient_ = 0;
-		return true;
-	}
-	else                                                         //si echec, le retour n'est jamais utilisé
-		return false;
+    return true;
+ 	}
+ 	else  //si echec, le retour n'est jamais utilisé
+    return false;
 }
 
 

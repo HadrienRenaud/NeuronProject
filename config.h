@@ -97,20 +97,12 @@
 //Remarque : chaque nouvel apprentissage efface la sauvegarde du précédent réseau ; une seule sauvegarde à la fois : à améliorer si possible ...
 
 
-//Anciennes méthodes de sauvegarde / chargement
-// Le dossier ou seront stockes les sauvegardes reseau
-//#define DOSSIER_SVG "svg_reseau/"
-// Le nom du fichier pointant vers la derniere sauvegarde
-//#define NOM_SVG "plus_recent_"
-// L'extension dediee aux sauvegardes reseau
-//#define EXTENSION_SVG ".svg_reseau"
-
-
 // Verbose settings
-#define VERBOSE_NORMAL 2
+#define VERBOSE_NORMAL 10
 #define VERBOSE_MUTE 0
-#define VERBOSE_DETAILS 3
-#define VERBOSE_MINIMAL 1
+#define VERBOSE_DETAILS 20
+#define VERBOSE_MINIMAL 2
+#define VERBOSE_SPECIFIC_DETAILS 3
 
 
 //! liste des caracteres
@@ -126,7 +118,6 @@
 #include "Layer.h"
 #include "Network.h"
 #include "Binding.h"
-#include "NetworkArray.h"
 //#include "ReadNetwork.h"
 #include "script.h"
 #include "error.h"
